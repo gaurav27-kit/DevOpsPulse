@@ -130,3 +130,4 @@ incidentSchema.index(
 );
 
 export const Incident = mongoose.model('Incident', incidentSchema);
+

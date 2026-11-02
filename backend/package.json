@@ -8,7 +8,8 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "test": "node --test tests/**/*.test.js",
-    "check:incidents": "node scripts/incidentFlowCheck.js"
+    "check:incidents": "node scripts/incidentFlowCheck.js",
+    "check:analytics": "node scripts/analyticsCheck.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

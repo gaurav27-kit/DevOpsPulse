@@ -369,3 +369,4 @@ export async function addIncidentNote(ownerId, id, { message }, userId) {
 
   return incident;
 }
+

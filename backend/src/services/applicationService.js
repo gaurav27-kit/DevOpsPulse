@@ -1,6 +1,7 @@
 import { Application } from '../models/Application.js';
 import { HealthCheck } from '../models/HealthCheck.js';
 import { Incident } from '../models/Incident.js';
+import { Deployment } from '../models/Deployment.js';
 import { AppError } from '../utils/AppError.js';
 import { assertSafeDestination } from './urlSafetyService.js';
 import { closeForUrlChange } from './incidentService.js';
@@ -164,7 +165,7 @@ export const updateApplication = async (ownerId, id, data) => {
  * Permanently removes the application and ALL of its associated child records:
  * - Health check telemetry (HealthCheck collection)
  * - Incidents (added in Step 6)
- * - Deployment records (added in Step 8)
+ * - Deployment records (added in Step 7)
  * This prevents orphaned documents and maintains referential integrity.
  */
 export const deleteApplication = async (ownerId, id) => {
@@ -177,7 +178,8 @@ export const deleteApplication = async (ownerId, id) => {
   // Cascade: delete all incidents (active and resolved) for this application
   await Incident.deleteMany({ applicationId: id });
 
-  // TODO (Step 8): await Deployment.deleteMany({ applicationId: id });
+  // Cascade: delete all deployment records for this application
+  await Deployment.deleteMany({ applicationId: id });
 
   await Application.deleteOne({ _id: id, ownerId });
 

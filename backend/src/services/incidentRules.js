@@ -46,3 +46,4 @@ export function decideIncidentAction({
   if (hasActiveIncident && consecutiveSuccesses >= 2) return 'resolve';
   return 'none';
 }
+

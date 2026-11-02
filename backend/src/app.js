@@ -6,6 +6,8 @@ import { env } from './config/env.js';
 import authRoutes from './routes/auth.js';
 import applicationRoutes from './routes/applications.js';
 import incidentRoutes from './routes/incidents.js';
+import deploymentRoutes from './routes/deployments.js';
+import dashboardRoutes from './routes/dashboard.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
 const app = express();
@@ -36,6 +38,8 @@ app.get('/api/v1/health', (req, res) => {
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/applications', applicationRoutes);
 app.use('/api/v1/incidents', incidentRoutes);
+app.use('/api/v1/deployments', deploymentRoutes);
+app.use('/api/v1/dashboard', dashboardRoutes);
 
 // Catch 404 for undefined routes
 app.use(notFoundHandler);

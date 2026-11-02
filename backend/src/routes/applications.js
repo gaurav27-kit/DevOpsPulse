@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { z } from 'zod';
 import * as applicationController from '../controllers/applicationController.js';
 import * as healthCheckController from '../controllers/healthCheckController.js';
+import { createDeploymentHandler } from '../controllers/deploymentController.js';
+import { getUptimeHandler } from '../controllers/analyticsController.js';
 import { requireAuth } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import { assertSafeUrlSyntax } from '../services/urlSafetyService.js';
@@ -130,6 +132,74 @@ const listHealthChecksQuerySchema = z.object({
   to: z.string().datetime({ offset: true }).optional()
 });
 
+// Schema for creating a deployment record under an application
+// NOTE: "source" and "ownerId" are intentionally absent — they are server-set only.
+const createDeploymentSchema = z
+  .object({
+    version: z.string().min(1).max(50),
+    commitSha: z
+      .string()
+      .regex(/^[0-9a-fA-F]{7,40}$/, 'commitSha must be 7–40 hexadecimal characters')
+      .toLowerCase()
+      .optional(),
+    branch: z
+      .string()
+      .min(1)
+      .max(100)
+      .regex(
+        /^[a-zA-Z0-9._\-\/]+$/,
+        'Branch name may only contain letters, digits, and . _ - /'
+      )
+      .optional(),
+    environment: z.enum(['production', 'staging', 'development']).optional(),
+    status: z
+      .enum(['pending', 'in_progress', 'success', 'failed', 'rolled_back'])
+      .optional()
+      .default('success'),
+    startedAt: z
+      .string()
+      .datetime({ offset: true })
+      .optional()
+      .refine(
+        (val) => !val || new Date(val) <= new Date(Date.now() + 5 * 60 * 1000),
+        'startedAt must not be more than 5 minutes in the future'
+      ),
+    completedAt: z.string().datetime({ offset: true }).optional(),
+    description: z.string().max(500).optional()
+  })
+  .strict()
+  .superRefine((data, ctx) => {
+    // completedAt must not be earlier than startedAt (or now if startedAt omitted)
+    if (data.completedAt) {
+      const effectiveStartedAt = data.startedAt ? new Date(data.startedAt) : new Date();
+      if (new Date(data.completedAt) < effectiveStartedAt) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['completedAt'],
+          message: 'completedAt must be greater than or equal to startedAt'
+        });
+      }
+    }
+    // completedAt must be absent when status is pending or in_progress
+    if (data.completedAt && (data.status === 'pending' || data.status === 'in_progress')) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['completedAt'],
+        message: 'completedAt must not be set when status is pending or in_progress'
+      });
+    }
+  });
+
+// Query schema for uptime range
+const uptimeQuerySchema = z.object({
+  range: z
+    .enum(['24h', '7d', '30d'], {
+      errorMap: () => ({ message: 'range must be one of: 24h, 7d, 30d' })
+    })
+    .optional()
+    .default('24h')
+});
+
 // Require authentication for all application management endpoints
 router.use(requireAuth);
 
@@ -175,6 +245,20 @@ router.get(
   '/:id/health-checks',
   validate({ params: mongoIdParamsSchema, query: listHealthChecksQuerySchema }),
   healthCheckController.listHealthChecks
+);
+
+// Deployment sub-route
+router.post(
+  '/:id/deployments',
+  validate({ params: mongoIdParamsSchema, body: createDeploymentSchema }),
+  createDeploymentHandler
+);
+
+// Uptime analytics sub-route
+router.get(
+  '/:id/uptime',
+  validate({ params: mongoIdParamsSchema, query: uptimeQuerySchema }),
+  getUptimeHandler
 );
 
 export default router;

@@ -182,3 +182,4 @@ describe('decideIncidentAction – edge cases', () => {
     );
   });
 });
+

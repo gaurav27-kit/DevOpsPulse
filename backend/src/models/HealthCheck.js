@@ -85,6 +85,9 @@ const healthCheckSchema = new mongoose.Schema(
 // Compound index for chronological telemetry queries scoped to application
 healthCheckSchema.index({ applicationId: 1, checkedAt: -1 });
 
+// Compound index for dashboard and analytics queries scoped by owner across all apps
+healthCheckSchema.index({ ownerId: 1, checkedAt: -1 });
+
 // TTL expiration index based on configured retention window
 // NOTE: MongoDB TTL cleanup runs as a background thread approximately once every 60 seconds
 const retentionSeconds = Math.max(1, env.HEALTHCHECK_RETENTION_DAYS) * 24 * 60 * 60;
