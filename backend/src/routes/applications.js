@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import * as applicationController from '../controllers/applicationController.js';
+import * as healthCheckController from '../controllers/healthCheckController.js';
 import { requireAuth } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import { assertSafeUrlSyntax } from '../services/urlSafetyService.js';
+import { manualCheckLimiter } from '../middleware/rateLimiters.js';
 
 const router = Router();
 
@@ -115,6 +117,19 @@ const listApplicationsQuerySchema = z.object({
   q: z.string().max(100, 'Search query cannot exceed 100 characters').optional()
 });
 
+// Query params schema for health-check history
+const listHealthChecksQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100, 'Limit cannot exceed 100').default(20),
+  order: z.enum(['asc', 'desc']).default('desc'),
+  success: z
+    .string()
+    .transform((v) => v === 'true' ? true : v === 'false' ? false : undefined)
+    .optional(),
+  from: z.string().datetime({ offset: true }).optional(),
+  to: z.string().datetime({ offset: true }).optional()
+});
+
 // Require authentication for all application management endpoints
 router.use(requireAuth);
 
@@ -146,6 +161,20 @@ router.delete(
   '/:id',
   validate({ params: mongoIdParamsSchema }),
   applicationController.deleteApplication
+);
+
+// Health-check sub-routes
+router.post(
+  '/:id/check',
+  manualCheckLimiter,
+  validate({ params: mongoIdParamsSchema }),
+  healthCheckController.triggerCheck
+);
+
+router.get(
+  '/:id/health-checks',
+  validate({ params: mongoIdParamsSchema, query: listHealthChecksQuerySchema }),
+  healthCheckController.listHealthChecks
 );
 
 export default router;

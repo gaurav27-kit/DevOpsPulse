@@ -50,3 +50,4 @@ export function AlertBanner({ message, type = 'success', onDismiss, className = 
     </div>
   );
 }
+

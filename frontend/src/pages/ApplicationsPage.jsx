@@ -418,3 +418,4 @@ export function ApplicationsPage() {
     </div>
   );
 }
+

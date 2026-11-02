@@ -52,6 +52,21 @@ const applicationSchema = new mongoose.Schema(
       },
       default: 'unknown'
     },
+    consecutiveFailures: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    consecutiveSuccesses: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    checkLockUntil: {
+      type: Date,
+      default: null,
+      index: true
+    },
     lastCheckedAt: {
       type: Date,
       default: null

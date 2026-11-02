@@ -27,5 +27,12 @@ export const env = Object.freeze({
   NODE_ENV: process.env.NODE_ENV || 'development',
   MONGO_URI: process.env.MONGO_URI,
   JWT_SECRET: process.env.JWT_SECRET,
-  CLIENT_ORIGIN: process.env.CLIENT_ORIGIN
+  CLIENT_ORIGIN: process.env.CLIENT_ORIGIN,
+
+  // Health-check monitoring & scheduler configuration
+  SCHEDULER_ENABLED: process.env.SCHEDULER_ENABLED !== 'false',
+  SCHEDULER_TICK_MS: Number(process.env.SCHEDULER_TICK_MS) || 10000,
+  MAX_CONCURRENT_CHECKS: Number(process.env.MAX_CONCURRENT_CHECKS) || 5,
+  SLOW_RESPONSE_MS: Number(process.env.SLOW_RESPONSE_MS) || 2000,
+  HEALTHCHECK_RETENTION_DAYS: Number(process.env.HEALTHCHECK_RETENTION_DAYS) || 30
 });

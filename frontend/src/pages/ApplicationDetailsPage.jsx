@@ -211,3 +211,4 @@ export function ApplicationDetailsPage() {
     </div>
   );
 }
+

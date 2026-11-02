@@ -39,3 +39,4 @@ export const applicationsApi = {
     return axiosClient.delete(`/applications/${id}`);
   }
 };
+

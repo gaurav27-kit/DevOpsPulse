@@ -1,5 +1,7 @@
 import { Application } from '../models/Application.js';
+import { HealthCheck } from '../models/HealthCheck.js';
 import { AppError } from '../utils/AppError.js';
+import { assertSafeDestination } from './urlSafetyService.js';
 
 /**
  * Escapes special regex metacharacters in user search queries to prevent crashes or ReDoS.
@@ -10,9 +12,14 @@ const escapeRegex = (string) => {
 
 /**
  * Create a new monitored application for the authenticated owner.
+ * Runs full SSRF check (syntax + DNS) on the URL.
  */
 export const createApplication = async (ownerId, data) => {
-  // Pre-emptively verify URL uniqueness per owner
+  // Full SSRF validation: syntax + DNS resolution check
+  // If ENOTFOUND, creation is allowed; health check will record dns_error
+  const safeUrl = await assertSafeDestination(data.url);
+  data.url = safeUrl;
+
   const existing = await Application.findOne({ ownerId, url: data.url });
   if (existing) {
     throw new AppError('You are already monitoring this URL', 409, [
@@ -20,15 +27,17 @@ export const createApplication = async (ownerId, data) => {
     ]);
   }
 
-  // Initial check is scheduled to run immediately upon creation
   const nextCheckAt = new Date();
 
   const application = await Application.create({
     ...data,
     ownerId,
     status: 'unknown',
+    consecutiveFailures: 0,
+    consecutiveSuccesses: 0,
     lastCheckedAt: null,
     lastSuccessfulAt: null,
+    checkLockUntil: null,
     nextCheckAt
   });
 
@@ -49,18 +58,11 @@ export const listApplications = async (ownerId, query = {}) => {
     q
   } = query;
 
-  // Enforce tenant isolation by always scoping query to ownerId
   const filter = { ownerId };
 
-  if (status) {
-    filter.status = status;
-  }
+  if (status) filter.status = status;
+  if (environment) filter.environment = environment;
 
-  if (environment) {
-    filter.environment = environment;
-  }
-
-  // Safe substring matching across name and url
   if (q && q.trim()) {
     const escaped = escapeRegex(q.trim());
     filter.$or = [
@@ -72,7 +74,6 @@ export const listApplications = async (ownerId, query = {}) => {
   const sortOrder = order === 'asc' ? 1 : -1;
   const skip = (page - 1) * limit;
 
-  // Execute count and query concurrently to minimize database latency
   const [total, items] = await Promise.all([
     Application.countDocuments(filter),
     Application.find(filter)
@@ -94,35 +95,29 @@ export const listApplications = async (ownerId, query = {}) => {
 
 /**
  * Retrieve a single application by ID scoped by owner.
- * Returns 404 if not found OR owned by another user to prevent cross-user enumeration.
+ * Returns 404 regardless of whether the app exists under another user (no 403 leakage).
  */
 export const getApplication = async (ownerId, id) => {
   const application = await Application.findOne({ _id: id, ownerId });
-  if (!application) {
-    throw new AppError('Application not found', 404);
-  }
+  if (!application) throw new AppError('Application not found', 404);
   return application;
 };
 
 /**
  * Update application configuration.
- * - Changing the URL resets health status and forces an immediate check.
- * - Changing check interval resets nextCheckAt.
+ * - URL change: runs full SSRF check, resets status/history, reschedules immediately.
+ * - Interval change: reschedules immediately.
  */
 export const updateApplication = async (ownerId, id, data) => {
   const application = await Application.findOne({ _id: id, ownerId });
-  if (!application) {
-    throw new AppError('Application not found', 404);
-  }
+  if (!application) throw new AppError('Application not found', 404);
 
-  // If changing URL, ensure new URL is not already registered by this owner
   if (data.url && data.url !== application.url) {
-    const duplicate = await Application.findOne({
-      ownerId,
-      url: data.url,
-      _id: { $ne: id }
-    });
+    // Run SSRF check (syntax + DNS) on the new URL
+    const safeUrl = await assertSafeDestination(data.url);
+    data.url = safeUrl;
 
+    const duplicate = await Application.findOne({ ownerId, url: data.url, _id: { $ne: id } });
     if (duplicate) {
       throw new AppError('You are already monitoring this URL', 409, [
         { field: 'url', message: 'You are already monitoring this URL' }
@@ -130,10 +125,12 @@ export const updateApplication = async (ownerId, id, data) => {
     }
 
     application.url = data.url;
-    // URL change resets status and history markers
     application.status = 'unknown';
+    application.consecutiveFailures = 0;
+    application.consecutiveSuccesses = 0;
     application.lastCheckedAt = null;
     application.lastSuccessfulAt = null;
+    application.checkLockUntil = null;
     application.nextCheckAt = new Date();
   }
 
@@ -146,7 +143,6 @@ export const updateApplication = async (ownerId, id, data) => {
     data.checkIntervalSeconds !== application.checkIntervalSeconds
   ) {
     application.checkIntervalSeconds = data.checkIntervalSeconds;
-    // Reschedule immediate check for the updated interval
     application.nextCheckAt = new Date();
   }
 
@@ -158,23 +154,23 @@ export const updateApplication = async (ownerId, id, data) => {
  * Delete an application scoped by owner.
  *
  * CASCADE DELETION POLICY:
- * Deleting an application permanently removes all of its associated child records:
- * - Health check telemetry history (HealthCheck collection)
- * - Active and resolved outage records (Incident collection)
- * - Deployment timeline records (Deployment collection)
- * This prevents orphaned records and maintains strict referential integrity.
- *
- * TODO (Steps 5, 6, 8): Implement cascade delete operations when child models are built.
+ * Permanently removes the application and ALL of its associated child records:
+ * - Health check telemetry (HealthCheck collection)
+ * - Incidents (added in Step 6)
+ * - Deployment records (added in Step 8)
+ * This prevents orphaned documents and maintains referential integrity.
  */
 export const deleteApplication = async (ownerId, id) => {
   const application = await Application.findOne({ _id: id, ownerId });
-  if (!application) {
-    throw new AppError('Application not found', 404);
-  }
+  if (!application) throw new AppError('Application not found', 404);
 
-  // Cascade deletion will hook in here in upcoming steps
+  // Cascade: delete all health check records for this application
+  await HealthCheck.deleteMany({ applicationId: id });
+
+  // TODO (Step 6): await Incident.deleteMany({ applicationId: id });
+  // TODO (Step 8): await Deployment.deleteMany({ applicationId: id });
+
   await Application.deleteOne({ _id: id, ownerId });
 
   return { id };
 };
-
