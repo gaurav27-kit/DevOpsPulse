@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   Server,
@@ -18,11 +18,12 @@ import { Button } from './Button.jsx';
  */
 export function AppLayout() {
   const { user, logout, isLoggingOut } = useAuth();
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
     { name: 'Dashboard', to: '/dashboard', icon: LayoutDashboard, enabled: true },
-    { name: 'Applications', to: '/applications', icon: Server, enabled: false },
+    { name: 'Applications', to: '/applications', icon: Server, enabled: true },
     { name: 'Incidents', to: '/incidents', icon: AlertOctagon, enabled: false },
     { name: 'Deployments', to: '/deployments', icon: Rocket, enabled: false }
   ];
@@ -103,18 +104,21 @@ export function AppLayout() {
               );
             }
 
+            const isItemActive =
+              item.to === '/dashboard'
+                ? location.pathname === '/dashboard'
+                : location.pathname.startsWith(item.to);
+
             return (
               <NavLink
                 key={item.name}
                 to={item.to}
                 onClick={closeMobileMenu}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                    isActive
-                      ? 'bg-indigo-50 text-indigo-700'
-                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                  }`
-                }
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  isItemActive
+                    ? 'bg-indigo-50 text-indigo-700'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                }`}
               >
                 <Icon className="w-5 h-5 text-indigo-600" aria-hidden="true" />
                 <span>{item.name}</span>

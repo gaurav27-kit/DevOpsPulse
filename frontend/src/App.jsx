@@ -6,12 +6,16 @@ import { AppLayout } from './components/AppLayout.jsx';
 import { LoginPage } from './pages/LoginPage.jsx';
 import { RegisterPage } from './pages/RegisterPage.jsx';
 import { DashboardPage } from './pages/DashboardPage.jsx';
+import { ApplicationsPage } from './pages/ApplicationsPage.jsx';
+import { ApplicationCreatePage } from './pages/ApplicationCreatePage.jsx';
+import { ApplicationEditPage } from './pages/ApplicationEditPage.jsx';
+import { ApplicationDetailsPage } from './pages/ApplicationDetailsPage.jsx';
 import { NotFoundPage } from './pages/NotFoundPage.jsx';
 
 /**
  * Root routing component defining access control policies:
  * - Public-only: /login, /register
- * - Protected: /dashboard
+ * - Protected: /dashboard, /applications, /applications/new, /applications/:id, /applications/:id/edit
  * - Redirects: / -> /dashboard
  * - Catch-all: * -> NotFoundPage
  */
@@ -31,6 +35,10 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/applications" element={<ApplicationsPage />} />
+          <Route path="/applications/new" element={<ApplicationCreatePage />} />
+          <Route path="/applications/:id" element={<ApplicationDetailsPage />} />
+          <Route path="/applications/:id/edit" element={<ApplicationEditPage />} />
         </Route>
       </Route>
 
@@ -39,4 +47,3 @@ export default function App() {
     </Routes>
   );
 }
-
