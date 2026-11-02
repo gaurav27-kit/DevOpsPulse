@@ -12,7 +12,11 @@ import {
   Layers,
   Play,
   Filter,
-  CheckCircle2
+  CheckCircle2,
+  AlertTriangle,
+  Rocket,
+  Plus,
+  ArrowRight
 } from 'lucide-react';
 import { useApplication, useDeleteApplication } from '../hooks/useApplications.js';
 import {
@@ -20,7 +24,12 @@ import {
   useApplicationHealthChecks,
   useRunCheck
 } from '../hooks/useApplicationHealth.js';
+import { useIncidentsList } from '../hooks/useIncidents.js';
+import { useDeploymentsList } from '../hooks/useDeployments.js';
 import { StatusBadge } from '../components/StatusBadge.jsx';
+import { SeverityBadge } from '../components/SeverityBadge.jsx';
+import { IncidentStatusBadge } from '../components/IncidentStatusBadge.jsx';
+import { DeploymentStatusBadge } from '../components/DeploymentStatusBadge.jsx';
 import { RangeSelector } from '../components/RangeSelector.jsx';
 import { StatCard } from '../components/StatCard.jsx';
 import { ResponseTimeChart } from '../components/ResponseTimeChart.jsx';
@@ -63,14 +72,17 @@ export function ApplicationDetailsPage() {
     refetch: refetchChecks
   } = useApplicationHealthChecks(id, hcParams);
 
+  // App-specific incidents & deployments
+  const { data: appIncidentsData } = useIncidentsList({ applicationId: id, limit: 5 });
+  const { data: appDeploymentsData } = useDeploymentsList({ applicationId: id, limit: 5 });
+
   const runCheckMutation = useRunCheck(id);
   const deleteMutation = useDeleteApplication();
 
   // Local state
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [checkBanner, setCheckBanner] = useState(null); // { type: 'success' | 'error' | 'warning', message: string }
+  const [checkBanner, setCheckBanner] = useState(null);
 
-  // Manual Check trigger handler
   const handleRunCheck = async () => {
     setCheckBanner(null);
     try {
@@ -108,7 +120,6 @@ export function ApplicationDetailsPage() {
     }
   };
 
-  // Toggle "Failures only"
   const handleToggleFailuresOnly = () => {
     const next = new URLSearchParams(searchParams);
     if (!hcFailed) {
@@ -116,11 +127,10 @@ export function ApplicationDetailsPage() {
     } else {
       next.delete('hcFailed');
     }
-    next.set('hcPage', '1'); // reset to page 1 on filter change
+    next.set('hcPage', '1');
     setSearchParams(next);
   };
 
-  // Page change
   const handlePageChange = (newPage) => {
     const next = new URLSearchParams(searchParams);
     if (newPage <= 1) {
@@ -181,6 +191,8 @@ export function ApplicationDetailsPage() {
 
   const healthChecks = checksData?.healthChecks || [];
   const pagination = checksData?.pagination || { page: 1, totalPages: 1, total: 0 };
+  const appIncidents = appIncidentsData?.incidents || [];
+  const appDeployments = appDeploymentsData?.deployments || [];
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
@@ -400,7 +412,6 @@ export function ApplicationDetailsPage() {
             </p>
           </div>
 
-          {/* Filter toggle: Failures only */}
           <button
             type="button"
             onClick={handleToggleFailuresOnly}
@@ -442,6 +453,116 @@ export function ApplicationDetailsPage() {
             />
           </>
         )}
+      </div>
+
+      {/* Two Column Grid: App Incidents & App Deployments */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Incidents for this application */}
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-semibold text-slate-900 flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 text-slate-500" />
+              <span>Incidents for this application</span>
+            </h3>
+            <Link
+              to={`/incidents?applicationId=${id}`}
+              className="text-xs font-semibold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1"
+            >
+              <span>View all</span>
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+
+          {appIncidents.length > 0 ? (
+            <ul className="divide-y divide-slate-100">
+              {appIncidents.map((inc) => (
+                <li key={inc._id} className="py-2.5 first:pt-0 last:pb-0">
+                  <Link
+                    to={`/incidents/${inc._id}`}
+                    className="block p-1.5 -mx-1.5 rounded-lg hover:bg-slate-50/75 transition-colors"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-slate-900 truncate hover:text-blue-600">
+                          {inc.title}
+                        </p>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                          Started {formatRelative(inc.startedAt)}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <SeverityBadge severity={inc.severity} />
+                        <IncidentStatusBadge status={inc.status} />
+                      </div>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-slate-500 py-6 text-center">
+              No incidents recorded for this application.
+            </p>
+          )}
+        </div>
+
+        {/* Deployments for this application */}
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-semibold text-slate-900 flex items-center gap-2">
+              <Rocket className="h-4 w-4 text-slate-500" />
+              <span>Recent deployments</span>
+            </h3>
+            <div className="flex items-center gap-3">
+              <Link
+                to={`/deployments/new?applicationId=${id}`}
+                className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                <span>Record deployment</span>
+              </Link>
+              <span className="text-slate-300">&bull;</span>
+              <Link
+                to={`/deployments?applicationId=${id}`}
+                className="text-xs font-semibold text-slate-500 hover:text-slate-800 inline-flex items-center gap-1"
+              >
+                <span>View all</span>
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+          </div>
+
+          {appDeployments.length > 0 ? (
+            <ul className="divide-y divide-slate-100">
+              {appDeployments.map((dep) => (
+                <li key={dep._id} className="py-2.5 first:pt-0 last:pb-0">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs font-semibold text-slate-900 bg-slate-100 px-2 py-0.5 rounded">
+                          {dep.version}
+                        </span>
+                        {dep.branch && (
+                          <span className="text-xs text-slate-500 font-mono">
+                            {dep.branch}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-slate-400 mt-1">
+                        Deployed {formatRelative(dep.startedAt)}
+                      </p>
+                    </div>
+                    <DeploymentStatusBadge status={dep.status} />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-slate-500 py-6 text-center">
+              No deployments recorded yet.
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Delete Confirmation Modal */}

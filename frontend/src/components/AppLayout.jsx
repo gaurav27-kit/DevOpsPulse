@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   LayoutDashboard,
   Server,
-  AlertOctagon,
+  AlertTriangle,
   Rocket,
   LogOut,
   Menu,
@@ -20,12 +21,26 @@ export function AppLayout() {
   const { user, logout, isLoggingOut } = useAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  // Inspect cached dashboard data for active incident count without triggering any network requests
+  const cachedDashboard =
+    queryClient.getQueryData(['dashboard', '24h']) ||
+    queryClient.getQueryData(['dashboard', '7d']) ||
+    queryClient.getQueryData(['dashboard', '30d']);
+  const activeIncidentsCount = cachedDashboard?.incidents?.activeCount;
 
   const navItems = [
     { name: 'Dashboard', to: '/dashboard', icon: LayoutDashboard, enabled: true },
     { name: 'Applications', to: '/applications', icon: Server, enabled: true },
-    { name: 'Incidents', to: '/incidents', icon: AlertOctagon, enabled: false },
-    { name: 'Deployments', to: '/deployments', icon: Rocket, enabled: false }
+    {
+      name: 'Incidents',
+      to: '/incidents',
+      icon: AlertTriangle,
+      enabled: true,
+      badge: activeIncidentsCount > 0 ? activeIncidentsCount : null
+    },
+    { name: 'Deployments', to: '/deployments', icon: Rocket, enabled: true }
   ];
 
   const handleLogout = async () => {
@@ -86,23 +101,6 @@ export function AppLayout() {
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
             const Icon = item.icon;
-            if (!item.enabled) {
-              return (
-                <div
-                  key={item.name}
-                  className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 cursor-not-allowed select-none"
-                  title="Coming in later updates"
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon className="w-5 h-5 text-slate-300" aria-hidden="true" />
-                    <span>{item.name}</span>
-                  </div>
-                  <span className="text-[10px] font-semibold bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                    Soon
-                  </span>
-                </div>
-              );
-            }
 
             const isItemActive =
               item.to === '/dashboard'
@@ -114,14 +112,25 @@ export function AppLayout() {
                 key={item.name}
                 to={item.to}
                 onClick={closeMobileMenu}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isItemActive
                     ? 'bg-indigo-50 text-indigo-700'
                     : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
               >
-                <Icon className="w-5 h-5 text-indigo-600" aria-hidden="true" />
-                <span>{item.name}</span>
+                <div className="flex items-center gap-3">
+                  <Icon
+                    className={`w-5 h-5 ${isItemActive ? 'text-indigo-600' : 'text-slate-400'}`}
+                    aria-hidden="true"
+                  />
+                  <span>{item.name}</span>
+                </div>
+
+                {item.badge != null && (
+                  <span className="inline-flex items-center justify-center rounded-full bg-rose-100 text-rose-700 px-2 py-0.5 text-2xs font-bold leading-none">
+                    {item.badge}
+                  </span>
+                )}
               </NavLink>
             );
           })}
@@ -170,4 +179,3 @@ export function AppLayout() {
     </div>
   );
 }
-

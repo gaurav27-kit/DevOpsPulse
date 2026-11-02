@@ -16,7 +16,8 @@ export function ConfirmDialog({
   variant = 'danger',
   isLoading = false,
   onConfirm,
-  onClose
+  onClose,
+  children
 }) {
   const dialogRef = useRef(null);
   const cancelButtonRef = useRef(null);
@@ -82,6 +83,7 @@ export function ConfirmDialog({
                 {description}
               </p>
             )}
+            {children && <div className="mt-4">{children}</div>}
           </div>
 
           <button

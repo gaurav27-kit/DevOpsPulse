@@ -2,7 +2,7 @@
  * backend/scripts/seedDemoData.js
  *
  * DEV-ONLY seed script to populate realistic demo applications, 24 hours of health checks,
- * and an incident for a given user.
+ * open & resolved incidents, and deployments for a given user.
  *
  * Usage:
  *   node scripts/seedDemoData.js <email>
@@ -84,59 +84,68 @@ async function main() {
       name: `${DEMO_PREFIX} Payment & Checkout Gateway`,
       url: 'https://checkout.pulse-demo.io',
       environment: 'production',
-      hasOutage: true // 40-minute outage 2 hours ago, now recovered
+      status: 'up',
+      hasResolvedOutage: true,
+      hasOpenIncident: false
+    },
+    {
+      name: `${DEMO_PREFIX} Notifications & Webhooks Worker`,
+      url: 'https://worker-dev.pulse-demo.io',
+      environment: 'production',
+      status: 'down',
+      consecutiveFailures: 5,
+      hasResolvedOutage: false,
+      hasOpenIncident: true // Currently active/down incident
     },
     {
       name: `${DEMO_PREFIX} Core Authentication Service`,
       url: 'https://auth.pulse-demo.io',
       environment: 'production',
-      hasOutage: false
+      status: 'up',
+      hasResolvedOutage: false,
+      hasOpenIncident: false
     },
     {
       name: `${DEMO_PREFIX} Search & Catalog API`,
       url: 'https://catalog-staging.pulse-demo.io',
       environment: 'staging',
-      hasOutage: false
-    },
-    {
-      name: `${DEMO_PREFIX} Notifications & Webhooks Worker`,
-      url: 'https://worker-dev.pulse-demo.io',
-      environment: 'development',
-      hasOutage: false
+      status: 'up',
+      hasResolvedOutage: false,
+      hasOpenIncident: false
     }
   ];
 
-  // Helper for random integer in range
   const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+  const createdApps = [];
 
   for (const config of demoAppsConfig) {
+    const isDown = config.status === 'down';
     const app = await Application.create({
       ownerId: user._id,
       name: config.name,
       url: config.url,
       environment: config.environment,
-      status: 'up',
+      status: config.status,
       checkIntervalSeconds: 300,
       timeoutMs: 10000,
-      consecutiveFailures: 0,
-      consecutiveSuccesses: 2,
+      consecutiveFailures: isDown ? 5 : 0,
+      consecutiveSuccesses: isDown ? 0 : 2,
       lastCheckedAt: now,
-      lastSuccessfulAt: now,
+      lastSuccessfulAt: isDown ? new Date(now.getTime() - 25 * 60 * 1000) : now,
       nextCheckAt: farFuture
     });
 
-    console.log(`Created demo app: "${app.name}" (${app.environment})`);
+    createdApps.push(app);
+    console.log(`Created demo app: "${app.name}" (${app.environment}, status: ${app.status})`);
 
-    // Create 24 hours of checks (1 check every 5 minutes = 288 checks)
+    // Create 24 hours of checks (1 check every 5 minutes = 289 checks)
     const healthChecks = [];
     const totalMinutes = 24 * 60;
     const intervalMinutes = 5;
 
-    // For the outage app: outage occurred from 150 mins ago to 110 mins ago (40 mins = 8 checks)
+    // For the resolved outage app: outage 150 to 110 mins ago
     const outageStartMinutesAgo = 150;
     const outageEndMinutesAgo = 110;
-
-    let latestCheck = null;
 
     for (let m = totalMinutes; m >= 0; m -= intervalMinutes) {
       const checkedAt = new Date(now.getTime() - m * 60 * 1000);
@@ -146,13 +155,12 @@ async function main() {
       let errorType = null;
       let errorMessage = null;
 
-      // Occasional slow response (~2500ms)
       if (Math.random() < 0.04) {
         responseTimeMs = randomInt(2100, 2700);
       }
 
-      // Outage window check
-      if (config.hasOutage && m <= outageStartMinutesAgo && m > outageEndMinutesAgo) {
+      // Past resolved outage
+      if (config.hasResolvedOutage && m <= outageStartMinutesAgo && m > outageEndMinutesAgo) {
         success = false;
         statusCode = 503;
         responseTimeMs = randomInt(500, 1500);
@@ -160,7 +168,16 @@ async function main() {
         errorMessage = 'Server returned HTTP 503 Service Unavailable';
       }
 
-      const checkDoc = {
+      // Currently down app: last 5 checks failed (last 25 minutes)
+      if (config.hasOpenIncident && m <= 25) {
+        success = false;
+        statusCode = 500;
+        responseTimeMs = randomInt(800, 2000);
+        errorType = 'http_error';
+        errorMessage = 'Internal Server Error (Database Connection Refused)';
+      }
+
+      healthChecks.push({
         applicationId: app._id,
         ownerId: user._id,
         checkedAt,
@@ -169,17 +186,14 @@ async function main() {
         responseTimeMs,
         errorType,
         errorMessage
-      };
-
-      healthChecks.push(checkDoc);
-      latestCheck = checkDoc;
+      });
     }
 
     await HealthCheck.insertMany(healthChecks);
     console.log(`  -> Inserted ${healthChecks.length} health checks.`);
 
-    // If this app had an outage, create a resolved incident
-    if (config.hasOutage) {
+    // 1. Resolved incident for past outage
+    if (config.hasResolvedOutage) {
       const incidentStarted = new Date(now.getTime() - outageStartMinutesAgo * 60 * 1000);
       const incidentResolved = new Date(now.getTime() - outageEndMinutesAgo * 60 * 1000);
 
@@ -215,24 +229,123 @@ async function main() {
           }
         ]
       });
-
       console.log('  -> Created resolved outage incident.');
     }
 
-    // Add a recent deployment for demo realism
-    await Deployment.create({
-      applicationId: app._id,
-      ownerId: user._id,
-      version: 'v2.4.1',
-      commitSha: '7f9a1b2c3d',
+    // 2. Open incident for currently down app
+    if (config.hasOpenIncident) {
+      const incidentStarted = new Date(now.getTime() - 25 * 60 * 1000);
+
+      await Incident.create({
+        applicationId: app._id,
+        ownerId: user._id,
+        title: `${app.name} is down`,
+        severity: 'high',
+        status: 'open',
+        isActive: true,
+        startedAt: incidentStarted,
+        lastFailureAt: now,
+        failureCount: 5,
+        resolvedAt: null,
+        updates: [
+          {
+            message: 'Incident opened after 2 consecutive failed checks. Last error: http_error',
+            type: 'system',
+            author: null,
+            createdAt: incidentStarted
+          },
+          {
+            message: 'Team investigating server 500 error response and database connectivity.',
+            type: 'note',
+            author: user._id,
+            createdAt: new Date(incidentStarted.getTime() + 10 * 60 * 1000)
+          }
+        ]
+      });
+      console.log('  -> Created active OPEN incident (failureCount: 5).');
+    }
+  }
+
+  // 6 Demo Deployments across demo apps
+  console.log('\nCreating 6 demo deployments with mixed statuses and branches...');
+  const demoDeployments = [
+    {
+      app: createdApps[0], // Payment
+      version: 'v2.4.2',
       branch: 'main',
-      environment: app.environment,
+      commitSha: 'a1b2c3d4e5f6',
       status: 'success',
+      startedAt: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+      completedAt: new Date(now.getTime() - 2 * 60 * 60 * 1000 + 45 * 1000),
+      description: 'Patch: Stripe webhook timeout fix and retry backoff'
+    },
+    {
+      app: createdApps[1], // Worker
+      version: 'v1.4.0-rc2',
+      branch: 'release/v1.4',
+      commitSha: 'e5f6a7b8c9d0',
+      status: 'failed',
+      startedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000),
+      completedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000 + 120 * 1000),
+      description: 'Worker queue consumer optimization (failed sanity health checks)'
+    },
+    {
+      app: createdApps[0], // Payment
+      version: 'v2.4.1',
+      branch: 'main',
+      commitSha: '9f8e7d6c5b4a',
+      status: 'rolled_back',
+      startedAt: new Date(now.getTime() - 8 * 60 * 60 * 1000),
+      completedAt: new Date(now.getTime() - 8 * 60 * 60 * 1000 + 90 * 1000),
+      description: 'Database schema migration rollback after replica lag detected'
+    },
+    {
+      app: createdApps[3], // Search
+      version: 'v1.9.0',
+      branch: 'feat/elasticsearch-upgrade',
+      commitSha: '112233445566',
+      status: 'success',
+      startedAt: new Date(now.getTime() - 14 * 60 * 60 * 1000),
+      completedAt: new Date(now.getTime() - 14 * 60 * 60 * 1000 + 65 * 1000),
+      description: 'Staging release: upgrade search cluster client'
+    },
+    {
+      app: createdApps[2], // Auth
+      version: 'v3.1.0',
+      branch: 'main',
+      commitSha: '556677889900',
+      status: 'success',
+      startedAt: new Date(now.getTime() - 24 * 60 * 60 * 1000),
+      completedAt: new Date(now.getTime() - 24 * 60 * 60 * 1000 + 50 * 1000),
+      description: 'OAuth 2.1 refresh token rotation enforcement'
+    },
+    {
+      app: createdApps[1], // Worker
+      version: 'v1.3.8',
+      branch: 'hotfix/leak-patch',
+      commitSha: 'aabbccddeeff',
+      status: 'success',
+      startedAt: new Date(now.getTime() - 36 * 60 * 60 * 1000),
+      completedAt: new Date(now.getTime() - 36 * 60 * 60 * 1000 + 30 * 1000),
+      description: 'Hotfix: fix memory leak in Redis subscription listener'
+    }
+  ];
+
+  for (const dep of demoDeployments) {
+    await Deployment.create({
+      applicationId: dep.app._id,
+      ownerId: user._id,
+      version: dep.version,
+      branch: dep.branch,
+      commitSha: dep.commitSha,
+      environment: dep.app.environment,
+      status: dep.status,
       source: 'manual',
-      startedAt: new Date(now.getTime() - 6 * 60 * 60 * 1000),
-      completedAt: new Date(now.getTime() - 6 * 60 * 60 * 1000 + 45 * 1000),
-      description: 'Production release: performance optimization & bug fixes'
+      startedAt: dep.startedAt,
+      completedAt: dep.completedAt,
+      description: dep.description
     });
+    console.log(`  -> Created deployment ${dep.version} (${dep.status}) for ${dep.app.name}`);
   }
 
   console.log('\n[Success] Demo data successfully seeded for:', emailArg);

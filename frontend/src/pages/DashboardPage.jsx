@@ -263,48 +263,60 @@ export function DashboardPage() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-slate-500" aria-hidden="true" />
-              Recent Incidents
+              <span>Recent Incidents</span>
             </h2>
+            <Link
+              to="/incidents"
+              className="text-xs font-semibold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1"
+            >
+              <span>View all incidents</span>
+              <ArrowRight className="h-3 w-3" />
+            </Link>
           </div>
 
           {incidents.recent && incidents.recent.length > 0 ? (
             <ul className="divide-y divide-slate-100">
               {incidents.recent.map((inc) => (
-                <li key={inc._id} className="py-3 first:pt-0 last:pb-0">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-slate-900 truncate">
-                        {inc.title}
-                      </p>
-                      <p className="text-xs text-slate-500">
-                        {inc.applicationId?.name || 'Application'} · Started {formatRelative(inc.startedAt)}
-                      </p>
+                <li key={inc._id} className="py-2.5 first:pt-0 last:pb-0">
+                  <Link
+                    to={`/incidents/${inc._id}`}
+                    className="block p-1.5 -mx-1.5 rounded-lg hover:bg-slate-50/75 transition-colors"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-slate-900 truncate hover:text-blue-600">
+                          {inc.title}
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          {inc.applicationId?.name || 'Application'} &bull; Started {formatRelative(inc.startedAt)}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <span
+                          className={`text-2xs font-semibold px-2 py-0.5 rounded uppercase tracking-wider ${
+                            inc.severity === 'critical'
+                              ? 'bg-rose-100 text-rose-800'
+                              : inc.severity === 'high'
+                              ? 'bg-orange-100 text-orange-800'
+                              : inc.severity === 'medium'
+                              ? 'bg-amber-100 text-amber-800'
+                              : 'bg-slate-100 text-slate-700'
+                          }`}
+                        >
+                          {inc.severity}
+                        </span>
+                        <span
+                          className={`text-2xs font-semibold px-2 py-0.5 rounded capitalize ${
+                            inc.status === 'resolved'
+                              ? 'bg-emerald-100 text-emerald-800'
+                              : 'bg-rose-100 text-rose-800'
+                          }`}
+                        >
+                          {inc.status}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      <span
-                        className={`text-2xs font-semibold px-2 py-0.5 rounded uppercase tracking-wider ${
-                          inc.severity === 'critical'
-                            ? 'bg-rose-100 text-rose-800'
-                            : inc.severity === 'high'
-                            ? 'bg-orange-100 text-orange-800'
-                            : inc.severity === 'medium'
-                            ? 'bg-amber-100 text-amber-800'
-                            : 'bg-slate-100 text-slate-700'
-                        }`}
-                      >
-                        {inc.severity}
-                      </span>
-                      <span
-                        className={`text-2xs font-semibold px-2 py-0.5 rounded capitalize ${
-                          inc.status === 'resolved'
-                            ? 'bg-emerald-100 text-emerald-800'
-                            : 'bg-rose-100 text-rose-800'
-                        }`}
-                      >
-                        {inc.status}
-                      </span>
-                    </div>
-                  </div>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -320,42 +332,60 @@ export function DashboardPage() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
               <Rocket className="h-4 w-4 text-slate-500" aria-hidden="true" />
-              Recent Deployments
+              <span>Recent Deployments</span>
             </h2>
+            <Link
+              to="/deployments"
+              className="text-xs font-semibold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1"
+            >
+              <span>View all deployments</span>
+              <ArrowRight className="h-3 w-3" />
+            </Link>
           </div>
 
           {deployments.recent && deployments.recent.length > 0 ? (
             <ul className="divide-y divide-slate-100">
-              {deployments.recent.map((dep) => (
-                <li key={dep._id} className="py-3 first:pt-0 last:pb-0">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-xs font-semibold text-slate-900 bg-slate-100 px-2 py-0.5 rounded">
-                          {dep.version}
-                        </span>
-                        <span className="text-xs text-slate-500 truncate">
-                          {dep.applicationId?.name || 'Application'}
+              {deployments.recent.map((dep) => {
+                const targetUrl = dep.applicationId?._id
+                  ? `/deployments?applicationId=${dep.applicationId._id}`
+                  : '/deployments';
+
+                return (
+                  <li key={dep._id} className="py-2.5 first:pt-0 last:pb-0">
+                    <Link
+                      to={targetUrl}
+                      className="block p-1.5 -mx-1.5 rounded-lg hover:bg-slate-50/75 transition-colors"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono text-xs font-semibold text-slate-900 bg-slate-100 px-2 py-0.5 rounded">
+                              {dep.version}
+                            </span>
+                            <span className="text-xs text-slate-600 truncate font-medium">
+                              {dep.applicationId?.name || 'Application'}
+                            </span>
+                          </div>
+                          <p className="text-xs text-slate-400 mt-1">
+                            Deployed {formatRelative(dep.startedAt)}
+                          </p>
+                        </div>
+                        <span
+                          className={`text-2xs font-semibold px-2 py-0.5 rounded uppercase tracking-wider shrink-0 ${
+                            dep.status === 'success'
+                              ? 'bg-emerald-100 text-emerald-800'
+                              : dep.status === 'failed'
+                              ? 'bg-rose-100 text-rose-800'
+                              : 'bg-slate-100 text-slate-700'
+                          }`}
+                        >
+                          {dep.status}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-400 mt-1">
-                        Deployed {formatRelative(dep.startedAt)}
-                      </p>
-                    </div>
-                    <span
-                      className={`text-2xs font-semibold px-2 py-0.5 rounded uppercase tracking-wider shrink-0 ${
-                        dep.status === 'success'
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : dep.status === 'failed'
-                          ? 'bg-rose-100 text-rose-800'
-                          : 'bg-slate-100 text-slate-700'
-                      }`}
-                    >
-                      {dep.status}
-                    </span>
-                  </div>
-                </li>
-              ))}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           ) : (
             <p className="text-sm text-slate-500 py-6 text-center">

@@ -9,3 +9,4 @@ export const dashboardApi = {
     return axiosClient.get('/dashboard/summary', { params: { range } });
   }
 };
+

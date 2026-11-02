@@ -10,12 +10,16 @@ import { ApplicationsPage } from './pages/ApplicationsPage.jsx';
 import { ApplicationCreatePage } from './pages/ApplicationCreatePage.jsx';
 import { ApplicationEditPage } from './pages/ApplicationEditPage.jsx';
 import { ApplicationDetailsPage } from './pages/ApplicationDetailsPage.jsx';
+import { IncidentsPage } from './pages/IncidentsPage.jsx';
+import { IncidentDetailsPage } from './pages/IncidentDetailsPage.jsx';
+import { DeploymentsPage } from './pages/DeploymentsPage.jsx';
+import { DeploymentCreatePage } from './pages/DeploymentCreatePage.jsx';
 import { NotFoundPage } from './pages/NotFoundPage.jsx';
 
 /**
  * Root routing component defining access control policies:
  * - Public-only: /login, /register
- * - Protected: /dashboard, /applications, /applications/new, /applications/:id, /applications/:id/edit
+ * - Protected: /dashboard, /applications, /incidents, /deployments
  * - Redirects: / -> /dashboard
  * - Catch-all: * -> NotFoundPage
  */
@@ -39,6 +43,10 @@ export default function App() {
           <Route path="/applications/new" element={<ApplicationCreatePage />} />
           <Route path="/applications/:id" element={<ApplicationDetailsPage />} />
           <Route path="/applications/:id/edit" element={<ApplicationEditPage />} />
+          <Route path="/incidents" element={<IncidentsPage />} />
+          <Route path="/incidents/:id" element={<IncidentDetailsPage />} />
+          <Route path="/deployments" element={<DeploymentsPage />} />
+          <Route path="/deployments/new" element={<DeploymentCreatePage />} />
         </Route>
       </Route>
 

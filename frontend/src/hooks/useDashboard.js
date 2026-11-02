@@ -22,3 +22,4 @@ export function useDashboard(range = '24h') {
     staleTime: 15000
   });
 }
+

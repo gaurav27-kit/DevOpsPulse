@@ -27,3 +27,4 @@ export const healthApi = {
     return axiosClient.post(`/applications/${id}/check`);
   }
 };
+

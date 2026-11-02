@@ -20,3 +20,4 @@ export function formatPercent(value, decimals = 1) {
 
   return `${num.toFixed(decimals)}%`;
 }
+

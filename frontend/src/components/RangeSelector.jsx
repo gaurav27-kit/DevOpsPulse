@@ -56,3 +56,4 @@ export function RangeSelector({ paramName = 'range', value: controlledValue, onC
     </div>
   );
 }
+
