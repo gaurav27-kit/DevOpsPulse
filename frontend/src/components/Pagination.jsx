@@ -5,7 +5,7 @@ import { Button } from './Button.jsx';
 /**
  * Accessible server-side pagination bar.
  */
-export function Pagination({ page = 1, totalPages = 1, total = 0, onPageChange, className = '' }) {
+export function Pagination({ page = 1, totalPages = 1, total = 0, onPageChange, itemLabel = 'record', className = '' }) {
   if (totalPages <= 1 && total === 0) return null;
 
   return (
@@ -15,7 +15,7 @@ export function Pagination({ page = 1, totalPages = 1, total = 0, onPageChange, 
       className={`flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-200 ${className}`}
     >
       <div className="text-xs text-slate-500">
-        Showing <span className="font-semibold text-slate-700">{total}</span> total application
+        Showing <span className="font-semibold text-slate-700">{total}</span> total {itemLabel}
         {total === 1 ? '' : 's'} &bull; Page <span className="font-semibold text-slate-700">{page}</span> of{' '}
         <span className="font-semibold text-slate-700">{totalPages || 1}</span>
       </div>
