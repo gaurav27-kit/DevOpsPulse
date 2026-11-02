@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth.js';
 import { Button } from './Button.jsx';
+import { LiveIndicator } from './LiveIndicator.jsx';
+import { useLiveInvalidation } from '../socket/useLiveInvalidation.js';
 
 /**
  * Main application shell featuring a responsive sidebar navigation and top bar.
@@ -22,6 +24,9 @@ export function AppLayout() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const queryClient = useQueryClient();
+
+  // Mount real-time Socket.IO cache invalidation hook
+  useLiveInvalidation();
 
   // Inspect cached dashboard data for active incident count without triggering any network requests
   const cachedDashboard =
@@ -61,14 +66,17 @@ export function AppLayout() {
           <Activity className="w-5 h-5 text-indigo-600" />
           <span>DevOpsPulse</span>
         </div>
-        <button
-          type="button"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
-          aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-        >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        <div className="flex items-center gap-2">
+          <LiveIndicator />
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Backdrop for mobile drawer */}
@@ -151,8 +159,9 @@ export function AppLayout() {
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Navbar on desktop */}
         <header className="hidden md:flex h-16 bg-white border-b border-slate-200 px-8 items-center justify-between">
-          <div>
+          <div className="flex items-center gap-3">
             <h2 className="text-base font-semibold text-slate-800">Operational Dashboard</h2>
+            <LiveIndicator />
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right">

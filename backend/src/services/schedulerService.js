@@ -5,6 +5,7 @@ import { computeNextState } from './statusService.js';
 import { env } from '../config/env.js';
 // incidentService imported lazily to avoid circular deps; imported at top since there are none here
 import { handleCheckOutcome } from './incidentService.js';
+import { emitApplicationStatus, emitHealthCheckCompleted } from '../sockets/events.js';
 
 let tickInterval = null;
 let isTickRunning = false;
@@ -65,6 +66,17 @@ export async function processCheckResult(application, result) {
 
   // If the app was deleted or its URL changed in-flight, discard result silently
   if (!updatedApp) return;
+
+  // Real-time notification: emit completed healthcheck & application status to owner room
+  emitHealthCheckCompleted(application.ownerId, {
+    applicationId: application._id,
+    success: result.success,
+    statusCode: result.statusCode ?? null,
+    responseTimeMs: result.responseTimeMs,
+    errorType: result.errorType ?? null,
+    checkedAt
+  });
+  emitApplicationStatus(application.ownerId, updatedApp);
 
   // d) Handle incident logic AFTER the application update succeeds.
   // Wrap in try/catch: an incident error must never break the scheduler or leave a lock held.

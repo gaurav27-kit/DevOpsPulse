@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { Deployment } from '../models/Deployment.js';
 import { Application } from '../models/Application.js';
 import { AppError } from '../utils/AppError.js';
+import { emitDeploymentRecorded } from '../sockets/events.js';
 
 const SORT_ALLOWLIST = new Set(['startedAt', 'createdAt']);
 
@@ -30,6 +31,9 @@ export async function createDeployment(ownerId, applicationId, data) {
     completedAt,
     description: data.description ?? null
   });
+
+  // Real-time: emit deployment:recorded to owner room
+  emitDeploymentRecorded(ownerId, deployment);
 
   return deployment;
 }

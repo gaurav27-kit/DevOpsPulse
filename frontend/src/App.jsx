@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ProtectedRoute } from './routes/ProtectedRoute.jsx';
 import { PublicOnlyRoute } from './routes/PublicOnlyRoute.jsx';
+import { SocketProvider } from './socket/SocketProvider.jsx';
 import { AppLayout } from './components/AppLayout.jsx';
 import { LoginPage } from './pages/LoginPage.jsx';
 import { RegisterPage } from './pages/RegisterPage.jsx';
@@ -20,6 +21,7 @@ import { NotFoundPage } from './pages/NotFoundPage.jsx';
  * Root routing component defining access control policies:
  * - Public-only: /login, /register
  * - Protected: /dashboard, /applications, /incidents, /deployments
+ * - Real-time: Protected routes wrapped with SocketProvider for live updates
  * - Redirects: / -> /dashboard
  * - Catch-all: * -> NotFoundPage
  */
@@ -35,9 +37,15 @@ export default function App() {
         <Route path="/register" element={<RegisterPage />} />
       </Route>
 
-      {/* Authenticated routes wrapped with AppLayout */}
+      {/* Authenticated routes wrapped with SocketProvider and AppLayout */}
       <Route element={<ProtectedRoute />}>
-        <Route element={<AppLayout />}>
+        <Route
+          element={
+            <SocketProvider>
+              <AppLayout />
+            </SocketProvider>
+          }
+        >
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/applications" element={<ApplicationsPage />} />
           <Route path="/applications/new" element={<ApplicationCreatePage />} />

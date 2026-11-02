@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { Incident } from '../models/Incident.js';
 import { AppError } from '../utils/AppError.js';
 import { decideIncidentAction } from './incidentRules.js';
+import { emitIncidentCreated, emitIncidentUpdated } from '../sockets/events.js';
 
 // Maximum number of timeline updates per incident before we stop accepting new ones
 const MAX_UPDATES = 200;
@@ -30,7 +31,7 @@ async function openIncident(application, result) {
     `Incident opened after 2 consecutive failed checks. Last error: ${result.errorType ?? 'unknown'}`;
 
   try {
-    await Incident.create({
+    const created = await Incident.create({
       applicationId: application._id,
       ownerId: application.ownerId,
       title: `${application.name} is down`,
@@ -50,7 +51,8 @@ async function openIncident(application, result) {
       ]
     });
 
-    // TODO(Step 9): emit incident:created via Socket.IO AFTER the DB write succeeds
+    // Real-time: emit incident:created AFTER database write succeeds
+    emitIncidentCreated(application.ownerId, created, application.name);
 
     console.log(`[Incident] Opened incident for app ${application._id} (${severity})`);
   } catch (err) {
@@ -80,7 +82,8 @@ async function updateActiveIncident(applicationId, now = new Date()) {
   );
 
   if (updated) {
-    // TODO(Step 9): emit incident:updated via Socket.IO AFTER the DB write succeeds
+    // Real-time: emit incident:updated AFTER database write succeeds
+    emitIncidentUpdated(updated.ownerId, updated);
     console.log(`[Incident] Updated active incident for app ${applicationId}, failureCount=${updated.failureCount}`);
   }
 }
@@ -112,7 +115,8 @@ async function resolveIncident(applicationId) {
   );
 
   if (updated) {
-    // TODO(Step 9): emit incident:updated via Socket.IO AFTER the DB write succeeds
+    // Real-time: emit incident:updated AFTER database write succeeds
+    emitIncidentUpdated(updated.ownerId, updated);
     console.log(`[Incident] Auto-resolved incident ${updated._id} for app ${applicationId}`);
   }
 }
@@ -175,7 +179,8 @@ export async function closeForUrlChange(applicationId) {
   );
 
   if (updated) {
-    // TODO(Step 9): emit incident:updated via Socket.IO AFTER the DB write succeeds
+    // Real-time: emit incident:updated AFTER database write succeeds
+    emitIncidentUpdated(updated.ownerId, updated);
     console.log(`[Incident] Closed incident ${updated._id} due to URL change on app ${applicationId}`);
   }
 }
@@ -336,7 +341,8 @@ export async function changeIncidentStatus(ownerId, id, { status: newStatus, not
     throw new AppError('Invalid status transition', 409);
   }
 
-  // TODO(Step 9): emit incident:updated via Socket.IO AFTER the DB write succeeds
+  // Real-time: emit incident:updated AFTER database write succeeds
+  emitIncidentUpdated(ownerId, updated);
 
   return updated;
 }
@@ -365,7 +371,8 @@ export async function addIncidentNote(ownerId, id, { message }, userId) {
 
   await incident.save();
 
-  // TODO(Step 9): emit incident:updated via Socket.IO AFTER the DB write succeeds
+  // Real-time: emit incident:updated AFTER database write succeeds
+  emitIncidentUpdated(ownerId, incident);
 
   return incident;
 }

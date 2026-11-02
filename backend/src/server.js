@@ -1,14 +1,22 @@
+import http from 'http';
+import mongoose from 'mongoose';
 import app from './app.js';
 import { env } from './config/env.js';
 import { connectDB } from './config/db.js';
 import * as schedulerService from './services/schedulerService.js';
+import { initSockets, closeIO } from './sockets/index.js';
 
 const startServer = async () => {
   // Connect to MongoDB before starting HTTP server or scheduler
   await connectDB();
 
-  const server = app.listen(env.PORT, () => {
-    console.log(`[Server] DevOpsPulse API running in ${env.NODE_ENV} mode on port ${env.PORT}`);
+  const httpServer = http.createServer(app);
+
+  // Initialize Socket.IO with cookie-based JWT authentication
+  initSockets(httpServer);
+
+  httpServer.listen(env.PORT, () => {
+    console.log(`[Server] DevOpsPulse API & WebSockets running in ${env.NODE_ENV} mode on port ${env.PORT}`);
   });
 
   // Start monitoring scheduler only if enabled in config
@@ -22,14 +30,21 @@ const startServer = async () => {
   process.on('unhandledRejection', (err) => {
     console.error(`[Unhandled Rejection] ${err.message}`, err);
     schedulerService.stop();
-    server.close(() => process.exit(1));
+    closeIO();
+    httpServer.close(() => process.exit(1));
   });
 
   // Graceful shutdown on termination signals
-  const shutdown = () => {
+  const shutdown = async () => {
     console.log('[Server] Gracefully shutting down...');
     schedulerService.stop();
-    server.close(() => {
+    closeIO();
+    httpServer.close(async () => {
+      try {
+        await mongoose.connection.close();
+      } catch {
+        // ignore error during disconnect
+      }
       console.log('[Server] Process terminated.');
       process.exit(0);
     });

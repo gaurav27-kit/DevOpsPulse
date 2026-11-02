@@ -5,6 +5,7 @@ import { Deployment } from '../models/Deployment.js';
 import { AppError } from '../utils/AppError.js';
 import { assertSafeDestination } from './urlSafetyService.js';
 import { closeForUrlChange } from './incidentService.js';
+import { emitApplicationStatus } from '../sockets/events.js';
 
 /**
  * Escapes special regex metacharacters in user search queries to prevent crashes or ReDoS.
@@ -115,7 +116,9 @@ export const updateApplication = async (ownerId, id, data) => {
   const application = await Application.findOne({ _id: id, ownerId });
   if (!application) throw new AppError('Application not found', 404);
 
+  let urlChanged = false;
   if (data.url && data.url !== application.url) {
+    urlChanged = true;
     // Run SSRF check (syntax + DNS) on the new URL
     const safeUrl = await assertSafeDestination(data.url);
     data.url = safeUrl;
@@ -155,6 +158,11 @@ export const updateApplication = async (ownerId, id, data) => {
   }
 
   await application.save();
+
+  if (urlChanged) {
+    emitApplicationStatus(ownerId, application);
+  }
+
   return application;
 };
 
