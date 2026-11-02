@@ -1,7 +1,9 @@
 import { Application } from '../models/Application.js';
 import { HealthCheck } from '../models/HealthCheck.js';
+import { Incident } from '../models/Incident.js';
 import { AppError } from '../utils/AppError.js';
 import { assertSafeDestination } from './urlSafetyService.js';
+import { closeForUrlChange } from './incidentService.js';
 
 /**
  * Escapes special regex metacharacters in user search queries to prevent crashes or ReDoS.
@@ -124,8 +126,13 @@ export const updateApplication = async (ownerId, id, data) => {
       ]);
     }
 
+    // Close any active incident before resetting the application state.
+    // The old incident belongs to the old URL; the new URL gets a fresh slate.
+    await closeForUrlChange(application._id);
+
     application.url = data.url;
     application.status = 'unknown';
+    // Reset consecutive counters so the new URL doesn't inherit stale failure/success streaks
     application.consecutiveFailures = 0;
     application.consecutiveSuccesses = 0;
     application.lastCheckedAt = null;
@@ -167,7 +174,9 @@ export const deleteApplication = async (ownerId, id) => {
   // Cascade: delete all health check records for this application
   await HealthCheck.deleteMany({ applicationId: id });
 
-  // TODO (Step 6): await Incident.deleteMany({ applicationId: id });
+  // Cascade: delete all incidents (active and resolved) for this application
+  await Incident.deleteMany({ applicationId: id });
+
   // TODO (Step 8): await Deployment.deleteMany({ applicationId: id });
 
   await Application.deleteOne({ _id: id, ownerId });

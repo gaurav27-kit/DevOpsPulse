@@ -166,3 +166,4 @@ describe('isPrivateOrSpecialIp – invalid input blocked by default', () => {
     assert.equal(isPrivateOrSpecialIp(''), true);
   });
 });
+

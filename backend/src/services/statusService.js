@@ -56,3 +56,4 @@ export function computeNextState(app, result, slowThresholdMs) {
 
   return { status, consecutiveFailures, consecutiveSuccesses };
 }
+

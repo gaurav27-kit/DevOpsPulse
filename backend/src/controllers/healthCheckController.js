@@ -37,3 +37,4 @@ export const listHealthChecks = asyncHandler(async (req, res) => {
     }
   });
 });
+

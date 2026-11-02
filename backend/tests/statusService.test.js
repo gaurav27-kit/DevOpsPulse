@@ -120,3 +120,4 @@ describe('computeNextState', () => {
     assert.equal(result.consecutiveSuccesses, 1);
   });
 });
+

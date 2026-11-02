@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import { env } from './config/env.js';
 import authRoutes from './routes/auth.js';
 import applicationRoutes from './routes/applications.js';
+import incidentRoutes from './routes/incidents.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
 const app = express();
@@ -34,6 +35,7 @@ app.get('/api/v1/health', (req, res) => {
 // Mount modular API routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/applications', applicationRoutes);
+app.use('/api/v1/incidents', incidentRoutes);
 
 // Catch 404 for undefined routes
 app.use(notFoundHandler);

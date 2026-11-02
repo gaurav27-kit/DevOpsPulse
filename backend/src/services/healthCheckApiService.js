@@ -108,3 +108,4 @@ export const listHealthChecks = async (ownerId, applicationId, query = {}) => {
     }
   };
 };
+
