@@ -107,7 +107,8 @@ export const listChannels = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     data: {
-      channels: channels.map((c) => c.toPublicJSON())
+      channels: channels.map((c) => c.toPublicJSON()),
+      isSmtpConfigured: isSmtpConfigured()
     }
   });
 });

@@ -27,6 +27,7 @@ import { Skeleton } from '../components/Skeleton.jsx';
 export function NotificationsPage() {
   const queryClient = useQueryClient();
   const [feedback, setFeedback] = useState({ message: '', variant: 'success' });
+  const [modalError, setModalError] = useState('');
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingChannel, setEditingChannel] = useState(null);
   const [deleteChannelConfirm, setDeleteChannelConfirm] = useState(null);
@@ -88,6 +89,7 @@ export function NotificationsPage() {
       enabled: true
     });
     setFormErrors({});
+    setModalError('');
   };
 
   const handleOpenCreate = () => {
@@ -137,15 +139,19 @@ export function NotificationsPage() {
       }
     },
     onError: (err) => {
-      if (err.fieldErrors && Object.keys(err.fieldErrors).length > 0) {
+      const isUrlError = /url|destination|private|forbidden|protocol|hostname/i.test(err.message || '');
+      const hasFieldErrors = err.fieldErrors && Object.keys(err.fieldErrors).length > 0;
+
+      if (hasFieldErrors) {
         setFormErrors(err.fieldErrors);
-      } else if (err.message) {
-        if (/url|destination|private|forbidden|protocol|hostname/i.test(err.message)) {
-          setFormErrors((prev) => ({ ...prev, url: err.message }));
-        }
-        setFeedback({ message: err.message, variant: 'error' });
+      } else if (isUrlError) {
+        setFormErrors((prev) => ({ ...prev, url: err.message }));
+      }
+
+      if (!hasFieldErrors && !isUrlError) {
+        setModalError(err.message || 'Failed to create channel.');
       } else {
-        setFeedback({ message: 'Failed to create channel.', variant: 'error' });
+        setModalError('');
       }
     }
   });
@@ -158,7 +164,20 @@ export function NotificationsPage() {
       setFeedback({ message: 'Channel updated successfully.', variant: 'success' });
     },
     onError: (err) => {
-      setFeedback({ message: err.message || 'Failed to update channel.', variant: 'error' });
+      const isUrlError = /url|destination|private|forbidden|protocol|hostname/i.test(err.message || '');
+      const hasFieldErrors = err.fieldErrors && Object.keys(err.fieldErrors).length > 0;
+
+      if (hasFieldErrors) {
+        setFormErrors(err.fieldErrors);
+      } else if (isUrlError) {
+        setFormErrors((prev) => ({ ...prev, url: err.message }));
+      }
+
+      if (!hasFieldErrors && !isUrlError) {
+        setModalError(err.message || 'Failed to update channel.');
+      } else {
+        setModalError('');
+      }
     }
   });
 
@@ -195,6 +214,7 @@ export function NotificationsPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormErrors({});
+    setModalError('');
 
     const payload = {
       name: formData.name.trim(),
@@ -370,6 +390,8 @@ export function NotificationsPage() {
                     size="sm"
                     onClick={() => {
                       setEditingChannel(chan);
+                      setModalError('');
+                      setFormErrors({});
                       setFormData({
                         name: chan.name,
                         type: chan.type,
@@ -496,6 +518,16 @@ export function NotificationsPage() {
               </button>
             </div>
 
+            {modalError && (
+              <div
+                role="alert"
+                className="p-3 bg-[#fdf2f2] border border-[#f87171] rounded-lg text-xs text-[#ba1a1a] flex items-start gap-2"
+              >
+                <AlertTriangle className="w-4 h-4 shrink-0 text-[#ba1a1a] mt-0.5" />
+                <span className="font-medium">{modalError}</span>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="channel-name" className="block text-xs font-semibold text-[#131b2e] mb-1">
@@ -584,8 +616,19 @@ export function NotificationsPage() {
               )}
 
               {formData.type === 'email' && (
-                <div className="p-3 bg-[#f8fafc] border border-[#e2e8f0] rounded-lg text-xs text-[#475569]">
-                  Alerts are strictly delivered to your verified account email address to prevent open relay spam abuse.
+                <div className="space-y-2">
+                  <div className="p-3 bg-[#f8fafc] border border-[#e2e8f0] rounded-lg text-xs text-[#475569]">
+                    Alerts are strictly delivered to your verified account email address to prevent open relay spam abuse.
+                  </div>
+                  {channelsData?.data?.isSmtpConfigured === false && (
+                    <div className="p-3 bg-[#fffbeb] border border-[#fef3c7] rounded-lg text-xs text-[#b45309] flex items-start gap-2">
+                      <AlertTriangle className="w-4 h-4 shrink-0 text-[#f59e0b] mt-0.5" />
+                      <div>
+                        <span className="font-semibold block text-[#92400e]">Email alerts not configured on server</span>
+                        SMTP credentials are not configured in <code className="bg-amber-100/60 px-1 py-0.5 rounded font-mono">backend/.env</code>. Set <code className="bg-amber-100/60 px-1 py-0.5 rounded font-mono">SMTP_HOST</code> to enable email delivery, or choose <strong>Webhook</strong> instead.
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -641,6 +684,7 @@ export function NotificationsPage() {
                 <Button
                   type="submit"
                   variant="primary"
+                  isLoading={createMutation.isPending || updateMutation.isPending}
                   disabled={createMutation.isPending || updateMutation.isPending}
                 >
                   {editingChannel ? 'Save Changes' : 'Create Channel'}
