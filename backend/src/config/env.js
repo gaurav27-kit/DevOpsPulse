@@ -58,7 +58,9 @@ export const env = Object.freeze({
 
   // Rate Limiting (configurable for testing)
   AUTH_RATE_LIMIT_WINDOW_MS: Number(process.env.AUTH_RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
-  AUTH_RATE_LIMIT_MAX: Number(process.env.AUTH_RATE_LIMIT_MAX) || 20,
+  AUTH_RATE_LIMIT_MAX:
+    Number(process.env.AUTH_RATE_LIMIT_MAX) ||
+    (process.env.NODE_ENV === 'production' ? 20 : 1000),
   CHECK_RATE_LIMIT_WINDOW_MS: Number(process.env.CHECK_RATE_LIMIT_WINDOW_MS) || 60 * 1000,
   CHECK_RATE_LIMIT_MAX: Number(process.env.CHECK_RATE_LIMIT_MAX) || 6,
 
