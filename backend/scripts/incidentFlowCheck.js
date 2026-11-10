@@ -179,6 +179,10 @@ async function main() {
       nextCheckAt: new Date()
     });
 
+    // Warm up to consecutiveFailures=1 so the concurrent calls reach failureCount=2 and attempt to open
+    const initialSnapshot = await freshApp(concApp._id);
+    await processCheckResult(initialSnapshot, failResult());
+
     // Run 20 concurrent processCheckResult calls with failure results.
     // Each call independently fetches a snapshot of the app, so they all see
     // consecutiveFailures at various stages. The partial unique index ensures
