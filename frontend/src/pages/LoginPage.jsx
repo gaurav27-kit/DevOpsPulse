@@ -8,7 +8,7 @@ import { FormError } from '../components/FormError.jsx';
 
 /**
  * Authentication login view with controlled form state, client validation,
- * and structured API error handling.
+ * and structured API error handling styled with DevOpsPulse design tokens.
  */
 export function LoginPage() {
   const navigate = useNavigate();
@@ -78,22 +78,39 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <div className="mx-auto w-12 h-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md">
-          <Activity className="w-7 h-7" aria-hidden="true" />
-        </div>
-        <h2 className="mt-4 text-2xl font-bold tracking-tight text-slate-900">
-          Sign in to DevOpsPulse
-        </h2>
-        <p className="mt-1 text-sm text-slate-500">
-          Monitor your services and track live incidents
-        </p>
-      </div>
+    <div className="min-h-screen bg-[#faf8ff] flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md">
+        {/* Card Container */}
+        <div className="bg-white border border-[#e2e8f0] rounded-2xl shadow-sm p-7 sm:p-9 space-y-6">
+          {/* Brand Header */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-lg bg-[#070d0d] flex items-center justify-center text-white shadow-xs">
+                <Activity className="w-5 h-5 text-[#ff6700]" aria-hidden="true" />
+              </div>
+              <span className="text-xl font-bold tracking-tight text-[#131b2e]">DevOpsPulse</span>
+            </div>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#f2f3ff] text-[#59605f] border border-[#dae2fd]">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff6700] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff6700]"></span>
+              </span>
+              <span className="text-2xs uppercase tracking-wider font-semibold font-mono text-[#5a4136]">Live v2.4</span>
+            </div>
+          </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-6 shadow-sm border border-slate-200 rounded-2xl sm:px-10">
-          <form className="space-y-5" onSubmit={handleSubmit} noValidate>
+          {/* Titles */}
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight text-[#131b2e]">
+              Sign in to DevOpsPulse
+            </h2>
+            <p className="mt-1 text-sm text-[#5a4136]">
+              Monitor your services and track live incidents
+            </p>
+          </div>
+
+          {/* Form */}
+          <form className="space-y-4" onSubmit={handleSubmit} noValidate>
             <FormError message={generalError} />
 
             <Input
@@ -128,18 +145,19 @@ export function LoginPage() {
               type="submit"
               variant="primary"
               isLoading={isLoggingIn}
-              className="w-full py-2.5 text-sm"
+              className="w-full min-h-[42px] mt-2 font-semibold"
             >
               Sign in
             </Button>
           </form>
 
-          <div className="mt-6 text-center border-t border-slate-100 pt-5">
-            <p className="text-sm text-slate-600">
+          {/* Footer Link */}
+          <div className="text-center border-t border-[#eaedff] pt-4">
+            <p className="text-sm text-[#5a4136]">
               Don't have an account?{' '}
               <Link
                 to="/register"
-                className="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors"
+                className="font-semibold text-[#a23f00] hover:text-[#ff6700] hover:underline transition-colors"
               >
                 Create one now
               </Link>
@@ -150,4 +168,3 @@ export function LoginPage() {
     </div>
   );
 }
-

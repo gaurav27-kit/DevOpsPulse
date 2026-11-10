@@ -59,3 +59,24 @@ npm run dev
 ```
 Frontend runs on `http://localhost:5173`.
 
+## Features & Capabilities
+
+- **Automated Health Checks**: HTTP/HTTPS monitoring with configurable intervals (10s to 1h), timeout enforcement, and status classification (up, down, degraded).
+- **Incident Management**: State-machine driven incident lifecycle (`open`, `investigating`, `identified`, `monitoring`, `resolved`), timeline notes, and automatic recovery.
+- **Deployment Markers**: Correlate deployment events across production and staging with health metrics and response times.
+- **Real-Time Telemetry**: WebSocket-driven dashboard updates and live query cache invalidation.
+- **Alerting & Notifications (Release 2)**:
+  - Outbound notifications for `incident_opened` and `incident_resolved` events.
+  - Email alerts via SMTP to the account owner with HTML/plain-text bodies and XSS/header injection protection.
+  - Webhooks with HMAC-SHA256 signatures (`X-DevOpsPulse-Signature`) supporting generic JSON and Slack-compatible formats.
+  - Defense-in-depth SSRF protection on webhook destinations using connect-time DNS validation (`buildSafeLookup`) and redirect blocking.
+  - AES-256-GCM encryption at rest for webhook URLs and secrets.
+  - Pure rule engine with minimum severity thresholds, anti-flapping cooldowns (5m), and per-user hourly rate caps (30/hr).
+  - Deduplication unique index ensuring zero duplicate alerts per incident event.
+
+### Known Limitations
+
+- **In-process, non-durable retries**: Webhook delivery retries (1s, 5s, 30s) are managed in-process with bounded concurrency (max 5 in flight). If the server crashes or restarts mid-flight, pending deliveries older than 2 minutes are marked as `failed` with error type `interrupted` upon restart rather than resumed from an external durable message broker (e.g. RabbitMQ or Redis Streams).
+- **Account-owner email only**: Email notifications are dispatched exclusively to the verified account owner's email address. Arbitrary third-party recipients are disallowed by design to prevent open-relay spam abuse.
+- **No SMS or native push**: Alerting supports Email and Webhooks only. SMS and mobile push notifications are out of scope for Release 2.
+

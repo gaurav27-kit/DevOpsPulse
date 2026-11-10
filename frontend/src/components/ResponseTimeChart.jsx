@@ -58,8 +58,8 @@ export function ResponseTimeChart({
 
   if (!hasData) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
-        <h3 className="text-sm font-semibold text-slate-800 mb-2">Response Time Latency</h3>
+      <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm">
+        <h3 className="text-base font-semibold text-[#131b2e] mb-2">Response Time Latency</h3>
         <EmptyState
           icon={Activity}
           title="No health-check data for this range yet"
@@ -91,18 +91,18 @@ export function ResponseTimeChart({
   const srSummary = `Average response time ranged from ${minMs} ms to ${maxMs} ms with an average of ${avgMs} ms over the ${range} period.`;
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
-      <div className="flex items-center justify-between mb-4">
+    <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
-          <h3 className="text-sm font-semibold text-slate-900">Response Time Latency</h3>
-          <p className="text-xs text-slate-500">
+          <h3 className="text-base font-semibold text-[#131b2e]">Response Time Latency</h3>
+          <p className="text-xs text-[#5a4136] mt-0.5">
             Average response time of successful checks (gaps indicate unmonitored periods or outages)
           </p>
         </div>
-        <div className="flex items-center gap-4 text-xs text-slate-500">
-          <span>Min: <strong className="text-slate-800">{minMs} ms</strong></span>
-          <span>Avg: <strong className="text-slate-800">{avgMs} ms</strong></span>
-          <span>Max: <strong className="text-slate-800">{maxMs} ms</strong></span>
+        <div className="flex items-center gap-4 text-xs text-[#5a4136]">
+          <span>Min: <strong className="text-[#131b2e]">{minMs} ms</strong></span>
+          <span>Avg: <strong className="text-[#131b2e]">{avgMs} ms</strong></span>
+          <span>Max: <strong className="text-[#131b2e]">{maxMs} ms</strong></span>
         </div>
       </div>
 
@@ -115,18 +115,18 @@ export function ResponseTimeChart({
             data={chartData}
             margin={{ top: 10, right: 15, left: -10, bottom: 0 }}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eaedff" />
             <XAxis
               dataKey="timestamp"
               tickFormatter={formatTick}
-              stroke="#94a3b8"
+              stroke="#5a4136"
               fontSize={11}
               tickLine={false}
-              axisLine={{ stroke: '#e2e8f0' }}
+              axisLine={{ stroke: '#dae2fd' }}
               minTickGap={35}
             />
             <YAxis
-              stroke="#94a3b8"
+              stroke="#5a4136"
               fontSize={11}
               tickLine={false}
               axisLine={false}
@@ -141,19 +141,20 @@ export function ResponseTimeChart({
               ]}
               contentStyle={{
                 backgroundColor: '#ffffff',
-                border: '1px solid #e2e8f0',
-                borderRadius: '8px',
+                border: '1px solid #dae2fd',
+                borderRadius: '12px',
                 fontSize: '12px',
-                boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                color: '#131b2e',
+                boxShadow: '0 4px 12px rgba(15, 23, 42, 0.05)'
               }}
             />
             <Line
               type="monotone"
               dataKey="responseTime"
-              stroke="#2563eb"
+              stroke="#0061a2"
               strokeWidth={2}
               dot={false}
-              activeDot={{ r: 5, fill: '#2563eb', stroke: '#ffffff', strokeWidth: 2 }}
+              activeDot={{ r: 5, fill: '#0061a2', stroke: '#ffffff', strokeWidth: 2 }}
               connectNulls={false} // Crucial: renders nulls as visible gaps
               isAnimationActive={false}
             />

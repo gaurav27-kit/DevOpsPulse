@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"inverse-on-surface":"#eef0ff","surface-container-low":"#f2f3ff","primary-fixed":"#ffdbcd","surface-container-high":"#e2e7ff","inverse-surface":"#283044","surface-container-lowest":"#ffffff","on-error":"#ffffff","primary-container":"#ff6700","on-primary":"#ffffff","surface-variant":"#dae2fd","inverse-primary":"#ffb595","surface-container-highest":"#dae2fd","secondary-fixed":"#dde4e3","outline-variant":"#e3bfb1","tertiary-container":"#019cff","surface-tint":"#a23f00","surface-bright":"#faf8ff","on-error-container":"#93000a","on-background":"#131b2e","primary":"#a23f00","outline":"#8e7164","surface-dim":"#d2d9f4","on-tertiary-fixed-variant":"#00497c","secondary":"#59605f","on-primary-container":"#561e00","error":"#ba1a1a","on-secondary-fixed-variant":"#414848","on-secondary-fixed":"#161d1d","on-secondary":"#ffffff","secondary-container":"#dde4e3","tertiary-fixed":"#d1e4ff","secondary-fixed-dim":"#c1c8c7","on-tertiary-container":"#003156","surface":"#faf8ff","tertiary-fixed-dim":"#9dcaff","on-primary-fixed":"#351000","error-container":"#ffdad6","on-tertiary-fixed":"#001d35","on-surface-variant":"#5a4136","primary-fixed-dim":"#ffb595","background":"#faf8ff","on-primary-fixed-variant":"#7c2e00","tertiary":"#0061a2","on-secondary-container":"#5f6665","on-surface":"#131b2e","on-tertiary":"#ffffff","surface-container":"#eaedff"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"margin-mobile":"1rem","margin":"2rem","space-sm":"0.5rem","gutter-mobile":"1rem","gutter":"1.5rem","space-md":"1rem","space-xs":"0.25rem","space-xl":"2rem","space-lg":"1.5rem"},fontFamily:{"body-md":["Inter"],"headline-lg-mobile":["Inter"],"headline-sm":["Inter"],"code-inline":["Inter"],"label-sm":["Inter"],"display-lg":["Inter"],"headline-md":["Inter"],"body-sm":["Inter"],"label-md":["Inter"],"body-lg":["Inter"],"headline-lg":["Inter"]},fontSize:{"body-md":["14px",{"lineHeight":"20px","letterSpacing":"-0.005em","fontWeight":"400"}],"headline-lg-mobile":["22px",{"lineHeight":"28px","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"-0.015em","fontWeight":"600"}],"code-inline":["12px",{"lineHeight":"16px","letterSpacing":"-0.01em","fontWeight":"500"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"500"}],"display-lg":["36px",{"lineHeight":"44px","letterSpacing":"-0.03em","fontWeight":"600"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-sm":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"400"}],"label-md":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"500"}],"body-lg":["15px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"400"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.025em","fontWeight":"600"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 left-0 right-0 z-50 h-16 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 w-full px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-xl"><div class="flex items-center gap-space-sm cursor-pointer select-none"><div class="w-8 h-8 rounded-xl bg-primary-container flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[20px]">vital_signs</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">DevOpsPulse</span><span class="font-label-sm text-label-sm text-primary leading-none mt-space-xs font-semibold">Observability</span></div></div><nav class="hidden xl:flex items-center gap-space-xs" data-active-classes="bg-surface-container-high text-on-surface font-medium rounded-lg"><a aria-current="page" class="px-space-md py-space-xs transition-colors bg-surface-container-high text-on-surface font-medium rounded-lg" data-path="dashboard" href="#">Dashboard</a><a class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="applications" href="#">Applications</a><a class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="incidents" href="#">Incidents</a><a class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="deployments" href="#">Deployments</a><a class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="settings" href="#">Settings</a></nav></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-space-sm px-space-md py-space-xs rounded-xl bg-surface-container-low text-on-surface-variant shadow-[0_1px_4px_rgba(0,0,0,0.02)] cursor-pointer hover:bg-surface-container hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[18px]">search</span><span class="font-body-sm text-body-sm select-none pr-space-md">Search metrics, services...</span><kbd class="px-space-xs py-0.5 rounded bg-surface-container-highest text-on-surface font-code-inline text-code-inline shadow-sm select-none">⌘K</kbd></div><div class="hidden sm:flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-low shadow-[0_1px_4px_rgba(0,0,0,0.02)]"><span class="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span><span class="font-label-sm text-label-sm text-on-surface select-none">All systems operational</span></div><button aria-label="Notifications" class="relative p-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary-container ring-2 ring-surface"></span></button><div class="flex items-center gap-space-sm pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ring-2 ring-primary-fixed"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden lg:flex flex-col text-left select-none"><span class="font-label-md text-label-md text-on-surface leading-tight">Gaurav</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-none">Lead SRE</span></div></div></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-64 bg-surface-container-low/70 backdrop-blur-md z-40 flex flex-col justify-between py-space-lg px-space-md shadow-[0_1px_8px_rgba(0,0,0,0.03)]"><div class="flex flex-col gap-space-lg"><div class="px-space-sm flex items-center justify-between"><span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Workspaces</span><span class="material-symbols-outlined text-on-surface-variant text-[16px] cursor-pointer hover:text-on-surface">unfold_more</span></div><div class="px-space-sm py-space-xs rounded-lg bg-surface flex items-center gap-space-sm shadow-[0_1px_4px_rgba(0,0,0,0.02)]"><div class="w-5 h-5 rounded bg-primary-container text-on-primary flex items-center justify-center font-label-sm text-[10px] font-bold">PR</div><span class="font-body-sm text-body-sm text-on-surface font-medium truncate">Production US-East</span></div><nav class="flex flex-col gap-space-xs" data-active-classes="bg-surface-container-high text-on-surface font-medium"><div class="px-space-sm pt-space-xs pb-space-xs font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">Telemetry</div><a aria-current="page" class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-lg transition-colors bg-surface-container-high text-on-surface font-medium" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[18px]">dashboard</span>Live Monitors</a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="applications" href="#"><span class="material-symbols-outlined text-[18px]">apps</span>Services & APIs</a><a class="flex items-center justify-between px-space-sm py-space-xs rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="incidents" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">emergency</span>Incidents</div><span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-[11px]">0</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="deployments" href="#"><span class="material-symbols-outlined text-[18px]">rocket_launch</span>Deployments</a><div class="px-space-sm pt-space-md pb-space-xs font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">Configuration</div><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="alert-channels" href="#"><span class="material-symbols-outlined text-[18px]">notifications_active</span>Alert Channels</a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[18px]">tune</span>Cluster Settings</a></nav></div><div class="px-space-sm py-space-sm rounded-xl bg-surface shadow-[0_1px_4px_rgba(0,0,0,0.02)] flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-on-surface-variant">SLA 30d</span><span class="font-code-inline text-code-inline text-on-surface font-semibold">99.98%</span></div><div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-primary-container w-[99.98%]"></div></div></div></aside><div class="pl-64"><main class="w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<div class="p-gutter max-w-[1360px] mx-auto w-full flex flex-col gap-space-xl">
+<!-- Top Greeting Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-sm text-primary">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-ping"></span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">Workspace Init • US-East Cluster</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-on-surface tracking-tight">Welcome, Gaurav</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+          Get started by connecting your first website, API, or service to monitor uptime and health.
+        </p>
+</div>
+<!-- Quick Status Strip -->
+<div class="flex items-center gap-space-md self-start md:self-auto bg-surface-container-low px-space-md py-space-sm rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-tertiary">public</span>
+<span class="font-body-sm text-body-sm">Global Edge:</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">12 PoPs Ready</span>
+</div>
+<span class="w-1 h-3 bg-surface-container-highest rounded-full"></span>
+<div class="flex items-center gap-space-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-primary-container">timer</span>
+<span class="font-body-sm text-body-sm">Polling:</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">30s Base</span>
+</div>
+</div>
+</div>
+<!-- Center Stage Empty State Bento Card -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest shadow-md flex flex-col lg:flex-row items-stretch">
+<!-- Ambient Glow Behind Graphic -->
+<div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-primary-fixed opacity-40 blur-3xl pointer-events-none"></div>
+<div class="absolute top-1/2 right-12 w-80 h-80 rounded-full bg-surface-container-high opacity-50 blur-3xl pointer-events-none"></div>
+<!-- Left Visual Radar Area -->
+<div class="relative lg:w-5/12 bg-surface-container-low flex items-center justify-center p-space-xl overflow-hidden min-h-[320px]">
+<!-- Radar Grid Visual Effect -->
+<div class="absolute inset-0 bg-[radial-gradient(#dae2fd_1px,transparent_1px)] [background-size:16px_16px] opacity-70"></div>
+<!-- Custom SVG Radar Graphic -->
+<div class="relative flex items-center justify-center z-10 w-full max-w-[280px] aspect-square">
+<svg class="w-full h-full" fill="none" viewbox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+<!-- Outermost Ripple -->
+<circle class="text-surface-container-highest" cx="120" cy="120" opacity="0.8" r="105" stroke="currentColor" stroke-dasharray="4 4" stroke-width="1.5"></circle>
+<circle class="text-surface-variant" cx="120" cy="120" r="82" stroke="currentColor" stroke-width="1.5"></circle>
+<circle class="text-surface-container-high" cx="120" cy="120" r="58" stroke="currentColor" stroke-width="2"></circle>
+<!-- Animated Ambient Pulse -->
+<circle class="stroke-primary-container opacity-25 animate-ping" cx="120" cy="120" r="70" stroke-width="2" style="transform-origin: center; animation-duration: 3.5s;"></circle>
+<!-- Coordinate Axes -->
+<line class="text-surface-variant" stroke="currentColor" stroke-dasharray="2 2" stroke-width="1" x1="120" x2="120" y1="20" y2="220"></line>
+<line class="text-surface-variant" stroke="currentColor" stroke-dasharray="2 2" stroke-width="1" x1="20" x2="220" y1="120" y2="120"></line>
+<!-- Radar Sweep Gradient Cone -->
+<defs>
+<lineargradient id="pulseSweep" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#ff6700" stop-opacity="0.35"></stop>
+<stop offset="60%" stop-color="#019cff" stop-opacity="0.08"></stop>
+<stop offset="100%" stop-color="#ffffff" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path class="origin-center animate-[spin_8s_linear_infinite]" d="M120 120 L210 75 A 105 105 0 0 0 120 15 Z" fill="url(#pulseSweep)"></path>
+<!-- Center Server Core Unit -->
+<rect class="fill-surface-container-lowest drop-shadow-md" height="64" rx="8" width="56" x="92" y="88"></rect>
+<rect class="fill-surface-container-high" height="12" rx="4" width="44" x="98" y="96"></rect>
+<circle class="fill-primary-container" cx="106" cy="102" r="2.5"></circle>
+<rect class="fill-on-surface-variant" height="3" opacity="0.3" rx="1.5" width="22" x="114" y="100.5"></rect>
+<rect class="fill-surface-container-high" height="12" rx="4" width="44" x="98" y="112"></rect>
+<circle class="fill-tertiary-container" cx="106" cy="118" r="2.5"></circle>
+<rect class="fill-on-surface-variant" height="3" opacity="0.3" rx="1.5" width="18" x="114" y="116.5"></rect>
+<rect class="fill-surface-container-low" height="16" rx="4" width="44" x="98" y="128"></rect>
+<circle class="fill-surface-variant" cx="106" cy="136" r="2"></circle>
+<circle class="fill-surface-variant" cx="114" cy="136" r="2"></circle>
+<circle class="fill-surface-variant" cx="122" cy="136" r="2"></circle>
+<!-- Heartbeat Signal Ribbon -->
+<path class="drop-shadow-sm" d="M72 172 L96 172 L104 158 L114 186 L124 166 L132 176 L140 172 L168 172" fill="none" stroke="#ff6700" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<!-- Orbital Ping Satellites -->
+<circle class="fill-primary-container animate-pulse" cx="184" cy="72" r="5"></circle>
+<circle class="fill-tertiary-container" cx="56" cy="154" r="4"></circle>
+<circle class="fill-on-surface-variant" cx="160" cy="174" opacity="0.4" r="3.5"></circle>
+</svg>
+<!-- Floating Micro telemetry badge -->
+<div class="absolute -bottom-2 right-2 bg-surface-container-lowest/95 backdrop-blur-sm px-space-sm py-1 rounded-lg shadow-sm flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-ping"></span>
+<span class="font-code-inline text-code-inline text-on-surface">STATUS: IDLE</span>
+</div>
+</div>
+</div>
+<!-- Right Action & Information Section -->
+<div class="relative lg:w-7/12 p-space-xl flex flex-col justify-between z-10">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="px-space-sm py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-code-inline text-code-inline font-semibold">GETTING STARTED</span>
+<span class="text-on-surface-variant font-body-sm text-body-sm">• Step 1 of 3</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">No applications monitored yet</h2>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-xl">
+            DevOpsPulse continuously monitors HTTP endpoints, SSL validity, and response times worldwide. Add your first service to see live health telemetry and configure instant incident alerts.
+          </p>
+<!-- Feature Highlights Checklist -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm pt-space-xs pb-space-sm">
+<div class="flex items-center gap-space-sm text-on-surface">
+<span class="w-5 h-5 rounded-full bg-surface-container flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[15px]">check</span>
+</span>
+<span class="font-body-sm text-body-sm">Zero-agent HTTP pinging</span>
+</div>
+<div class="flex items-center gap-space-sm text-on-surface">
+<span class="w-5 h-5 rounded-full bg-surface-container flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[15px]">check</span>
+</span>
+<span class="font-body-sm text-body-sm">Automated SSL expiration warning</span>
+</div>
+<div class="flex items-center gap-space-sm text-on-surface">
+<span class="w-5 h-5 rounded-full bg-surface-container flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[15px]">check</span>
+</span>
+<span class="font-body-sm text-body-sm">Global latency percentiles</span>
+</div>
+<div class="flex items-center gap-space-sm text-on-surface">
+<span class="w-5 h-5 rounded-full bg-surface-container flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[15px]">check</span>
+</span>
+<span class="font-body-sm text-body-sm">Custom header & payload validation</span>
+</div>
+</div>
+</div>
+<!-- Call-to-action Toolbar -->
+<div class="pt-space-lg flex flex-wrap items-center gap-space-md">
+<button class="group flex items-center gap-space-sm px-space-lg py-space-sm rounded-xl bg-primary-container text-on-primary font-headline-sm text-headline-sm shadow-md hover:bg-primary transition-all duration-200 active:scale-[0.98]" id="addAppBtn" type="button">
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:rotate-90">add</span>
+<span>+ Add your first application</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded-xl bg-surface-container-high text-on-surface font-label-md text-label-md hover:bg-surface-container-highest transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+<span>Import from GitHub</span>
+</button>
+<a class="flex items-center gap-1 font-label-md text-label-md text-primary hover:text-on-surface transition-colors ml-auto" href="#">
+<span>Read Quickstart Docs</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Section Heading for Features / Guides -->
+<div class="flex items-center justify-between pt-space-xs">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">What you can configure in under 2 minutes</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Full observability pipeline with turnkey presets designed for modern engineering teams.</p>
+</div>
+<span class="hidden sm:inline-flex px-space-sm py-1 rounded bg-surface-container font-code-inline text-code-inline text-on-surface-variant">REST • gRPC • WebSocket</span>
+</div>
+<!-- 3 Helpful Quick-Onboarding Bento Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-gutter">
+<!-- Card 1: HTTP & API Uptime -->
+<div class="group relative rounded-xl bg-surface-container-lowest p-space-lg shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary-container shadow-sm group-hover:bg-primary-container group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[22px]">speed</span>
+</div>
+<span class="font-code-inline text-code-inline px-space-xs py-0.5 rounded bg-surface-container text-on-surface-variant">30s PING</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">HTTP & API Uptime</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Ping GET/POST endpoints every 30 seconds from 12 global regions with status codes and latency tracking.
+            </p>
+</div>
+</div>
+<!-- Graphic visual sparkline snippet -->
+<div class="mt-space-lg pt-space-md bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1.5">
+<div class="flex items-center justify-between text-on-surface-variant font-code-inline text-code-inline">
+<span>REGIONAL PROBES</span>
+<span class="text-tertiary font-semibold">12 ACTIVE</span>
+</div>
+<!-- Micro Region Bars Graphic -->
+<div class="flex items-end gap-1 h-8 pt-1">
+<span class="flex-1 bg-tertiary-container/30 rounded-t h-4 hover:h-6 transition-all"></span>
+<span class="flex-1 bg-tertiary-container/40 rounded-t h-6 hover:h-7 transition-all"></span>
+<span class="flex-1 bg-tertiary-container/60 rounded-t h-5 hover:h-8 transition-all"></span>
+<span class="flex-1 bg-primary-container/80 rounded-t h-7 hover:h-8 transition-all"></span>
+<span class="flex-1 bg-tertiary-container/50 rounded-t h-6 hover:h-7 transition-all"></span>
+<span class="flex-1 bg-tertiary-container/30 rounded-t h-4 hover:h-6 transition-all"></span>
+<span class="flex-1 bg-tertiary-container/60 rounded-t h-5 hover:h-8 transition-all"></span>
+<span class="flex-1 bg-primary-container rounded-t h-8"></span>
+</div>
+</div>
+</div>
+<!-- Card 2: Incident Alerting -->
+<div class="group relative rounded-xl bg-surface-container-lowest p-space-lg shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary-container shadow-sm group-hover:bg-primary-container group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[22px]">notifications_active</span>
+</div>
+<span class="font-code-inline text-code-inline px-space-xs py-0.5 rounded bg-surface-container text-on-surface-variant"><2s DISPATCH</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Incident Alerting</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Instant notifications to Slack, PagerDuty, Discord, or Email as soon as downtime is confirmed.
+            </p>
+</div>
+</div>
+<!-- Graphic visual channels tags snippet -->
+<div class="mt-space-lg pt-space-md bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1.5">
+<div class="flex items-center justify-between text-on-surface-variant font-code-inline text-code-inline">
+<span>INTEGRATIONS</span>
+<span class="text-primary font-semibold">ZERO CONFIG</span>
+</div>
+<div class="flex flex-wrap gap-1.5 pt-1">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container font-code-inline text-code-inline text-on-surface">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Slack
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container font-code-inline text-code-inline text-on-surface">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span> PagerDuty
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container font-code-inline text-code-inline text-on-surface">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Webhook
+            </span>
+</div>
+</div>
+</div>
+<!-- Card 3: Public Status Pages -->
+<div class="group relative rounded-xl bg-surface-container-lowest p-space-lg shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary-container shadow-sm group-hover:bg-primary-container group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[22px]">podium</span>
+</div>
+<span class="font-code-inline text-code-inline px-space-xs py-0.5 rounded bg-surface-container text-on-surface-variant">CUSTOM DOMAIN</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Public Status Pages</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Share real-time service uptime and incident transparency with your users in one click.
+            </p>
+</div>
+</div>
+<!-- Graphic visual uptime timeline strip preview -->
+<div class="mt-space-lg pt-space-md bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1.5">
+<div class="flex items-center justify-between text-on-surface-variant font-code-inline text-code-inline">
+<span>PREVIEW (90 DAYS)</span>
+<span class="text-tertiary font-semibold">100.0%</span>
+</div>
+<div class="flex items-center gap-[2px] h-6 pt-1">
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-primary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+<span class="w-1 h-5 rounded-sm bg-tertiary-container"></span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Manual URL Bar Modal Mock / Quick Test -->
+<div class="rounded-xl bg-surface-container-high/60 p-space-md flex flex-col md:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="w-8 h-8 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary-container shadow-sm">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Want to test right now?</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Enter a domain or API URL below for an immediate latency check.</span>
+</div>
+</div>
+<div class="flex items-center w-full md:w-auto gap-space-xs">
+<div class="relative flex-1 md:w-80">
+<span class="absolute left-3 top-2.5 text-on-surface-variant material-symbols-outlined text-[16px]">link</span>
+<input class="w-full pl-8 pr-3 py-1.5 bg-surface-container-lowest text-on-surface font-body-sm text-body-sm rounded-lg outline-none focus:ring-2 focus:ring-primary-container shadow-sm" id="quickCheckUrl" placeholder="https://api.yourdomain.com/health" type="text"/>
+</div>
+<button class="px-space-md py-1.5 rounded-lg bg-inverse-surface text-inverse-on-surface font-label-md text-label-md hover:bg-on-background transition-colors whitespace-nowrap shadow-sm" id="quickProbeBtn" type="button">
+          Run Ping Test
+        </button>
+</div>
+</div>
+</div>
+<!-- Interactive Client Behavior -->
+<script>
+    (function() {
+      const probeBtn = document.getElementById('quickProbeBtn');
+      const probeInput = document.getElementById('quickCheckUrl');
+      const addAppBtn = document.getElementById('addAppBtn');
+
+      if (probeBtn && probeInput) {
+        probeBtn.addEventListener('click', function() {
+          const val = probeInput.value.trim();
+          if (!val) {
+            probeInput.focus();
+            probeInput.classList.add('ring-2', 'ring-primary-container');
+            setTimeout(() => {
+              probeInput.classList.remove('ring-2', 'ring-primary-container');
+            }, 1200);
+            return;
+          }
+          
+          probeBtn.disabled = true;
+          const origText = probeBtn.innerText;
+          probeBtn.innerHTML = '<span class="material-symbols-outlined text-[16px] animate-spin">refresh</span> Probing...';
+          
+          setTimeout(() => {
+            probeBtn.disabled = false;
+            probeBtn.innerText = '200 OK (38ms)';
+            probeBtn.classList.remove('bg-inverse-surface');
+            probeBtn.classList.add('bg-tertiary-container');
+            setTimeout(() => {
+              probeBtn.innerText = origText;
+              probeBtn.classList.remove('bg-tertiary-container');
+              probeBtn.classList.add('bg-inverse-surface');
+            }, 3000);
+          }, 1000);
+        });
+      }
+
+      if (addAppBtn) {
+        addAppBtn.addEventListener('click', function() {
+          if (probeInput) {
+            probeInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            probeInput.focus();
+          }
+        });
+      }
+    })();
+  </script>
+</div></main></div></body></html>

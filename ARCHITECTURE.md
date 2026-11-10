@@ -18,10 +18,15 @@ flowchart TD
     subgraph Worker["Monitoring worker"]
       SCH[Scheduler] --> HC[Health checker] --> INC[Incident engine]
     end
+    NS[Notification Service: email + webhook]
     MW --> CT --> SV
+    INC --> NS
+    CT --> NS
   end
   DB[(MongoDB Atlas)]
   EXT[Monitored apps: HTTP/HTTPS URLs]
+  HOOK[Outbound Webhooks / Slack]
+  SMTP[SMTP Mail Server]
 
   TQ -- "REST /api/v1" --> MW
   SC -- "WebSocket" --> SIO
@@ -29,6 +34,9 @@ flowchart TD
   INC --> DB
   HC -- "outbound GET, SSRF-safe" --> EXT
   INC -- "emit after DB write" --> SIO
+  NS -- "fire-and-forget after DB write" --> DB
+  NS -- "signed POST, SSRF-safe" --> HOOK
+  NS -- "SMTP TLS" --> SMTP
 ```
 
 ### Layer rules
@@ -42,13 +50,13 @@ flowchart TD
 ```
 backend/src/
   config/        env.js, db.js
-  models/        User, Application, HealthCheck, Incident, Deployment
+  models/        User, Application, HealthCheck, Incident, Deployment, NotificationChannel, NotificationDelivery
   middleware/    auth, validate, errorHandler, rateLimiters
-  routes/        auth, applications, incidents, deployments, dashboard
-  controllers/   authController, applicationController, healthCheckController
-  services/      authService, applicationService, healthCheckService, statusService, schedulerService, urlSafetyService
+  routes/        auth, applications, incidents, deployments, dashboard, notifications
+  controllers/   authController, applicationController, healthCheckController, notificationController
+  services/      authService, applicationService, healthCheckService, statusService, schedulerService, urlSafetyService, notificationService, notificationRules
   sockets/       index.js (auth + rooms + emit helpers)
-  utils/         AppError, asyncHandler
+  utils/         AppError, asyncHandler, crypto
 ```
 
 ### Frontend folder structure
@@ -67,9 +75,14 @@ frontend/src/
 ```mermaid
 erDiagram
   USER ||--o{ APPLICATION : owns
+  USER ||--o{ NOTIFICATION_CHANNEL : configures
+  USER ||--o{ NOTIFICATION_DELIVERY : audits
   APPLICATION ||--o{ HEALTH_CHECK : produces
   APPLICATION ||--o{ INCIDENT : has
   APPLICATION ||--o{ DEPLOYMENT : records
+  APPLICATION ||--o{ NOTIFICATION_DELIVERY : relates
+  NOTIFICATION_CHANNEL ||--o{ NOTIFICATION_DELIVERY : logs
+  INCIDENT ||--o{ NOTIFICATION_DELIVERY : triggers
   USER {
     ObjectId _id PK
     string name
@@ -130,6 +143,35 @@ erDiagram
     date completedAt
     string description
   }
+  NOTIFICATION_CHANNEL {
+    ObjectId _id PK
+    ObjectId ownerId FK
+    string type
+    string name
+    boolean enabled
+    array events
+    string minSeverity
+    string urlEncrypted
+    string secretEncrypted
+    string format
+    date createdAt
+    date updatedAt
+  }
+  NOTIFICATION_DELIVERY {
+    ObjectId _id PK
+    ObjectId ownerId FK
+    ObjectId channelId FK
+    ObjectId incidentId FK
+    ObjectId applicationId FK
+    string event
+    string status
+    string skipReason
+    number attempts
+    string errorType
+    number httpStatus
+    date createdAt
+    date sentAt
+  }
 ```
 
 ### Data decisions
@@ -139,7 +181,12 @@ erDiagram
 - Application `consecutiveFailures`: counter to enforce failure threshold before marking `down`.
 - Application `consecutiveSuccesses`: counter to enforce recovery threshold (2 consecutive successes required to transition from `down` to `up`).
 - Application `checkLockUntil`: atomic distributed lease/lock timestamp preventing overlapping or concurrent checks across scheduler ticks and multi-process workers.
-- Deleting an application deletes its health checks, incidents and deployments (cascade, documented policy).
+- Deleting an application deletes its health checks, incidents and deployments (cascade, documented policy). It does NOT delete notification deliveries, as deliveries form an immutable audit trail.
+- Deleting a `NotificationChannel` cascades to delete its `NotificationDelivery` history records.
+- Notification secrets (`urlEncrypted`, `secretEncrypted`) are encrypted with AES-256-GCM. Webhook signing secret is returned only once at creation or rotation.
+- Unique index on `NotificationDelivery { channelId, incidentId, event }` enforces exact deduplication so identical alerts are never dispatched twice.
+- TTL index of 30 days on `NotificationDelivery.createdAt` automatically purges stale delivery logs.
+- Indexes: `User.email` unique; `Application {ownerId, createdAt}`; `HealthCheck {applicationId, checkedAt}` (+ TTL); `Incident {ownerId, status, startedAt}`; `Deployment {applicationId, createdAt}`; `NotificationChannel {ownerId, createdAt}`; `NotificationDelivery {ownerId, createdAt: -1}`.
 - Indexes: `User.email` unique; `Application {ownerId, createdAt}`; `HealthCheck {applicationId, checkedAt}` (+ TTL); `Incident {ownerId, status, startedAt}`; `Deployment {applicationId, createdAt}`.
 - No duplicate active incidents: a partial unique index on `{ applicationId }` where `status` is `open` or `investigating`.
 

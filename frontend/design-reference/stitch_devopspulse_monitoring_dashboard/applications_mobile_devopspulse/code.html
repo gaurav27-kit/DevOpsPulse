@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-primary": "#ffffff", "surface-container-high": "#e2e7ff", "primary-fixed-dim": "#ffb595", "on-surface": "#131b2e", "surface-container": "#eaedff", "on-tertiary-fixed": "#001d35", "on-secondary-container": "#5f6665", "surface-bright": "#faf8ff", "surface-variant": "#dae2fd", "on-primary-fixed": "#351000", "tertiary-container": "#019cff", "on-secondary-fixed": "#161d1d", "on-surface-variant": "#5a4136", "error": "#ba1a1a", "surface-tint": "#a23f00", "secondary": "#59605f", "on-tertiary-fixed-variant": "#00497c", "on-tertiary": "#ffffff", "on-error-container": "#93000a", "background": "#faf8ff", "tertiary-fixed-dim": "#9dcaff", "surface-container-low": "#f2f3ff", "surface-container-lowest": "#ffffff", "secondary-fixed": "#dde4e3", "on-tertiary-container": "#003156", "tertiary": "#0061a2", "primary-fixed": "#ffdbcd", "primary": "#a23f00", "surface": "#faf8ff", "surface-dim": "#d2d9f4", "secondary-container": "#dde4e3", "on-secondary-fixed-variant": "#414848", "surface-container-highest": "#dae2fd", "primary-container": "#ff6700", "inverse-primary": "#ffb595", "error-container": "#ffdad6", "inverse-on-surface": "#eef0ff", "secondary-fixed-dim": "#c1c8c7", "on-primary-fixed-variant": "#7c2e00", "outline-variant": "#e3bfb1", "outline": "#8e7164", "tertiary-fixed": "#d1e4ff", "on-error": "#ffffff", "on-primary-container": "#561e00", "inverse-surface": "#283044", "on-secondary": "#ffffff", "on-background": "#131b2e" }, borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, spacing: { "space-xs": "0.25rem", "gutter-mobile": "1rem", "margin-mobile": "1rem", "space-xl": "2rem", "space-lg": "1.5rem", "space-md": "1rem", "margin": "2rem", "space-sm": "0.5rem", "gutter": "1.5rem" }, fontFamily: { "label-md": ["Inter"], "headline-lg-mobile": ["Inter"], "headline-lg": ["Inter"], "body-md": ["Inter"], "body-sm": ["Inter"], "code-inline": ["Inter"], "headline-md": ["Inter"], "headline-sm": ["Inter"], "display-lg": ["Inter"], "label-sm": ["Inter"], "body-lg": ["Inter"] }, fontSize: { "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "500" }], "headline-lg-mobile": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.025em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "-0.005em", "fontWeight": "400" }], "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }], "code-inline": ["12px", { "lineHeight": "16px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "600" }], "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }], "body-lg": ["15px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "400" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-gutter-mobile flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="DevOpsPulse Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1W9-qTRdQWw6hqromKROXMY-sLxf8VfAtVrd04YzDDUI8w27xzBlSJZzQJ4_FlZ90ZjUC6DVqx3FCuN6R8hAQpZozujwXBiflNBQKq4ouPyDh7_XcdSNF3QqqxZpRDaT9mTqQl87sq-U1oVkyATXUwLsclWaTXAAG4h4zCT55QwWYg4YizwkaTv2V0FjrmuCSIhAo3sJ75RCt_61Y3R5iMIvsePS6Sy1U8DviZys0pE5A"/><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">DevOpsPulse</span><span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-surface-container-high"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span><span class="font-label-sm text-label-sm text-on-surface-variant font-medium text-[10px] leading-none uppercase tracking-wider">Live</span></span></div><span class="font-label-sm text-label-sm text-on-surface-variant">Dashboard</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Open User Menu" class="min-w-[44px] min-h-[44px] p-space-xs flex items-center gap-space-xs rounded-xl hover:bg-surface-container-low transition-colors" id="drawer-trigger"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFpdSckDQhDL42SV_x8y2TEU0FvVw-MLRLqMF2gos9voTNptnymL7xhlZHAaXeqBLnZFLBo9MArM_JXnYEQ_FqURUwkNjCrYkCw0DQDjBB0f9cGOobTqTEjpy16aRXFBBNjgbE7VzqfKNTnFJMdVQp7v2aSqkAD5c-NQISCLXeqy8Rm5KihNVnNH1CGfYyibN3BUHcCoIfzAeKMe9YUhY5QkI7nL9p3iBT5pXMLZkQ"/><span class="material-symbols-outlined text-on-surface-variant text-[20px]">menu</span></button></div></div></header><div class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" id="menu-drawer-backdrop"></div><aside class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-surface-container-lowest shadow-[0_4px_24px_rgba(0,0,0,0.12)] translate-x-full transition-transform duration-300 ease-out flex flex-col pt-safe pb-safe" id="menu-drawer"><div class="p-space-lg flex items-center justify-between"><div class="flex items-center gap-space-md"><img alt="Profile" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFpdSckDQhDL42SV_x8y2TEU0FvVw-MLRLqMF2gos9voTNptnymL7xhlZHAaXeqBLnZFLBo9MArM_JXnYEQ_FqURUwkNjCrYkCw0DQDjBB0f9cGOobTqTEjpy16aRXFBBNjgbE7VzqfKNTnFJMdVQp7v2aSqkAD5c-NQISCLXeqy8Rm5KihNVnNH1CGfYyibN3BUHcCoIfzAeKMe9YUhY5QkI7nL9p3iBT5pXMLZkQ"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface leading-snug">Alex Rivera</span><span class="font-label-sm text-label-sm text-primary-container font-medium">Student tier</span></div></div><button aria-label="Close Drawer" class="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" id="drawer-close"><span class="material-symbols-outlined">close</span></button></div><div class="px-space-lg py-space-sm flex-1 flex flex-col gap-space-xs"><div class="py-space-xs"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Workspace</span></div><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors min-h-[44px]" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">monitoring</span><span class="font-body-md text-body-md font-medium">Dashboard</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors min-h-[44px]" data-path="applications" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span class="font-body-md text-body-md font-medium">Applications</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors min-h-[44px]" data-path="incidents" href="#"><span class="material-symbols-outlined text-[20px]">notification_important</span><span class="font-body-md text-body-md font-medium">Incidents</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors min-h-[44px]" data-path="deployments" href="#"><span class="material-symbols-outlined text-[20px]">deployed_code</span><span class="font-body-md text-body-md font-medium">Deployments</span></a></div><div class="p-space-lg flex flex-col gap-space-xs"><button class="w-full flex items-center justify-between px-space-md py-space-sm rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors min-h-[44px]"><span class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[20px]">dark_mode</span><span class="font-body-md text-body-md">Theme Toggle</span></span><span class="font-label-sm text-label-sm text-secondary">Light</span></button><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-xl text-error hover:bg-error-container/20 transition-colors min-h-[44px]" href="#"><span class="material-symbols-outlined text-[20px]">logout</span><span class="font-body-md text-body-md font-medium">Log out</span></a></div></aside><script>const trigger=document.getElementById('drawer-trigger');const closeBtn=document.getElementById('drawer-close');const drawer=document.getElementById('menu-drawer');const backdrop=document.getElementById('menu-drawer-backdrop');function toggleDrawer(open){if(open){backdrop.classList.remove('opacity-0','pointer-events-none');backdrop.classList.add('opacity-100');drawer.classList.remove('translate-x-full');drawer.classList.add('translate-x-0');}else{backdrop.classList.remove('opacity-100');backdrop.classList.add('opacity-0','pointer-events-none');drawer.classList.remove('translate-x-0');drawer.classList.add('translate-x-full');}}if(trigger&&closeBtn&&drawer&&backdrop){trigger.addEventListener('click',()=>toggleDrawer(true));closeBtn.addEventListener('click',()=>toggleDrawer(false));backdrop.addEventListener('click',()=>toggleDrawer(false));}</script><main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen"><div class="flex flex-col w-full px-margin-mobile gap-space-md">
+<!-- Top Level App Summary & Add Action -->
+<div class="flex items-center justify-between pt-space-xs">
+<div class="flex flex-col">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface tracking-tight">Applications</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1.5 mt-0.5">
+<span class="inline-block w-2 h-2 rounded-full bg-primary-container"></span>
+        24 monitored services active
+      </p>
+</div>
+<button class="min-h-[44px] px-space-md flex items-center gap-1.5 bg-primary-container text-on-primary rounded-xl font-label-md text-label-md active:scale-95 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Add app</span>
+</button>
+</div>
+<!-- Search & Quick Sort Trigger Bar -->
+<div class="flex items-center gap-space-xs w-full">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[20px]">search</span>
+<input class="w-full h-11 pl-10 pr-4 rounded-xl bg-surface-container text-on-surface placeholder:text-secondary font-body-md text-body-md focus:outline-none focus:bg-surface-container-high transition-colors" id="appSearchInput" placeholder="Search applications or endpoints..." type="search"/>
+</div>
+<button aria-label="Open Filter and Sort Options" class="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors" id="openFilterModal">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+<!-- Horizontal Scrollable Filter Chips -->
+<div class="flex items-center gap-space-xs overflow-x-auto no-scrollbar -mx-margin-mobile px-margin-mobile py-0.5">
+<button class="filter-chip active flex items-center gap-1 px-3.5 py-1.5 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-primary-container text-on-primary font-medium transition-colors">
+<span>All</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-lowest/20 text-[10px]">24</span>
+</button>
+<button class="filter-chip flex items-center gap-1 px-3.5 py-1.5 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span>Down</span>
+<span class="px-1.5 py-0.2 rounded-full bg-error-container text-on-error-container text-[10px]">2</span>
+</button>
+<button class="filter-chip flex items-center gap-1 px-3.5 py-1.5 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+<span>Degraded</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-variant text-on-surface-variant text-[10px]">3</span>
+</button>
+<button class="filter-chip flex items-center gap-1 px-3.5 py-1.5 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+<span>Up</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface text-[10px]">19</span>
+</button>
+<button class="filter-chip flex items-center gap-1 px-3.5 py-1.5 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors">
+<span>Production</span>
+<span class="text-[10px] text-secondary">20</span>
+</button>
+<button class="filter-chip flex items-center gap-1 px-3.5 py-1.5 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors">
+<span>Staging</span>
+<span class="text-[10px] text-secondary">4</span>
+</button>
+</div>
+<!-- Operational Health Highlight Pill -->
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low shadow-sm">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[20px]">heart_check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Global System Latency</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">p95 averaged 94ms · 99.82% overall</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-error bg-error-container/60 px-2 py-0.5 rounded-full font-medium">2 Failing</span>
+</div>
+<!-- Applications List (Mobile Friendly Cards) -->
+<div class="flex flex-col gap-space-sm" id="applicationCards">
+<!-- Card 1: Orders API (Down) -->
+<div class="group flex flex-col p-4 rounded-xl bg-surface-container-lowest shadow-sm hover:shadow transition-shadow relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error"></div>
+<div class="flex items-start justify-between gap-2">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">Orders API</h2>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded-md font-medium">Prod</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant mt-1 min-w-0">
+<span class="material-symbols-outlined text-[14px] shrink-0 text-secondary">link</span>
+<span class="font-code-inline text-code-inline truncate text-secondary">api.devopspulse.com/v1/orders</span>
+</div>
+</div>
+<span class="shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>
+          Down
+        </span>
+</div>
+<div class="flex items-center justify-between mt-3 pt-3 bg-surface-container-low/50 px-2.5 py-2 rounded-lg">
+<div class="flex items-center gap-3">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary text-[10px] uppercase">Last Checked</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">18s ago</span>
+</div>
+<div class="w-px h-5 bg-surface-container-high"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary text-[10px] uppercase">Interval</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">30s</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-error text-[16px]">crisis_alert</span>
+<span class="font-label-sm text-label-sm text-error font-medium">HTTP 502</span>
+</div>
+</div>
+<!-- Quick Action Touch Points -->
+<div class="flex items-center justify-end gap-2 mt-3 pt-1">
+<button class="min-h-[44px] px-3.5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high active:scale-95 transition-all flex items-center gap-1.5">
+<span>View Details</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+<button aria-label="Orders API More Options" class="min-w-[44px] min-h-[44px] rounded-lg bg-surface-container-low text-secondary flex items-center justify-center hover:text-on-surface active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Card 2: Auth Service (Degraded) -->
+<div class="group flex flex-col p-4 rounded-xl bg-surface-container-lowest shadow-sm hover:shadow transition-shadow relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-amber-500"></div>
+<div class="flex items-start justify-between gap-2">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">Auth Service</h2>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded-md font-medium">Prod</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant mt-1 min-w-0">
+<span class="material-symbols-outlined text-[14px] shrink-0 text-secondary">link</span>
+<span class="font-code-inline text-code-inline truncate text-secondary">auth.devopspulse.com</span>
+</div>
+</div>
+<span class="shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+          Degraded
+        </span>
+</div>
+<div class="flex items-center justify-between mt-3 pt-3 bg-surface-container-low/50 px-2.5 py-2 rounded-lg">
+<div class="flex items-center gap-3">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary text-[10px] uppercase">Last Checked</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">42s ago</span>
+</div>
+<div class="w-px h-5 bg-surface-container-high"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary text-[10px] uppercase">Interval</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">30s</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-amber-600 text-[16px]">speed</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">890ms Latency</span>
+</div>
+</div>
+<div class="flex items-center justify-end gap-2 mt-3 pt-1">
+<button class="min-h-[44px] px-3.5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high active:scale-95 transition-all flex items-center gap-1.5">
+<span>View Details</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+<button aria-label="Auth Service More Options" class="min-w-[44px] min-h-[44px] rounded-lg bg-surface-container-low text-secondary flex items-center justify-center hover:text-on-surface active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Card 3: Portfolio Website (Up) -->
+<div class="group flex flex-col p-4 rounded-xl bg-surface-container-lowest shadow-sm hover:shadow transition-shadow relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
+<div class="flex items-start justify-between gap-2">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">Portfolio Website</h2>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded-md font-medium">Prod</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant mt-1 min-w-0">
+<span class="material-symbols-outlined text-[14px] shrink-0 text-secondary">link</span>
+<span class="font-code-inline text-code-inline truncate text-secondary">gaurav.dev</span>
+</div>
+</div>
+<span class="shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          Up
+        </span>
+</div>
+<div class="flex items-center justify-between mt-3 pt-3 bg-surface-container-low/50 px-2.5 py-2 rounded-lg">
+<div class="flex items-center gap-3">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary text-[10px] uppercase">Last Checked</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">1m ago</span>
+</div>
+<div class="w-px h-5 bg-surface-container-high"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary text-[10px] uppercase">Interval</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">60s</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-emerald-600 text-[16px]">check_circle</span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">38ms · 100%</span>
+</div>
+</div>
+<div class="flex items-center justify-end gap-2 mt-3 pt-1">
+<button class="min-h-[44px] px-3.5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high active:scale-95 transition-all flex items-center gap-1.5">
+<span>View Details</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+<button aria-label="Portfolio Website More Options" class="min-w-[44px] min-h-[44px] rounded-lg bg-surface-container-low text-secondary flex items-center justify-center hover:text-on-surface active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Card 4: Staging Frontend (Up) -->
+<div class="group flex flex-col p-4 rounded-xl bg-surface-container-lowest shadow-sm hover:shadow transition-shadow relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
+<div class="flex items-start justify-between gap-2">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">Staging Frontend</h2>
+<span class="font-label-sm text-label-sm text-secondary-container bg-surface-dim px-2 py-0.5 rounded-md font-medium text-on-surface">Staging</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant mt-1 min-w-0">
+<span class="material-symbols-outlined text-[14px] shrink-0 text-secondary">link</span>
+<span class="font-code-inline text-code-inline truncate text-secondary">staging.app.devopspulse.com</span>
+</div>
+</div>
+<span class="shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          Up
+        </span>
+</div>
+<div class="flex items-center justify-between mt-3 pt-3 bg-surface-container-low/50 px-2.5 py-2 rounded-lg">
+<div class="flex items-center gap-3">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary text-[10px] uppercase">Last Checked</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">2m ago</span>
+</div>
+<div class="w-px h-5 bg-surface-container-high"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary text-[10px] uppercase">Interval</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">60s</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-emerald-600 text-[16px]">check_circle</span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">72ms · 99.9%</span>
+</div>
+</div>
+<div class="flex items-center justify-end gap-2 mt-3 pt-1">
+<button class="min-h-[44px] px-3.5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high active:scale-95 transition-all flex items-center gap-1.5">
+<span>View Details</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+<button aria-label="Staging Frontend More Options" class="min-w-[44px] min-h-[44px] rounded-lg bg-surface-container-low text-secondary flex items-center justify-center hover:text-on-surface active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Card 5: Billing Service (Up) -->
+<div class="group flex flex-col p-4 rounded-xl bg-surface-container-lowest shadow-sm hover:shadow transition-shadow relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
+<div class="flex items-start justify-between gap-2">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">Billing Service</h2>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded-md font-medium">Prod</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant mt-1 min-w-0">
+<span class="material-symbols-outlined text-[14px] shrink-0 text-secondary">link</span>
+<span class="font-code-inline text-code-inline truncate text-secondary">billing.devopspulse.com</span>
+</div>
+</div>
+<span class="shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          Up
+        </span>
+</div>
+<div class="flex items-center justify-between mt-3 pt-3 bg-surface-container-low/50 px-2.5 py-2 rounded-lg">
+<div class="flex items-center gap-3">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary text-[10px] uppercase">Last Checked</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">3m ago</span>
+</div>
+<div class="w-px h-5 bg-surface-container-high"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary text-[10px] uppercase">Interval</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">30s</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-emerald-600 text-[16px]">check_circle</span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">45ms · 100%</span>
+</div>
+</div>
+<div class="flex items-center justify-end gap-2 mt-3 pt-1">
+<button class="min-h-[44px] px-3.5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high active:scale-95 transition-all flex items-center gap-1.5">
+<span>View Details</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+<button aria-label="Billing Service More Options" class="min-w-[44px] min-h-[44px] rounded-lg bg-surface-container-low text-secondary flex items-center justify-center hover:text-on-surface active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Mobile Pagination Footer -->
+<div class="flex items-center justify-between p-3 mt-1 rounded-xl bg-surface-container-low">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Page 1 of 3</span>
+<span class="font-body-sm text-body-sm text-secondary text-[11px]">24 total applications</span>
+</div>
+<div class="flex items-center gap-1.5">
+<button aria-label="Previous Page" class="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg bg-surface-container text-secondary opacity-40 cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button aria-label="Next Page" class="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Filter & Sort Bottom Sheet Drawer / Modal Backdrop -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-end" id="filterModal">
+<div class="w-full bg-surface-container-lowest rounded-t-2xl shadow-xl p-space-lg flex flex-col gap-space-md translate-y-full transition-transform duration-300 max-h-[751px] overflow-y-auto" id="filterSheet">
+<div class="flex items-center justify-between pb-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[22px]">tune</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Filter &amp; Sort</h3>
+</div>
+<button aria-label="Close Filter" class="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-secondary hover:text-on-surface" id="closeFilterModal">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Sort Options -->
+<div class="flex flex-col gap-1.5">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider font-semibold">Sort By</span>
+<div class="grid grid-cols-2 gap-2">
+<button class="min-h-[44px] px-3 rounded-xl bg-primary-container text-on-primary font-label-md text-label-md font-medium text-left flex items-center justify-between">
+<span>Status Severity</span>
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<button class="min-h-[44px] px-3 rounded-xl bg-surface-container text-on-surface font-label-md text-label-md text-left">
+<span>Response Latency</span>
+</button>
+<button class="min-h-[44px] px-3 rounded-xl bg-surface-container text-on-surface font-label-md text-label-md text-left">
+<span>Recently Checked</span>
+</button>
+<button class="min-h-[44px] px-3 rounded-xl bg-surface-container text-on-surface font-label-md text-label-md text-left">
+<span>Name (A-Z)</span>
+</button>
+</div>
+</div>
+<!-- Environment Selection -->
+<div class="flex flex-col gap-1.5">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider font-semibold">Environment</span>
+<div class="flex gap-2">
+<button class="flex-1 min-h-[44px] rounded-xl bg-surface-container-high text-on-surface font-label-md text-label-md font-semibold">All</button>
+<button class="flex-1 min-h-[44px] rounded-xl bg-surface-container text-on-surface font-label-md text-label-md">Production</button>
+<button class="flex-1 min-h-[44px] rounded-xl bg-surface-container text-on-surface font-label-md text-label-md">Staging</button>
+</div>
+</div>
+<!-- Action Footer -->
+<div class="flex items-center gap-2 pt-2">
+<button class="min-h-[44px] flex-1 rounded-xl bg-surface-container text-secondary font-label-md text-label-md hover:text-on-surface" id="resetFilters">Reset</button>
+<button class="min-h-[44px] flex-[2] rounded-xl bg-primary-container text-on-primary font-label-md text-label-md font-semibold shadow-sm" id="applyFilters">Apply Filters</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Highlighting active nav item for Applications
+  document.addEventListener('DOMContentLoaded', () => {
+    const navLinks = document.querySelectorAll('nav a[data-path]');
+    navLinks.forEach(link => {
+      if (link.getAttribute('data-path') === 'applications') {
+        link.classList.remove('text-on-surface-variant');
+        link.classList.add('text-primary-container', 'font-semibold');
+        const icon = link.querySelector('.material-symbols-outlined');
+        if (icon) icon.style.fontVariationSettings = "'FILL' 1";
+      } else {
+        link.classList.remove('text-primary-container', 'font-semibold');
+        link.classList.add('text-on-surface-variant');
+      }
+    });
+
+    // Filter Chips toggling
+    const chips = document.querySelectorAll('.filter-chip');
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => {
+          c.classList.remove('bg-primary-container', 'text-on-primary', 'font-medium');
+          c.classList.add('bg-surface-container', 'text-on-surface-variant');
+        });
+        chip.classList.add('bg-primary-container', 'text-on-primary', 'font-medium');
+        chip.classList.remove('bg-surface-container', 'text-on-surface-variant');
+      });
+    });
+
+    // Filter Drawer Modal Interactions
+    const openBtn = document.getElementById('openFilterModal');
+    const closeBtn = document.getElementById('closeFilterModal');
+    const resetBtn = document.getElementById('resetFilters');
+    const applyBtn = document.getElementById('applyFilters');
+    const modal = document.getElementById('filterModal');
+    const sheet = document.getElementById('filterSheet');
+
+    function openModal() {
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.classList.add('opacity-100');
+      sheet.classList.remove('translate-y-full');
+      sheet.classList.add('translate-y-0');
+    }
+
+    function closeModal() {
+      modal.classList.remove('opacity-100');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      sheet.classList.remove('translate-y-0');
+      sheet.classList.add('translate-y-full');
+    }
+
+    if (openBtn && modal && sheet) {
+      openBtn.addEventListener('click', openModal);
+      if (closeBtn) closeBtn.addEventListener('click', closeModal);
+      if (applyBtn) applyBtn.addEventListener('click', closeModal);
+      if (resetBtn) resetBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+    }
+
+    // Interactive Search Filtering
+    const searchInput = document.getElementById('appSearchInput');
+    const cards = document.querySelectorAll('#applicationCards > div');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        cards.forEach(card => {
+          const text = card.textContent.toLowerCase();
+          card.style.display = text.includes(query) ? 'flex' : 'none';
+        });
+      });
+    }
+  });
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/85 backdrop-blur-xl shadow-[0_-1px_12px_rgba(0,0,0,0.03)]" data-active-classes="text-primary-container font-semibold"><div class="flex justify-around items-center h-16 px-space-xs"><a class="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] flex-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[22px]">monitoring</span><span class="font-label-sm text-label-sm text-[11px] leading-none">Dashboard</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] flex-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="applications" href="#"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-label-sm text-label-sm text-[11px] leading-none">Apps</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] flex-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="incidents" href="#"><span class="material-symbols-outlined text-[22px]">notification_important</span><span class="font-label-sm text-label-sm text-[11px] leading-none">Incidents</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] flex-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="deployments" href="#"><span class="material-symbols-outlined text-[22px]">deployed_code</span><span class="font-label-sm text-label-sm text-[11px] leading-none">Deploys</span></a></div></nav></body></html>

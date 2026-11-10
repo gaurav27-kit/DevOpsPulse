@@ -74,19 +74,19 @@ export function DashboardPage() {
   // Zero-state onboarding: User has no monitored applications yet
   if (applications.total === 0) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 max-w-5xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-[#131b2e]">
               Welcome, {user?.name || 'Developer'}
             </h1>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-[#5a4136]">
               Get started by adding your first web service or API endpoint for automated monitoring.
             </p>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-12 shadow-xs">
+        <div className="rounded-xl border border-[#e2e8f0] bg-white p-8 sm:p-12 shadow-sm text-center">
           <EmptyState
             icon={Server}
             title="No applications monitored yet"
@@ -95,7 +95,7 @@ export function DashboardPage() {
               <Link to="/applications/new">
                 <Button className="inline-flex items-center gap-2">
                   <Plus className="h-4 w-4" aria-hidden="true" />
-                  Add your first application
+                  <span>Add your first application</span>
                 </Button>
               </Link>
             }
@@ -109,14 +109,14 @@ export function DashboardPage() {
   const activeBySeverity = incidents.activeBySeverity || {};
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header with Greeting & Range Selector */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-[#131b2e]">
             Welcome, {user?.name || 'Developer'}
           </h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-[#5a4136]">
             Real-time monitoring telemetry and incident status overview.
           </p>
         </div>
@@ -133,23 +133,23 @@ export function DashboardPage() {
           icon={Server}
           hint={
             <div className="flex items-center gap-2 text-xs flex-wrap">
-              <span className="inline-flex items-center gap-1 text-emerald-700">
-                <CheckCircle2 className="h-3 w-3 text-emerald-600" />
+              <span className="inline-flex items-center gap-1 text-[#065f46]">
+                <CheckCircle2 className="h-3 w-3 text-[#10b981]" />
                 {byStatus.up || 0}
               </span>
-              <span className="text-slate-300">·</span>
-              <span className="inline-flex items-center gap-1 text-amber-700">
-                <AlertTriangle className="h-3 w-3 text-amber-600" />
+              <span className="text-[#e2e8f0]">·</span>
+              <span className="inline-flex items-center gap-1 text-[#92400e]">
+                <AlertTriangle className="h-3 w-3 text-[#f59e0b]" />
                 {byStatus.degraded || 0}
               </span>
-              <span className="text-slate-300">·</span>
-              <span className="inline-flex items-center gap-1 text-rose-700">
-                <AlertCircle className="h-3 w-3 text-rose-600" />
+              <span className="text-[#e2e8f0]">·</span>
+              <span className="inline-flex items-center gap-1 text-[#991b1b]">
+                <AlertCircle className="h-3 w-3 text-[#ef4444]" />
                 {byStatus.down || 0}
               </span>
-              <span className="text-slate-300">·</span>
-              <span className="inline-flex items-center gap-1 text-slate-500">
-                <HelpCircle className="h-3 w-3 text-slate-400" />
+              <span className="text-[#e2e8f0]">·</span>
+              <span className="inline-flex items-center gap-1 text-[#59605f]">
+                <HelpCircle className="h-3 w-3 text-[#64748b]" />
                 {byStatus.unknown || 0}
               </span>
             </div>
@@ -160,12 +160,15 @@ export function DashboardPage() {
           label="Active Incidents"
           value={incidents.activeCount}
           icon={AlertTriangle}
-          valueClassName={incidents.activeCount > 0 ? 'text-rose-600' : 'text-slate-900'}
+          valueClassName={incidents.activeCount > 0 ? 'text-[#ba1a1a]' : 'text-[#131b2e]'}
           hint={
             incidents.activeCount === 0 ? (
-              <span className="text-emerald-600 font-medium">All systems operational</span>
+              <span className="text-[#065f46] font-medium inline-flex items-center gap-1">
+                <CheckCircle2 className="h-3 w-3 text-[#10b981]" />
+                <span>All systems operational</span>
+              </span>
             ) : (
-              <span className="text-rose-600 font-medium">
+              <span className="text-[#ba1a1a] font-medium">
                 {[
                   activeBySeverity.critical ? `${activeBySeverity.critical} critical` : null,
                   activeBySeverity.high ? `${activeBySeverity.high} high` : null,
@@ -192,27 +195,28 @@ export function DashboardPage() {
         />
       </div>
 
-      {/* Applications Health Table */}
-      <div className="rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden">
-        <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+      {/* Applications Health Section (Responsive: Table on Desktop, Cards on Mobile) */}
+      <div className="rounded-xl border border-[#e2e8f0] bg-white shadow-sm overflow-hidden">
+        <div className="flex items-center justify-between border-b border-[#e2e8f0] px-6 py-4">
           <div>
-            <h2 className="text-base font-semibold text-slate-900">Application Health</h2>
-            <p className="text-xs text-slate-500">
+            <h2 className="text-base font-semibold text-[#131b2e]">Application Health</h2>
+            <p className="text-xs text-[#5a4136]">
               Sorted by operational priority (outages first)
             </p>
           </div>
           <Link
             to="/applications"
-            className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-[#a23f00] hover:underline"
           >
-            View all applications
+            <span>View all applications</span>
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </Link>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50/75 border-b border-slate-200 text-xs uppercase font-semibold text-slate-500">
+            <thead className="bg-[#f2f3ff]/60 border-b border-[#e2e8f0] text-xs uppercase font-semibold text-[#5a4136] tracking-wider">
               <tr>
                 <th className="px-6 py-3">Application</th>
                 <th className="px-6 py-3">Environment</th>
@@ -221,32 +225,32 @@ export function DashboardPage() {
                 <th className="px-6 py-3">Last Checked</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-[#eaedff]">
               {applicationsTable.map((app) => (
-                <tr key={app.id} className="hover:bg-slate-50/50 transition-colors">
+                <tr key={app.id} className="hover:bg-[#f2f3ff]/40 transition-colors">
                   <td className="px-6 py-3.5">
                     <Link
                       to={`/applications/${app.id}`}
-                      className="font-medium text-slate-900 hover:text-blue-600 focus:outline-hidden"
+                      className="font-semibold text-[#131b2e] hover:text-[#a23f00] focus:outline-hidden"
                     >
                       {app.name}
                     </Link>
-                    <div className="text-xs text-slate-400 font-mono truncate max-w-xs">
+                    <div className="text-xs text-[#59605f] font-mono truncate max-w-xs mt-0.5">
                       {app.url}
                     </div>
                   </td>
                   <td className="px-6 py-3.5">
-                    <span className="capitalize text-xs font-medium text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full">
+                    <span className="capitalize text-xs font-medium text-[#59605f] bg-[#f2f3ff] px-2.5 py-0.5 rounded-full border border-[#dae2fd]">
                       {app.environment}
                     </span>
                   </td>
                   <td className="px-6 py-3.5">
                     <StatusBadge status={app.status} />
                   </td>
-                  <td className="px-6 py-3.5 font-medium text-slate-700">
+                  <td className="px-6 py-3.5 font-medium text-[#131b2e]">
                     {formatPercent(app.uptimePercent)}
                   </td>
-                  <td className="px-6 py-3.5 text-xs text-slate-500 whitespace-nowrap">
+                  <td className="px-6 py-3.5 text-xs text-[#59605f] whitespace-nowrap">
                     {formatRelative(app.lastCheckedAt)}
                   </td>
                 </tr>
@@ -254,20 +258,54 @@ export function DashboardPage() {
             </tbody>
           </table>
         </div>
+
+        {/* Mobile Card Layout (Visible only on screens < md) */}
+        <div className="md:hidden divide-y divide-[#eaedff]">
+          {applicationsTable.map((app) => (
+            <div key={app.id} className="p-4 flex flex-col gap-2.5 hover:bg-[#f2f3ff]/30 transition-colors">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <Link
+                    to={`/applications/${app.id}`}
+                    className="font-semibold text-sm text-[#131b2e] hover:text-[#a23f00] block truncate"
+                  >
+                    {app.name}
+                  </Link>
+                  <p className="text-xs text-[#59605f] font-mono truncate mt-0.5">
+                    {app.url}
+                  </p>
+                </div>
+                <StatusBadge status={app.status} className="shrink-0" />
+              </div>
+
+              <div className="flex items-center justify-between text-xs pt-1 border-t border-[#eaedff]/60">
+                <span className="capitalize font-medium text-[#59605f] bg-[#f2f3ff] px-2 py-0.5 rounded-full border border-[#dae2fd]">
+                  {app.environment}
+                </span>
+                <span className="font-semibold text-[#131b2e]">
+                  Uptime: {formatPercent(app.uptimePercent)}
+                </span>
+                <span className="text-[#5a4136]">
+                  {formatRelative(app.lastCheckedAt)}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Two Column Grid: Recent Incidents & Recent Deployments */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Incidents */}
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
+        <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-slate-500" aria-hidden="true" />
+            <h2 className="text-base font-semibold text-[#131b2e] flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 text-[#59605f]" aria-hidden="true" />
               <span>Recent Incidents</span>
             </h2>
             <Link
               to="/incidents"
-              className="text-xs font-semibold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1"
+              className="text-xs font-semibold text-[#a23f00] hover:underline inline-flex items-center gap-1"
             >
               <span>View all incidents</span>
               <ArrowRight className="h-3 w-3" />
@@ -275,19 +313,19 @@ export function DashboardPage() {
           </div>
 
           {incidents.recent && incidents.recent.length > 0 ? (
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-[#eaedff]">
               {incidents.recent.map((inc) => (
                 <li key={inc._id} className="py-2.5 first:pt-0 last:pb-0">
                   <Link
                     to={`/incidents/${inc._id}`}
-                    className="block p-1.5 -mx-1.5 rounded-lg hover:bg-slate-50/75 transition-colors"
+                    className="block p-2 -mx-2 rounded-lg hover:bg-[#f2f3ff]/60 transition-colors"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-slate-900 truncate hover:text-blue-600">
+                        <p className="text-sm font-semibold text-[#131b2e] truncate hover:text-[#a23f00]">
                           {inc.title}
                         </p>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-xs text-[#5a4136] mt-0.5">
                           {inc.applicationId?.name || 'Application'} &bull; Started {formatRelative(inc.startedAt)}
                         </p>
                       </div>
@@ -295,12 +333,12 @@ export function DashboardPage() {
                         <span
                           className={`text-2xs font-semibold px-2 py-0.5 rounded uppercase tracking-wider ${
                             inc.severity === 'critical'
-                              ? 'bg-rose-100 text-rose-800'
+                              ? 'bg-[#ffdad6] text-[#93000a]'
                               : inc.severity === 'high'
-                              ? 'bg-orange-100 text-orange-800'
+                              ? 'bg-[#ffdbcd] text-[#7c2e00]'
                               : inc.severity === 'medium'
-                              ? 'bg-amber-100 text-amber-800'
-                              : 'bg-slate-100 text-slate-700'
+                              ? 'bg-[#fffbeb] text-[#92400e]'
+                              : 'bg-[#f2f3ff] text-[#59605f]'
                           }`}
                         >
                           {inc.severity}
@@ -308,8 +346,8 @@ export function DashboardPage() {
                         <span
                           className={`text-2xs font-semibold px-2 py-0.5 rounded capitalize ${
                             inc.status === 'resolved'
-                              ? 'bg-emerald-100 text-emerald-800'
-                              : 'bg-rose-100 text-rose-800'
+                              ? 'bg-[#ecfdf5] text-[#065f46]'
+                              : 'bg-[#ffdad6] text-[#93000a]'
                           }`}
                         >
                           {inc.status}
@@ -321,22 +359,22 @@ export function DashboardPage() {
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-slate-500 py-6 text-center">
+            <p className="text-sm text-[#59605f] py-6 text-center">
               No recent incidents recorded.
             </p>
           )}
         </div>
 
         {/* Recent Deployments */}
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
+        <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
-              <Rocket className="h-4 w-4 text-slate-500" aria-hidden="true" />
+            <h2 className="text-base font-semibold text-[#131b2e] flex items-center gap-2">
+              <Rocket className="h-4 w-4 text-[#59605f]" aria-hidden="true" />
               <span>Recent Deployments</span>
             </h2>
             <Link
               to="/deployments"
-              className="text-xs font-semibold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1"
+              className="text-xs font-semibold text-[#a23f00] hover:underline inline-flex items-center gap-1"
             >
               <span>View all deployments</span>
               <ArrowRight className="h-3 w-3" />
@@ -344,7 +382,7 @@ export function DashboardPage() {
           </div>
 
           {deployments.recent && deployments.recent.length > 0 ? (
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-[#eaedff]">
               {deployments.recent.map((dep) => {
                 const targetUrl = dep.applicationId?._id
                   ? `/deployments?applicationId=${dep.applicationId._id}`
@@ -354,29 +392,29 @@ export function DashboardPage() {
                   <li key={dep._id} className="py-2.5 first:pt-0 last:pb-0">
                     <Link
                       to={targetUrl}
-                      className="block p-1.5 -mx-1.5 rounded-lg hover:bg-slate-50/75 transition-colors"
+                      className="block p-2 -mx-2 rounded-lg hover:bg-[#f2f3ff]/60 transition-colors"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-semibold text-slate-900 bg-slate-100 px-2 py-0.5 rounded">
+                            <span className="font-mono text-xs font-semibold text-[#131b2e] bg-[#f2f3ff] border border-[#dae2fd] px-2 py-0.5 rounded">
                               {dep.version}
                             </span>
-                            <span className="text-xs text-slate-600 truncate font-medium">
+                            <span className="text-xs text-[#59605f] truncate font-medium">
                               {dep.applicationId?.name || 'Application'}
                             </span>
                           </div>
-                          <p className="text-xs text-slate-400 mt-1">
+                          <p className="text-xs text-[#5a4136] mt-1">
                             Deployed {formatRelative(dep.startedAt)}
                           </p>
                         </div>
                         <span
                           className={`text-2xs font-semibold px-2 py-0.5 rounded uppercase tracking-wider shrink-0 ${
                             dep.status === 'success'
-                              ? 'bg-emerald-100 text-emerald-800'
+                              ? 'bg-[#ecfdf5] text-[#065f46]'
                               : dep.status === 'failed'
-                              ? 'bg-rose-100 text-rose-800'
-                              : 'bg-slate-100 text-slate-700'
+                              ? 'bg-[#ffdad6] text-[#93000a]'
+                              : 'bg-[#f2f3ff] text-[#59605f]'
                           }`}
                         >
                           {dep.status}
@@ -388,7 +426,7 @@ export function DashboardPage() {
               })}
             </ul>
           ) : (
-            <p className="text-sm text-slate-500 py-6 text-center">
+            <p className="text-sm text-[#59605f] py-6 text-center">
               No recent deployments logged.
             </p>
           )}

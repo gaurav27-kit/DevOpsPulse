@@ -8,6 +8,7 @@ import { FormError } from './FormError.jsx';
 /**
  * Form allowing operators to append investigative notes to an incident's timeline.
  * Features live character counting (max 1000) and handles 409 timeline full error.
+ * Styled with DevOpsPulse design tokens.
  */
 export function AddNoteForm({ incidentId }) {
   const [message, setMessage] = useState('');
@@ -43,14 +44,14 @@ export function AddNoteForm({ incidentId }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs space-y-3">
+    <form onSubmit={handleSubmit} className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm space-y-3">
       <div className="flex items-center justify-between">
-        <label htmlFor="incident-note-input" className="text-sm font-semibold text-slate-800">
+        <label htmlFor="incident-note-input" className="text-sm font-semibold text-[#131b2e]">
           Add an investigative note
         </label>
         <span
           className={`text-xs font-mono ${
-            isOverLimit ? 'text-rose-600 font-bold' : remaining < 100 ? 'text-amber-600' : 'text-slate-400'
+            isOverLimit ? 'text-[#ba1a1a] font-bold' : remaining < 100 ? 'text-[#d97706]' : 'text-[#5a4136]'
           }`}
           aria-live="polite"
         >
@@ -70,7 +71,7 @@ export function AddNoteForm({ incidentId }) {
           placeholder="Document investigation steps, hypotheses, or external status updates..."
           rows={3}
           maxLength={1100}
-          className="w-full rounded-lg border border-slate-300 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-hidden focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50 transition-colors"
+          className="w-full rounded-lg border border-[#dae2fd] p-3 text-sm text-[#131b2e] placeholder:text-[#59605f] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 disabled:bg-[#f2f3ff] transition-colors"
         />
         {errorText && <FormError message={errorText} />}
       </div>
@@ -80,7 +81,7 @@ export function AddNoteForm({ incidentId }) {
           type="submit"
           variant="primary"
           disabled={!message.trim() || isOverLimit || addMutation.isPending}
-          className="text-xs py-2 px-4 flex items-center gap-1.5"
+          className="text-xs py-2 px-4 flex items-center gap-1.5 min-h-[38px] font-semibold"
         >
           {addMutation.isPending ? (
             <>

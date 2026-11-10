@@ -4,11 +4,15 @@ import app from './app.js';
 import { env } from './config/env.js';
 import { connectDB } from './config/db.js';
 import * as schedulerService from './services/schedulerService.js';
+import { cleanupInterruptedDeliveries } from './services/notificationService.js';
 import { initSockets, closeIO } from './sockets/index.js';
 
 const startServer = async () => {
   // Connect to MongoDB before starting HTTP server or scheduler
   await connectDB();
+
+  // Clean up any stale in-flight deliveries interrupted across restarts
+  await cleanupInterruptedDeliveries();
 
   const httpServer = http.createServer(app);
 

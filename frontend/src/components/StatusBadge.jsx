@@ -12,22 +12,22 @@ export function StatusBadge({ status = 'unknown', className = '' }) {
     up: {
       label: 'Operational',
       icon: CheckCircle2,
-      style: 'bg-emerald-50 text-emerald-700 border-emerald-200'
+      style: 'bg-[#ecfdf5] text-[#065f46] border-[#a7f3d0]'
     },
     degraded: {
       label: 'Degraded',
       icon: AlertTriangle,
-      style: 'bg-amber-50 text-amber-700 border-amber-200'
+      style: 'bg-[#fffbeb] text-[#92400e] border-[#fde68a]'
     },
     down: {
       label: 'Down',
       icon: XCircle,
-      style: 'bg-rose-50 text-rose-700 border-rose-200'
+      style: 'bg-[#fef2f2] text-[#991b1b] border-[#fecaca]'
     },
     unknown: {
       label: 'Unknown',
       icon: HelpCircle,
-      style: 'bg-slate-100 text-slate-700 border-slate-200'
+      style: 'bg-[#f1f5f9] text-[#334155] border-[#e2e8f0]'
     }
   };
 

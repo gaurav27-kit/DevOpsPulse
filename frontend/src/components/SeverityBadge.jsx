@@ -5,28 +5,29 @@ const SEVERITY_CONFIG = {
   critical: {
     label: 'Critical',
     icon: AlertOctagon,
-    classes: 'bg-rose-100 text-rose-800 border-rose-200'
+    classes: 'bg-[#ffdad6] text-[#93000a] border-[#ffb4ab]'
   },
   high: {
     label: 'High',
     icon: AlertCircle,
-    classes: 'bg-orange-100 text-orange-800 border-orange-200'
+    classes: 'bg-[#ffdbcd] text-[#7c2e00] border-[#ffb595]'
   },
   medium: {
     label: 'Medium',
     icon: AlertTriangle,
-    classes: 'bg-amber-100 text-amber-800 border-amber-200'
+    classes: 'bg-[#fffbeb] text-[#92400e] border-[#fde68a]'
   },
   low: {
     label: 'Low',
     icon: Info,
-    classes: 'bg-slate-100 text-slate-700 border-slate-200'
+    classes: 'bg-[#f2f3ff] text-[#59605f] border-[#dae2fd]'
   }
 };
 
 /**
  * Accessible badge indicating incident severity level.
  * Communicates status via both icon and text, never color alone.
+ * Uses DevOpsPulse design tokens.
  */
 export function SeverityBadge({ severity, className = '' }) {
   const config = SEVERITY_CONFIG[severity?.toLowerCase()] || SEVERITY_CONFIG.low;

@@ -7,8 +7,6 @@ import {
   FilterX,
   GitBranch,
   GitCommit,
-  Clock,
-  Layers,
   Info
 } from 'lucide-react';
 import { useDeploymentsList } from '../hooks/useDeployments.js';
@@ -105,7 +103,7 @@ export function DeploymentsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Success banner if redirected after recording deployment */}
       {bannerMessage && (
         <AlertBanner
@@ -118,14 +116,14 @@ export function DeploymentsPage() {
       {/* Header & CTA */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Deployments</h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-[#131b2e]">Deployments</h1>
+          <p className="mt-1 text-sm text-[#5a4136]">
             Track release versions, Git commits, and deployment execution logs across services.
           </p>
         </div>
 
         <Link to="/deployments/new">
-          <Button variant="primary" className="inline-flex items-center gap-1.5 self-start sm:self-auto">
+          <Button variant="primary" className="inline-flex items-center gap-1.5 self-start sm:self-auto min-h-[40px] font-semibold">
             <Plus className="h-4 w-4" />
             <span>Record deployment</span>
           </Button>
@@ -133,18 +131,18 @@ export function DeploymentsPage() {
       </div>
 
       {/* Filters Bar */}
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs space-y-3">
+      <div className="rounded-xl border border-[#e2e8f0] bg-white p-4 shadow-sm space-y-3">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
           {/* Application */}
           <div>
-            <label htmlFor="dep-app-filter" className="block text-xs font-semibold text-slate-600 mb-1">
+            <label htmlFor="dep-app-filter" className="block text-xs font-semibold text-[#131b2e] mb-1">
               Application
             </label>
             <select
               id="dep-app-filter"
               value={applicationId}
               onChange={(e) => updateParam('applicationId', e.target.value)}
-              className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs text-slate-900 focus:border-blue-500 focus:outline-hidden"
+              className="w-full rounded-lg border border-[#dae2fd] bg-white p-2 text-xs text-[#131b2e] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
             >
               <option value="">All Applications</option>
               {applications.map((app) => (
@@ -157,14 +155,14 @@ export function DeploymentsPage() {
 
           {/* Status */}
           <div>
-            <label htmlFor="dep-status-filter" className="block text-xs font-semibold text-slate-600 mb-1">
+            <label htmlFor="dep-status-filter" className="block text-xs font-semibold text-[#131b2e] mb-1">
               Status
             </label>
             <select
               id="dep-status-filter"
               value={status}
               onChange={(e) => updateParam('status', e.target.value)}
-              className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs text-slate-900 focus:border-blue-500 focus:outline-hidden"
+              className="w-full rounded-lg border border-[#dae2fd] bg-white p-2 text-xs text-[#131b2e] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
             >
               <option value="">All Statuses</option>
               <option value="success">Success</option>
@@ -177,14 +175,14 @@ export function DeploymentsPage() {
 
           {/* Environment */}
           <div>
-            <label htmlFor="dep-env-filter" className="block text-xs font-semibold text-slate-600 mb-1">
+            <label htmlFor="dep-env-filter" className="block text-xs font-semibold text-[#131b2e] mb-1">
               Environment
             </label>
             <select
               id="dep-env-filter"
               value={environment}
               onChange={(e) => updateParam('environment', e.target.value)}
-              className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs text-slate-900 focus:border-blue-500 focus:outline-hidden"
+              className="w-full rounded-lg border border-[#dae2fd] bg-white p-2 text-xs text-[#131b2e] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
             >
               <option value="">All Environments</option>
               <option value="production">Production</option>
@@ -195,7 +193,7 @@ export function DeploymentsPage() {
 
           {/* Branch */}
           <div>
-            <label htmlFor="dep-branch-filter" className="block text-xs font-semibold text-slate-600 mb-1">
+            <label htmlFor="dep-branch-filter" className="block text-xs font-semibold text-[#131b2e] mb-1">
               Branch Name
             </label>
             <input
@@ -204,13 +202,13 @@ export function DeploymentsPage() {
               value={branchInput}
               onChange={(e) => setBranchInput(e.target.value)}
               placeholder="e.g. main"
-              className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs text-slate-900 focus:border-blue-500 focus:outline-hidden"
+              className="w-full rounded-lg border border-[#dae2fd] bg-white p-2 text-xs text-[#131b2e] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
             />
           </div>
 
           {/* Sort By */}
           <div>
-            <label htmlFor="dep-sort-filter" className="block text-xs font-semibold text-slate-600 mb-1">
+            <label htmlFor="dep-sort-filter" className="block text-xs font-semibold text-[#131b2e] mb-1">
               Sort By
             </label>
             <div className="flex items-center gap-1.5">
@@ -218,7 +216,7 @@ export function DeploymentsPage() {
                 id="dep-sort-filter"
                 value={sortBy}
                 onChange={(e) => updateParam('sortBy', e.target.value)}
-                className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs text-slate-900 focus:border-blue-500 focus:outline-hidden"
+                className="w-full rounded-lg border border-[#dae2fd] bg-white p-2 text-xs text-[#131b2e] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
               >
                 <option value="startedAt">Started Time</option>
                 <option value="createdAt">Recorded Time</option>
@@ -227,7 +225,7 @@ export function DeploymentsPage() {
               <button
                 type="button"
                 onClick={toggleSortOrder}
-                className="p-2 border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-600 cursor-pointer"
+                className="p-2 border border-[#dae2fd] rounded-lg hover:bg-[#f2f3ff] text-[#59605f] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 cursor-pointer shrink-0 transition-colors"
                 title={`Order: ${order === 'asc' ? 'Oldest first' : 'Newest first'}`}
               >
                 <ArrowUpDown className="h-4 w-4" />
@@ -237,12 +235,12 @@ export function DeploymentsPage() {
         </div>
 
         {hasActiveFilters && (
-          <div className="flex items-center justify-between pt-2 border-t border-slate-100">
-            <span className="text-xs text-slate-500">Filtered view active</span>
+          <div className="flex items-center justify-between pt-2 border-t border-[#eaedff]">
+            <span className="text-xs text-[#5a4136]">Filtered view active</span>
             <button
               type="button"
               onClick={clearFilters}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 cursor-pointer"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-[#a23f00] hover:text-[#ff6700] hover:underline cursor-pointer"
             >
               <FilterX className="h-3.5 w-3.5" />
               <span>Clear filters</span>
@@ -253,7 +251,7 @@ export function DeploymentsPage() {
 
       {/* Content */}
       {isLoading ? (
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
+        <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm space-y-4">
           <Skeleton className="h-10 w-full" />
           <Skeleton className="h-14 w-full" />
           <Skeleton className="h-14 w-full" />
@@ -266,7 +264,7 @@ export function DeploymentsPage() {
           onRetry={refetch}
         />
       ) : deployments.length === 0 ? (
-        <div className="rounded-xl border border-slate-200 bg-white p-12 shadow-xs">
+        <div className="rounded-xl border border-[#e2e8f0] bg-white p-12 shadow-sm">
           {hasActiveFilters ? (
             <EmptyState
               icon={Rocket}
@@ -294,99 +292,101 @@ export function DeploymentsPage() {
       ) : (
         <div className="space-y-4">
           {/* Desktop Table */}
-          <div className="hidden md:block rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50/75 border-b border-slate-200 text-xs uppercase font-semibold text-slate-500">
-                <tr>
-                  <th className="px-6 py-3">Version & Service</th>
-                  <th className="px-6 py-3">Branch & Commit</th>
-                  <th className="px-6 py-3">Environment</th>
-                  <th className="px-6 py-3">Status</th>
-                  <th className="px-6 py-3">Started</th>
-                  <th className="px-6 py-3">Duration</th>
-                  <th className="px-6 py-3">Source</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {deployments.map((dep) => {
-                  const durationStr = dep.completedAt
-                    ? formatElapsedDuration(dep.startedAt, dep.completedAt)
-                    : dep.status === 'in_progress'
-                    ? 'In progress'
-                    : '—';
+          <div className="hidden md:block rounded-xl border border-[#e2e8f0] bg-white shadow-sm overflow-hidden">
+            <div className="overflow-x-auto custom-scrollbar-x">
+              <table className="w-full min-w-[880px] text-left text-sm text-[#131b2e]">
+                <thead className="bg-[#f2f3ff]/60 border-b border-[#e2e8f0] text-xs uppercase font-semibold text-[#5a4136]">
+                  <tr>
+                    <th className="px-6 py-3 whitespace-nowrap">Version & Service</th>
+                    <th className="px-6 py-3 whitespace-nowrap">Branch & Commit</th>
+                    <th className="px-6 py-3 whitespace-nowrap">Environment</th>
+                    <th className="px-6 py-3 whitespace-nowrap">Status</th>
+                    <th className="px-6 py-3 whitespace-nowrap">Started</th>
+                    <th className="px-6 py-3 whitespace-nowrap">Duration</th>
+                    <th className="px-6 py-3 whitespace-nowrap">Source</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#eaedff]">
+                  {deployments.map((dep) => {
+                    const durationStr = dep.completedAt
+                      ? formatElapsedDuration(dep.startedAt, dep.completedAt)
+                      : dep.status === 'in_progress'
+                      ? 'In progress'
+                      : '—';
 
-                  const shortSha = dep.commitSha ? dep.commitSha.slice(0, 7) : null;
+                    const shortSha = dep.commitSha ? dep.commitSha.slice(0, 7) : null;
 
-                  return (
-                    <tr key={dep._id} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="font-mono text-xs font-bold text-slate-900 bg-slate-100 px-2.5 py-1 rounded-md inline-block">
-                          {dep.version}
-                        </div>
-                        {dep.applicationId && (
-                          <div className="text-xs text-slate-500 mt-1">
-                            {dep.applicationId.name}
+                    return (
+                      <tr key={dep._id} className="hover:bg-[#f2f3ff]/40 transition-colors">
+                        <td className="px-6 py-4">
+                          <div className="font-mono text-xs font-bold text-[#131b2e] bg-[#f2f3ff] border border-[#dae2fd] px-2.5 py-1 rounded-md inline-block">
+                            {dep.version}
                           </div>
-                        )}
-                        {dep.description && (
-                          <p className="text-2xs text-slate-400 mt-0.5 truncate max-w-xs" title={dep.description}>
-                            {dep.description}
-                          </p>
-                        )}
-                      </td>
+                          {dep.applicationId && (
+                            <div className="text-xs text-[#5a4136] mt-1 font-medium">
+                              {dep.applicationId.name}
+                            </div>
+                          )}
+                          {dep.description && (
+                            <p className="text-2xs text-[#59605f] mt-0.5 truncate max-w-xs" title={dep.description}>
+                              {dep.description}
+                            </p>
+                          )}
+                        </td>
 
-                      <td className="px-6 py-4 text-xs text-slate-600">
-                        {dep.branch ? (
-                          <div className="inline-flex items-center gap-1 font-mono text-slate-700">
-                            <GitBranch className="h-3.5 w-3.5 text-slate-400" />
-                            <span>{dep.branch}</span>
+                        <td className="px-6 py-4 text-xs text-[#131b2e]">
+                          {dep.branch ? (
+                            <div className="inline-flex items-center gap-1 font-mono font-medium text-[#131b2e]">
+                              <GitBranch className="h-3.5 w-3.5 text-[#59605f]" />
+                              <span>{dep.branch}</span>
+                            </div>
+                          ) : (
+                            <span className="text-[#59605f]">—</span>
+                          )}
+
+                          {shortSha && (
+                            <div className="inline-flex items-center gap-1 font-mono text-2xs text-[#59605f] mt-0.5 block">
+                              <GitCommit className="h-3 w-3" />
+                              <span>{shortSha}</span>
+                            </div>
+                          )}
+                        </td>
+
+                        <td className="px-6 py-4">
+                          <span className="capitalize text-xs font-medium text-[#59605f] bg-[#f2f3ff] border border-[#dae2fd] px-2.5 py-0.5 rounded-full">
+                            {dep.environment}
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4">
+                          <DeploymentStatusBadge status={dep.status} />
+                        </td>
+
+                        <td className="px-6 py-4 text-xs text-[#5a4136] whitespace-nowrap">
+                          <div title={formatDateTime(dep.startedAt)}>
+                            {formatRelative(dep.startedAt)}
                           </div>
-                        ) : (
-                          <span className="text-slate-400">—</span>
-                        )}
+                        </td>
 
-                        {shortSha && (
-                          <div className="inline-flex items-center gap-1 font-mono text-2xs text-slate-400 mt-0.5 block">
-                            <GitCommit className="h-3 w-3" />
-                            <span>{shortSha}</span>
-                          </div>
-                        )}
-                      </td>
+                        <td className="px-6 py-4 text-xs font-medium text-[#131b2e] whitespace-nowrap">
+                          {durationStr}
+                        </td>
 
-                      <td className="px-6 py-4">
-                        <span className="capitalize text-xs font-medium text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full">
-                          {dep.environment}
-                        </span>
-                      </td>
-
-                      <td className="px-6 py-4">
-                        <DeploymentStatusBadge status={dep.status} />
-                      </td>
-
-                      <td className="px-6 py-4 text-xs text-slate-600 whitespace-nowrap">
-                        <div title={formatDateTime(dep.startedAt)}>
-                          {formatRelative(dep.startedAt)}
-                        </div>
-                      </td>
-
-                      <td className="px-6 py-4 text-xs font-medium text-slate-700 whitespace-nowrap">
-                        {durationStr}
-                      </td>
-
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-2xs font-medium bg-slate-100 text-slate-600 cursor-help"
-                          title="Entered by you, not verified by an automated integration"
-                        >
-                          <Info className="h-3 w-3 text-slate-400" />
-                          <span>Manual entry</span>
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-2xs font-semibold bg-[#f2f3ff] text-[#59605f] border border-[#dae2fd] cursor-help"
+                            title="Entered by you, not verified by an automated integration"
+                          >
+                            <Info className="h-3 w-3 text-[#59605f]" />
+                            <span>Manual entry</span>
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           {/* Mobile Card List */}
@@ -401,26 +401,26 @@ export function DeploymentsPage() {
               return (
                 <div
                   key={dep._id}
-                  className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs space-y-2"
+                  className="rounded-xl border border-[#e2e8f0] bg-white p-4 shadow-sm space-y-2 hover:border-[#dae2fd] transition-colors"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <span className="font-mono text-xs font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded">
+                      <span className="font-mono text-xs font-bold text-[#131b2e] bg-[#f2f3ff] border border-[#dae2fd] px-2 py-0.5 rounded">
                         {dep.version}
                       </span>
-                      <p className="text-xs text-slate-500 mt-1">{dep.applicationId?.name}</p>
+                      <p className="text-xs text-[#5a4136] mt-1 font-medium">{dep.applicationId?.name}</p>
                     </div>
                     <DeploymentStatusBadge status={dep.status} />
                   </div>
 
                   {dep.description && (
-                    <p className="text-xs text-slate-600">{dep.description}</p>
+                    <p className="text-xs text-[#59605f]">{dep.description}</p>
                   )}
 
-                  <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
-                    <span>{dep.branch || 'no branch'}</span>
+                  <div className="flex items-center justify-between text-xs text-[#5a4136] pt-2 border-t border-[#eaedff]">
+                    <span className="font-mono">{dep.branch || 'no branch'}</span>
                     <span>Started {formatRelative(dep.startedAt)}</span>
-                    <span>{durationStr}</span>
+                    <span className="font-medium text-[#131b2e]">{durationStr}</span>
                   </div>
                 </div>
               );

@@ -33,7 +33,7 @@ export function RangeSelector({ paramName = 'range', value: controlledValue, onC
     <div
       role="group"
       aria-label="Time range selector"
-      className="inline-flex rounded-lg border border-slate-200 bg-white p-1 shadow-xs"
+      className="inline-flex items-center rounded-xl border border-[#e2e8f0] bg-[#f2f3ff] p-1 shadow-sm"
     >
       {RANGES.map((r) => {
         const isSelected = activeRange === r.value;
@@ -43,10 +43,10 @@ export function RangeSelector({ paramName = 'range', value: controlledValue, onC
             type="button"
             onClick={() => handleSelect(r.value)}
             aria-pressed={isSelected}
-            className={`cursor-pointer rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+            className={`cursor-pointer rounded-lg px-3 py-1.5 text-xs font-medium transition-all focus:outline-hidden focus:ring-2 focus:ring-[#ff6700] ${
               isSelected
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                ? 'bg-white text-[#131b2e] shadow-xs font-semibold'
+                : 'text-[#5a4136] hover:bg-white/60 hover:text-[#131b2e]'
             }`}
           >
             {r.label}

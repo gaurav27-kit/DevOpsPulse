@@ -44,7 +44,10 @@ export const validate = (schema) => async (req, res, next) => {
       const fieldErrors = error.errors.map((err) => {
         // Remove container prefixes ('body', 'query', 'params') if present
         const filteredPath = err.path.filter((p) => p !== 'body' && p !== 'query' && p !== 'params');
-        const field = filteredPath.length > 0 ? filteredPath.join('.') : 'root';
+        let field = filteredPath.length > 0 ? filteredPath.join('.') : 'root';
+        if (field === 'root' && Array.isArray(err.keys) && err.keys.length > 0) {
+          field = err.keys.join(', ');
+        }
         return {
           field,
           message: err.message

@@ -54,9 +54,10 @@ export function useAuth() {
   const logoutMutation = useMutation({
     mutationFn: () => authApi.logout(),
     onSuccess: () => {
-      // Clear entire TanStack Query cache and reset session
-      queryClient.clear();
+      // 1. Mark authentication session as null
       queryClient.setQueryData(AUTH_QUERY_KEY, null);
+      // 2. Remove all cached non-auth query data so previous user data is never leaked
+      queryClient.removeQueries({ predicate: (q) => q.queryKey[0] !== AUTH_QUERY_KEY[0] });
     }
   });
 

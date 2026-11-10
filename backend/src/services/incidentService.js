@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
 import { Incident } from '../models/Incident.js';
+import { Application } from '../models/Application.js';
 import { AppError } from '../utils/AppError.js';
 import { decideIncidentAction } from './incidentRules.js';
 import { emitIncidentCreated, emitIncidentUpdated } from '../sockets/events.js';
+import { notifyIncidentEvent } from './notificationService.js';
 
 // Maximum number of timeline updates per incident before we stop accepting new ones
 const MAX_UPDATES = 200;
@@ -53,6 +55,9 @@ async function openIncident(application, result) {
 
     // Real-time: emit incident:created AFTER database write succeeds
     emitIncidentCreated(application.ownerId, created, application.name);
+
+    // Outbound alert: trigger incident_opened fire-and-forget without awaiting
+    notifyIncidentEvent(created, application, 'incident_opened').catch(() => {});
 
     console.log(`[Incident] Opened incident for app ${application._id} (${severity})`);
   } catch (err) {
@@ -118,6 +123,17 @@ async function resolveIncident(applicationId) {
     // Real-time: emit incident:updated AFTER database write succeeds
     emitIncidentUpdated(updated.ownerId, updated);
     console.log(`[Incident] Auto-resolved incident ${updated._id} for app ${applicationId}`);
+
+    // Outbound alert: trigger incident_resolved fire-and-forget without awaiting
+    Application.findById(applicationId)
+      .select('name _id')
+      .lean()
+      .then((appDoc) => {
+        if (appDoc) {
+          notifyIncidentEvent(updated, appDoc, 'incident_resolved').catch(() => {});
+        }
+      })
+      .catch(() => {});
   }
 }
 
@@ -182,6 +198,17 @@ export async function closeForUrlChange(applicationId) {
     // Real-time: emit incident:updated AFTER database write succeeds
     emitIncidentUpdated(updated.ownerId, updated);
     console.log(`[Incident] Closed incident ${updated._id} due to URL change on app ${applicationId}`);
+
+    // Outbound alert: trigger incident_resolved fire-and-forget without awaiting
+    Application.findById(applicationId)
+      .select('name _id')
+      .lean()
+      .then((appDoc) => {
+        if (appDoc) {
+          notifyIncidentEvent(updated, appDoc, 'incident_resolved').catch(() => {});
+        }
+      })
+      .catch(() => {});
   }
 }
 
@@ -343,6 +370,19 @@ export async function changeIncidentStatus(ownerId, id, { status: newStatus, not
 
   // Real-time: emit incident:updated AFTER database write succeeds
   emitIncidentUpdated(ownerId, updated);
+
+  // Outbound alert: if transitioned to resolved, trigger incident_resolved fire-and-forget
+  if (isResolving) {
+    Application.findById(updated.applicationId)
+      .select('name _id')
+      .lean()
+      .then((appDoc) => {
+        if (appDoc) {
+          notifyIncidentEvent(updated, appDoc, 'incident_resolved').catch(() => {});
+        }
+      })
+      .catch(() => {});
+  }
 
   return updated;
 }

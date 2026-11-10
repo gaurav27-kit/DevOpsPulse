@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import { AlertTriangle, X } from 'lucide-react';
 import { Button } from './Button.jsx';
@@ -6,6 +7,7 @@ import { Button } from './Button.jsx';
  * Accessible confirmation modal dialog.
  * Enforces role="dialog", aria-modal="true", keyboard trap/escape listeners,
  * and preserves previous DOM focus upon close.
+ * Styled with DevOpsPulse design tokens.
  */
 export function ConfirmDialog({
   isOpen,
@@ -50,7 +52,7 @@ export function ConfirmDialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 overflow-y-auto bg-[#283044]/60 backdrop-blur-xs flex items-center justify-center p-4"
       onClick={(e) => {
         if (e.target === e.currentTarget && !isLoading) {
           onClose();
@@ -63,23 +65,25 @@ export function ConfirmDialog({
         aria-modal="true"
         aria-labelledby="confirm-dialog-title"
         aria-describedby="confirm-dialog-desc"
-        className="w-full max-w-md bg-white rounded-2xl p-6 shadow-xl border border-slate-200 transform transition-all"
+        className="w-full max-w-md bg-white rounded-2xl p-6 shadow-xl border border-[#e2e8f0] transform transition-all"
       >
         <div className="flex items-start gap-4">
           <div
             className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-              variant === 'danger' ? 'bg-rose-100 text-rose-600' : 'bg-indigo-100 text-indigo-600'
+              variant === 'danger'
+                ? 'bg-[#ffdad6] text-[#ba1a1a]'
+                : 'bg-[#f2f3ff] text-[#0061a2]'
             }`}
           >
             <AlertTriangle className="w-5 h-5" aria-hidden="true" />
           </div>
 
           <div className="flex-1">
-            <h3 id="confirm-dialog-title" className="text-base font-semibold text-slate-900 leading-snug">
+            <h3 id="confirm-dialog-title" className="text-base font-semibold text-[#131b2e] leading-snug">
               {title}
             </h3>
             {description && (
-              <p id="confirm-dialog-desc" className="mt-2 text-sm text-slate-600 leading-relaxed">
+              <p id="confirm-dialog-desc" className="mt-2 text-sm text-[#5a4136] leading-relaxed">
                 {description}
               </p>
             )}
@@ -90,14 +94,14 @@ export function ConfirmDialog({
             type="button"
             onClick={onClose}
             disabled={isLoading}
-            className="text-slate-400 hover:text-slate-600 p-1 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+            className="text-[#59605f] hover:text-[#131b2e] p-1 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+        <div className="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-[#eaedff]">
           <Button
             ref={cancelButtonRef}
             variant="outline"
@@ -121,4 +125,3 @@ export function ConfirmDialog({
     </div>
   );
 }
-

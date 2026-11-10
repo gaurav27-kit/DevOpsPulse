@@ -2,7 +2,7 @@ import http from 'http';
 import https from 'https';
 import dns from 'dns';
 import { performance } from 'perf_hooks';
-import { isPrivateOrSpecialIp, assertSafeUrlSyntax } from './urlSafetyService.js';
+import { isPrivateOrSpecialIp, assertSafeUrlSyntax, buildSafeLookup } from './urlSafetyService.js';
 import { SANITIZED_ERROR_MESSAGES } from '../models/HealthCheck.js';
 
 const MAX_REDIRECTS = 3;
@@ -29,33 +29,6 @@ const classifyError = (err) => {
   if (code === 'BLOCKED_DESTINATION') return 'blocked_destination';
   if (code === 'TOO_MANY_REDIRECTS') return 'too_many_redirects';
   return 'unknown';
-};
-
-/**
- * Builds a safe custom lookup function for http/https request options.
- * For EVERY DNS resolution it re-validates the returned IP addresses against
- * private/special ranges. This closes the DNS-rebinding gap: a domain might
- * resolve to a safe IP at configuration time but be rebind to 127.0.0.1 later.
- */
-const buildSafeLookup = () => {
-  return (hostname, options, callback) => {
-    dns.lookup(hostname, { all: true, ...options }, (err, addresses) => {
-      if (err) return callback(err);
-
-      const blocked = addresses.find((a) => isPrivateOrSpecialIp(a.address));
-      if (blocked) {
-        const ssrfErr = new Error(
-          `Blocked: '${hostname}' resolved to a private/restricted address`
-        );
-        ssrfErr.code = 'BLOCKED_DESTINATION';
-        return callback(ssrfErr);
-      }
-
-      // Return first address in the expected format
-      const { address, family } = addresses[0];
-      callback(null, address, family);
-    });
-  };
 };
 
 /**

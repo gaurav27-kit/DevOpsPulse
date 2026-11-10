@@ -6,6 +6,7 @@ import { ApplicationForm } from '../components/ApplicationForm.jsx';
 
 /**
  * View to configure and register a new monitored application.
+ * Styled with DevOpsPulse design tokens.
  */
 export function ApplicationCreatePage() {
   const navigate = useNavigate();
@@ -33,40 +34,41 @@ export function ApplicationCreatePage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      {/* Back button link */}
-      <div>
+    <div className="max-w-3xl mx-auto space-y-6">
+      {/* Breadcrumb / Back button */}
+      <div className="flex items-center justify-between">
         <Link
           to="/applications"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5a4136] hover:text-[#131b2e] transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to Applications</span>
         </Link>
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#f2f3ff] text-[#59605f] border border-[#dae2fd] text-2xs font-semibold font-mono uppercase">
+          New Service
+        </span>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs">
-        <div className="flex items-center gap-3 pb-6 border-b border-slate-100 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shadow-xs">
-            <Server className="w-5 h-5" aria-hidden="true" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">Add New Application</h1>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Enter the HTTP/HTTPS endpoint and timing parameters to begin monitoring.
-            </p>
-          </div>
+      {/* Header Banner */}
+      <div className="flex items-start gap-3.5">
+        <div className="w-10 h-10 rounded-xl bg-[#070d0d] text-white flex items-center justify-center shrink-0 shadow-xs mt-0.5">
+          <Server className="w-5 h-5 text-[#ff6700]" aria-hidden="true" />
         </div>
-
-        <ApplicationForm
-          onSubmit={handleCreate}
-          isLoading={createMutation.isPending}
-          serverErrors={serverErrors}
-          generalError={generalError}
-          submitLabel="Register Application"
-        />
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-[#131b2e]">Add New Application</h1>
+          <p className="text-sm text-[#5a4136] mt-0.5">
+            Configure health check probing, timeouts, and notification thresholds for a new service.
+          </p>
+        </div>
       </div>
+
+      <ApplicationForm
+        onSubmit={handleCreate}
+        isLoading={createMutation.isPending}
+        serverErrors={serverErrors}
+        generalError={generalError}
+        submitLabel="Register Application"
+      />
     </div>
   );
 }
-

@@ -5,34 +5,35 @@ const DEPLOY_STATUS_CONFIG = {
   pending: {
     label: 'Pending',
     icon: Clock,
-    classes: 'bg-slate-100 text-slate-700 border-slate-200'
+    classes: 'bg-[#f2f3ff] text-[#59605f] border-[#dae2fd]'
   },
   in_progress: {
     label: 'In Progress',
     icon: Loader2,
-    classes: 'bg-blue-50 text-blue-700 border-blue-200',
+    classes: 'bg-[#d1e4ff] text-[#00497c] border-[#9dcaff]',
     spin: true
   },
   success: {
     label: 'Success',
     icon: CheckCircle2,
-    classes: 'bg-emerald-50 text-emerald-700 border-emerald-200'
+    classes: 'bg-[#ecfdf5] text-[#065f46] border-[#a7f3d0]'
   },
   failed: {
     label: 'Failed',
     icon: XCircle,
-    classes: 'bg-rose-50 text-rose-700 border-rose-200'
+    classes: 'bg-[#ffdad6] text-[#93000a] border-[#ffb4ab]'
   },
   rolled_back: {
     label: 'Rolled Back',
     icon: RotateCcw,
-    classes: 'bg-purple-50 text-purple-700 border-purple-200'
+    classes: 'bg-[#f5f3ff] text-[#5b21b6] border-[#ddd6fe]'
   }
 };
 
 /**
  * Accessible badge indicating deployment status.
  * Communicates status via both icon and text, never color alone.
+ * Uses DevOpsPulse design tokens.
  */
 export function DeploymentStatusBadge({ status, className = '' }) {
   const config = DEPLOY_STATUS_CONFIG[status?.toLowerCase()] || DEPLOY_STATUS_CONFIG.pending;

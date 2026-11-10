@@ -57,6 +57,36 @@ export const isPrivateOrSpecialIp = (ip) => {
 };
 
 /**
+ * Builds a safe custom lookup function for http/https request options.
+ * For EVERY DNS resolution it re-validates the returned IP addresses against
+ * private/special ranges. This closes the DNS-rebinding gap: a domain might
+ * resolve to a safe IP at configuration time but be rebind to 127.0.0.1 later.
+ */
+export const buildSafeLookup = () => {
+  return (hostname, options, callback) => {
+    dns.lookup(hostname, { all: true, ...options }, (err, addresses) => {
+      if (err) return callback(err);
+
+      const blocked = addresses.find((a) => isPrivateOrSpecialIp(a.address));
+      if (blocked) {
+        const ssrfErr = new Error(
+          `Blocked: '${hostname}' resolved to a private/restricted address`
+        );
+        ssrfErr.code = 'BLOCKED_DESTINATION';
+        return callback(ssrfErr);
+      }
+
+      if (options?.all) {
+        callback(null, addresses);
+      } else {
+        const { address, family } = addresses[0];
+        callback(null, address, family);
+      }
+    });
+  };
+};
+
+/**
  * Validates URL syntax and enforces SSRF-safe structural rules.
  * - Only http: and https: protocols allowed.
  * - No embedded credentials (user:pass@host).
@@ -74,27 +104,37 @@ export const isPrivateOrSpecialIp = (ip) => {
  */
 export const assertSafeUrlSyntax = (rawUrl) => {
   if (typeof rawUrl !== 'string' || !rawUrl.trim()) {
-    throw new AppError('A valid URL is required', 400);
+    throw new AppError('A valid URL is required', 400, [
+      { field: 'url', message: 'A valid URL is required' }
+    ]);
   }
 
   const trimmed = rawUrl.trim();
   if (trimmed.length > MAX_URL_LENGTH) {
-    throw new AppError(`URL length must not exceed ${MAX_URL_LENGTH} characters`, 400);
+    throw new AppError(`URL length must not exceed ${MAX_URL_LENGTH} characters`, 400, [
+      { field: 'url', message: `URL length must not exceed ${MAX_URL_LENGTH} characters` }
+    ]);
   }
 
   let parsed;
   try {
     parsed = new URL(trimmed);
   } catch {
-    throw new AppError('Invalid URL format. Must include protocol (e.g., https://example.com)', 400);
+    throw new AppError('Invalid URL format. Must include protocol (e.g., https://example.com)', 400, [
+      { field: 'url', message: 'Invalid URL format. Must include protocol (e.g., https://example.com)' }
+    ]);
   }
 
   if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
-    throw new AppError('Only http: and https: protocols are permitted', 400);
+    throw new AppError('Only http: and https: protocols are permitted', 400, [
+      { field: 'url', message: 'Only http: and https: protocols are permitted' }
+    ]);
   }
 
   if (parsed.username || parsed.password) {
-    throw new AppError('URLs with embedded credentials (username/password) are not permitted', 400);
+    throw new AppError('URLs with embedded credentials (username/password) are not permitted', 400, [
+      { field: 'url', message: 'URLs with embedded credentials (username/password) are not permitted' }
+    ]);
   }
 
   const hostname = parsed.hostname.toLowerCase();
@@ -105,13 +145,17 @@ export const assertSafeUrlSyntax = (rawUrl) => {
     hostname.endsWith('.local') ||
     hostname.endsWith('.internal')
   ) {
-    throw new AppError(`Forbidden hostname: requests to '${hostname}' are not permitted`, 400);
+    throw new AppError(`Forbidden hostname: requests to '${hostname}' are not permitted`, 400, [
+      { field: 'url', message: `Forbidden hostname: requests to '${hostname}' are not permitted` }
+    ]);
   }
 
   // Reject literal IPs that are private/special
   const ipVersion = net.isIP(cleanHost);
   if (ipVersion !== 0 && isPrivateOrSpecialIp(cleanHost)) {
-    throw new AppError('Forbidden destination: private or local IP addresses are not permitted', 400);
+    throw new AppError('Forbidden destination: private or local IP addresses are not permitted', 400, [
+      { field: 'url', message: 'Forbidden destination: private or local IP addresses are not permitted' }
+    ]);
   }
 
   parsed.hash = '';

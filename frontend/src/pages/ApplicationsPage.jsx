@@ -123,7 +123,7 @@ export function ApplicationsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Flash Feedback Banner */}
       {flashMessage && (
         <AlertBanner
@@ -136,8 +136,10 @@ export function ApplicationsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Monitored Applications</h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-[#131b2e]">
+            Monitored Applications
+          </h1>
+          <p className="mt-1 text-sm text-[#5a4136]">
             Track availability, configuration, and endpoint status across your environments.
           </p>
         </div>
@@ -150,17 +152,17 @@ export function ApplicationsPage() {
       </div>
 
       {/* Filter and Control Bar */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-3">
+      <div className="bg-white p-4 rounded-xl border border-[#e2e8f0] shadow-sm space-y-3">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
           {/* Search Box */}
           <div className="lg:col-span-2 relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+            <Search className="w-4 h-4 text-[#59605f] absolute left-3 top-3 pointer-events-none" />
             <input
               type="text"
               placeholder="Search by name or URL..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-[#dae2fd] bg-white pl-9 pr-3 py-2 text-sm text-[#131b2e] placeholder:text-[#59605f] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
               aria-label="Search applications"
             />
           </div>
@@ -170,7 +172,7 @@ export function ApplicationsPage() {
             <select
               value={status}
               onChange={(e) => handleFilterChange('status', e.target.value)}
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-[#dae2fd] bg-white px-3 py-2 text-sm text-[#131b2e] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
               aria-label="Filter by status"
             >
               <option value="">All Statuses</option>
@@ -186,7 +188,7 @@ export function ApplicationsPage() {
             <select
               value={environment}
               onChange={(e) => handleFilterChange('environment', e.target.value)}
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-[#dae2fd] bg-white px-3 py-2 text-sm text-[#131b2e] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
               aria-label="Filter by environment"
             >
               <option value="">All Environments</option>
@@ -201,7 +203,7 @@ export function ApplicationsPage() {
             <select
               value={sortBy}
               onChange={(e) => handleSortChange(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-[#dae2fd] bg-white px-3 py-2 text-sm text-[#131b2e] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
               aria-label="Sort by field"
             >
               <option value="createdAt">Newest</option>
@@ -213,7 +215,7 @@ export function ApplicationsPage() {
             <button
               type="button"
               onClick={toggleSortOrder}
-              className="p-2 border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-600 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 shrink-0"
+              className="p-2 border border-[#dae2fd] rounded-lg hover:bg-[#f2f3ff] text-[#59605f] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 shrink-0 transition-colors"
               title={`Sort order: ${order.toUpperCase()}`}
               aria-label={`Toggle sort order, currently ${order}`}
             >
@@ -225,7 +227,7 @@ export function ApplicationsPage() {
 
       {/* Main Content Area */}
       {isLoading ? (
-        <div className="bg-white rounded-xl border border-slate-200 p-12 flex justify-center">
+        <div className="bg-white rounded-xl border border-[#e2e8f0] p-12 flex justify-center">
           <Spinner size="lg" />
         </div>
       ) : isError ? (
@@ -262,54 +264,54 @@ export function ApplicationsPage() {
           />
         )
       ) : (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+        <div className="bg-white rounded-xl border border-[#e2e8f0] shadow-sm overflow-hidden">
           {/* Desktop Table View */}
-          <div className="hidden md:block overflow-x-auto">
-            <table className="w-full text-left text-sm text-slate-600">
-              <thead className="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-500 tracking-wider">
+          <div className="hidden md:block overflow-x-auto custom-scrollbar-x">
+            <table className="w-full min-w-[800px] text-left text-sm text-[#131b2e]">
+              <thead className="bg-[#f2f3ff]/60 border-b border-[#e2e8f0] text-xs font-semibold uppercase text-[#5a4136] tracking-wider">
                 <tr>
-                  <th scope="col" className="px-6 py-3.5">Name & URL</th>
-                  <th scope="col" className="px-6 py-3.5">Environment</th>
-                  <th scope="col" className="px-6 py-3.5">Status</th>
-                  <th scope="col" className="px-6 py-3.5">Check Interval</th>
-                  <th scope="col" className="px-6 py-3.5">Last Checked</th>
-                  <th scope="col" className="px-6 py-3.5 text-right">Actions</th>
+                  <th scope="col" className="px-6 py-3.5 whitespace-nowrap">Name & URL</th>
+                  <th scope="col" className="px-6 py-3.5 whitespace-nowrap">Environment</th>
+                  <th scope="col" className="px-6 py-3.5 whitespace-nowrap">Status</th>
+                  <th scope="col" className="px-6 py-3.5 whitespace-nowrap">Check Interval</th>
+                  <th scope="col" className="px-6 py-3.5 whitespace-nowrap">Last Checked</th>
+                  <th scope="col" className="px-6 py-3.5 text-right whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-[#eaedff]">
                 {applications.map((app) => (
-                  <tr key={app._id} className="hover:bg-slate-50/80 transition-colors">
+                  <tr key={app._id} className="hover:bg-[#f2f3ff]/40 transition-colors">
                     <td className="px-6 py-4">
-                      <div className="font-semibold text-slate-900">{app.name}</div>
+                      <div className="font-semibold text-[#131b2e]">{app.name}</div>
                       <a
                         href={app.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-indigo-600 hover:text-indigo-800 hover:underline inline-flex items-center gap-1 mt-0.5 truncate max-w-xs"
+                        className="text-xs text-[#a23f00] hover:text-[#ff6700] hover:underline inline-flex items-center gap-1 mt-0.5 truncate max-w-xs font-mono"
                       >
                         <span className="truncate">{app.url}</span>
                         <ExternalLink className="w-3 h-3 shrink-0" aria-hidden="true" />
                       </a>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="capitalize text-xs font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
+                      <span className="capitalize text-xs font-medium px-2.5 py-0.5 rounded-full bg-[#f2f3ff] text-[#59605f] border border-[#dae2fd]">
                         {app.environment}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <StatusBadge status={app.status} />
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-600">
+                    <td className="px-6 py-4 text-xs text-[#5a4136] font-mono">
                       {app.checkIntervalSeconds}s
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-500" title={formatDateTime(app.lastCheckedAt)}>
+                    <td className="px-6 py-4 text-xs text-[#5a4136]" title={formatDateTime(app.lastCheckedAt)}>
                       {formatRelative(app.lastCheckedAt)}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
                         <Link
                           to={`/applications/${app._id}`}
-                          className="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded-lg transition-colors"
+                          className="p-1.5 text-[#59605f] hover:text-[#a23f00] hover:bg-[#f2f3ff] rounded-lg transition-colors"
                           title="View details"
                           aria-label={`View details for ${app.name}`}
                         >
@@ -317,7 +319,7 @@ export function ApplicationsPage() {
                         </Link>
                         <Link
                           to={`/applications/${app._id}/edit`}
-                          className="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded-lg transition-colors"
+                          className="p-1.5 text-[#59605f] hover:text-[#a23f00] hover:bg-[#f2f3ff] rounded-lg transition-colors"
                           title="Edit application"
                           aria-label={`Edit ${app.name}`}
                         >
@@ -326,7 +328,7 @@ export function ApplicationsPage() {
                         <button
                           type="button"
                           onClick={() => setDeleteTarget(app)}
-                          className="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                          className="p-1.5 text-[#59605f] hover:text-[#ba1a1a] hover:bg-[#ffdad6]/40 rounded-lg transition-colors"
                           title="Delete application"
                           aria-label={`Delete ${app.name}`}
                         >
@@ -341,39 +343,39 @@ export function ApplicationsPage() {
           </div>
 
           {/* Mobile Stacked Card View */}
-          <div className="md:hidden divide-y divide-slate-100">
+          <div className="md:hidden divide-y divide-[#eaedff]">
             {applications.map((app) => (
-              <div key={app._id} className="p-4 space-y-3">
+              <div key={app._id} className="p-4 space-y-3 hover:bg-[#f2f3ff]/20 transition-colors">
                 <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <h3 className="font-semibold text-slate-900">{app.name}</h3>
+                  <div className="min-w-0">
+                    <h3 className="font-semibold text-sm text-[#131b2e] truncate">{app.name}</h3>
                     <a
                       href={app.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-indigo-600 inline-flex items-center gap-1 mt-0.5 truncate max-w-[240px]"
+                      className="text-xs text-[#a23f00] inline-flex items-center gap-1 mt-0.5 truncate max-w-[240px] font-mono"
                     >
                       <span className="truncate">{app.url}</span>
                       <ExternalLink className="w-3 h-3 shrink-0" aria-hidden="true" />
                     </a>
                   </div>
-                  <StatusBadge status={app.status} />
+                  <StatusBadge status={app.status} className="shrink-0" />
                 </div>
 
-                <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
-                  <span>Env: <strong className="font-medium text-slate-700 capitalize">{app.environment}</strong></span>
-                  <span>Checked: <strong className="font-medium text-slate-700">{formatRelative(app.lastCheckedAt)}</strong></span>
+                <div className="flex items-center justify-between text-xs text-[#5a4136] pt-1">
+                  <span>Env: <strong className="font-semibold text-[#131b2e] capitalize">{app.environment}</strong></span>
+                  <span>Checked: <strong className="font-semibold text-[#131b2e]">{formatRelative(app.lastCheckedAt)}</strong></span>
                 </div>
 
-                <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-50">
+                <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#eaedff]">
                   <Link to={`/applications/${app._id}`}>
-                    <Button variant="outline" className="text-xs py-1 px-2.5 flex items-center gap-1">
+                    <Button variant="outline" className="text-xs py-1 px-2.5 flex items-center gap-1 min-h-[36px]">
                       <Eye className="w-3.5 h-3.5" />
                       <span>View</span>
                     </Button>
                   </Link>
                   <Link to={`/applications/${app._id}/edit`}>
-                    <Button variant="outline" className="text-xs py-1 px-2.5 flex items-center gap-1">
+                    <Button variant="outline" className="text-xs py-1 px-2.5 flex items-center gap-1 min-h-[36px]">
                       <Edit2 className="w-3.5 h-3.5" />
                       <span>Edit</span>
                     </Button>
@@ -381,7 +383,7 @@ export function ApplicationsPage() {
                   <Button
                     variant="outline"
                     onClick={() => setDeleteTarget(app)}
-                    className="text-xs py-1 px-2.5 text-rose-600 hover:bg-rose-50 border-rose-200 flex items-center gap-1"
+                    className="text-xs py-1 px-2.5 text-[#ba1a1a] hover:bg-[#ffdad6]/40 border-[#ffb4ab] flex items-center gap-1 min-h-[36px]"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     <span>Delete</span>
@@ -392,7 +394,7 @@ export function ApplicationsPage() {
           </div>
 
           {/* Pagination Controls */}
-          <div className="p-4 bg-slate-50/50">
+          <div className="p-4 bg-[#f2f3ff]/30">
             <Pagination
               page={pagination.page}
               totalPages={pagination.totalPages}
@@ -418,4 +420,3 @@ export function ApplicationsPage() {
     </div>
   );
 }
-

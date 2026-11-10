@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   LayoutDashboard,
@@ -9,11 +9,13 @@ import {
   LogOut,
   Menu,
   X,
-  Activity
+  Activity,
+  Bell
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth.js';
 import { Button } from './Button.jsx';
 import { LiveIndicator } from './LiveIndicator.jsx';
+import { AlertBanner } from './AlertBanner.jsx';
 import { useLiveInvalidation } from '../socket/useLiveInvalidation.js';
 
 /**
@@ -22,6 +24,8 @@ import { useLiveInvalidation } from '../socket/useLiveInvalidation.js';
 export function AppLayout() {
   const { user, logout, isLoggingOut } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+  const [logoutError, setLogoutError] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const queryClient = useQueryClient();
 
@@ -45,13 +49,17 @@ export function AppLayout() {
       enabled: true,
       badge: activeIncidentsCount > 0 ? activeIncidentsCount : null
     },
-    { name: 'Deployments', to: '/deployments', icon: Rocket, enabled: true }
+    { name: 'Deployments', to: '/deployments', icon: Rocket, enabled: true },
+    { name: 'Alerts', to: '/notifications', icon: Bell, enabled: true }
   ];
 
   const handleLogout = async () => {
+    setLogoutError('');
     try {
       await logout();
+      navigate('/login', { replace: true });
     } catch (err) {
+      setLogoutError(err.message || 'Logout failed. Please check your network connection.');
       console.error('Logout error:', err);
     }
   };
@@ -59,11 +67,13 @@ export function AppLayout() {
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row">
+    <div className="min-h-screen bg-[#faf8ff] flex flex-col md:flex-row">
       {/* Mobile Top Header */}
-      <div className="md:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
-        <div className="flex items-center gap-2 font-bold text-slate-900 tracking-tight">
-          <Activity className="w-5 h-5 text-indigo-600" />
+      <div className="md:hidden bg-white/85 backdrop-blur-xl border-b border-[#e2e8f0] px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+        <div className="flex items-center gap-2 font-bold text-[#131b2e] tracking-tight">
+          <div className="w-8 h-8 rounded-lg bg-[#070d0d] text-[#ff6700] flex items-center justify-center shadow-xs">
+            <Activity className="w-4 h-4" />
+          </div>
           <span>DevOpsPulse</span>
         </div>
         <div className="flex items-center gap-2">
@@ -71,7 +81,7 @@ export function AppLayout() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+            className="p-2 rounded-lg text-[#5a4136] hover:bg-[#f2f3ff] hover:text-[#131b2e] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]"
             aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -82,7 +92,7 @@ export function AppLayout() {
       {/* Backdrop for mobile drawer */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-slate-900/40 z-40 md:hidden"
+          className="fixed inset-0 bg-[#283044]/40 backdrop-blur-xs z-40 md:hidden"
           onClick={closeMobileMenu}
           aria-hidden="true"
         />
@@ -90,23 +100,23 @@ export function AppLayout() {
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 flex flex-col transform transition-transform duration-200 ease-in-out md:static md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-[#e2e8f0] flex flex-col transform transition-transform duration-200 ease-in-out md:static md:translate-x-0 shadow-xs ${
           mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Brand header */}
-        <div className="p-5 border-b border-slate-100 flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold shadow-xs">
+        <div className="p-5 border-b border-[#eaedff] flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl bg-[#070d0d] text-[#ff6700] flex items-center justify-center font-bold shadow-xs">
             <Activity className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="font-bold text-slate-900 leading-tight">DevOpsPulse</h1>
-            <p className="text-xs text-slate-500">Monitoring & Incidents</p>
+            <h1 className="font-semibold text-[#131b2e] leading-tight">DevOpsPulse</h1>
+            <p className="text-xs text-[#a23f00] font-medium">Monitoring &amp; Incidents</p>
           </div>
         </div>
 
         {/* Navigation items */}
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+        <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
           {navItems.map((item) => {
             const Icon = item.icon;
 
@@ -122,20 +132,20 @@ export function AppLayout() {
                 onClick={closeMobileMenu}
                 className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isItemActive
-                    ? 'bg-indigo-50 text-indigo-700'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                    ? 'bg-[#e2e7ff] text-[#131b2e] font-semibold shadow-xs'
+                    : 'text-[#5a4136] hover:bg-[#f2f3ff] hover:text-[#131b2e]'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <Icon
-                    className={`w-5 h-5 ${isItemActive ? 'text-indigo-600' : 'text-slate-400'}`}
+                    className={`w-5 h-5 ${isItemActive ? 'text-[#a23f00]' : 'text-[#59605f]'}`}
                     aria-hidden="true"
                   />
                   <span>{item.name}</span>
                 </div>
 
                 {item.badge != null && (
-                  <span className="inline-flex items-center justify-center rounded-full bg-rose-100 text-rose-700 px-2 py-0.5 text-2xs font-bold leading-none">
+                  <span className="inline-flex items-center justify-center rounded-full bg-[#ffdad6] text-[#93000a] px-2 py-0.5 text-2xs font-bold leading-none">
                     {item.badge}
                   </span>
                 )}
@@ -145,11 +155,11 @@ export function AppLayout() {
         </nav>
 
         {/* User profile footer inside sidebar */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50">
+        <div className="p-4 border-t border-[#eaedff] bg-[#f2f3ff]/50">
           <div className="flex items-center justify-between">
             <div className="truncate">
-              <p className="text-xs font-semibold text-slate-900 truncate">{user?.name}</p>
-              <p className="text-xs text-slate-500 truncate">{user?.email}</p>
+              <p className="text-xs font-semibold text-[#131b2e] truncate">{user?.name}</p>
+              <p className="text-xs text-[#59605f] truncate">{user?.email}</p>
             </div>
           </div>
         </div>
@@ -158,23 +168,23 @@ export function AppLayout() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Navbar on desktop */}
-        <header className="hidden md:flex h-16 bg-white border-b border-slate-200 px-8 items-center justify-between">
+        <header className="hidden md:flex h-16 bg-white/85 backdrop-blur-xl border-b border-[#e2e8f0] px-8 items-center justify-between sticky top-0 z-30">
           <div className="flex items-center gap-3">
-            <h2 className="text-base font-semibold text-slate-800">Operational Dashboard</h2>
+            <h2 className="text-base font-semibold text-[#131b2e]">Operational Dashboard</h2>
             <LiveIndicator />
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <p className="text-sm font-medium text-slate-900">{user?.name}</p>
-              <p className="text-xs text-slate-500">{user?.email}</p>
+              <p className="text-sm font-semibold text-[#131b2e]">{user?.name}</p>
+              <p className="text-xs text-[#59605f]">{user?.email}</p>
             </div>
             <Button
               variant="outline"
               onClick={handleLogout}
               isLoading={isLoggingOut}
-              className="text-xs py-1.5 px-3 flex items-center gap-1.5"
+              className="text-xs py-1.5 px-3 min-h-[36px] flex items-center gap-1.5"
             >
-              <LogOut className="w-4 h-4 text-slate-500" aria-hidden="true" />
+              <LogOut className="w-4 h-4 text-[#59605f]" aria-hidden="true" />
               <span>Logout</span>
             </Button>
           </div>
@@ -182,6 +192,15 @@ export function AppLayout() {
 
         {/* Page Body */}
         <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
+          {logoutError && (
+            <div className="mb-6">
+              <AlertBanner
+                message={logoutError}
+                type="error"
+                onDismiss={() => setLogoutError('')}
+              />
+            </div>
+          )}
           <Outlet />
         </main>
       </div>

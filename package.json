@@ -1,0 +1,19 @@
+{
+  "name": "devopspulse-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check:secrets": "node scripts/checkSecrets.js",
+    "test:secrets": "node --test scripts/checkSecrets.test.js",
+    "test:backend:unit": "npm --prefix backend test",
+    "test:backend:api": "npm --prefix backend run test:api",
+    "test:frontend": "npm --prefix frontend test",
+    "test:e2e": "npm --prefix e2e run test:e2e",
+    "build:frontend": "npm --prefix frontend run build",
+    "check:alerting": "node scripts/alertingCheck.js",
+    "proof:alerting": "node scripts/alertingProof.mjs",
+    "check:all": "node scripts/checkAll.js"
+  }
+}
+

@@ -159,11 +159,11 @@ export function DeploymentForm({
 
       {/* Application Selector */}
       <div>
-        <label htmlFor="deployment-app-select" className="block text-sm font-semibold text-slate-800 mb-1">
-          Monitored Application <span className="text-rose-500">*</span>
+        <label htmlFor="deployment-app-select" className="block text-sm font-semibold text-[#131b2e] mb-1.5">
+          Monitored Application <span className="text-[#ba1a1a]">*</span>
         </label>
         {isLoadingApps ? (
-          <div className="flex items-center gap-2 text-xs text-slate-500 py-2">
+          <div className="flex items-center gap-2 text-xs text-[#5a4136] py-2">
             <Spinner size="sm" />
             <span>Loading applications...</span>
           </div>
@@ -173,7 +173,7 @@ export function DeploymentForm({
             value={applicationId}
             onChange={(e) => setApplicationId(e.target.value)}
             disabled={Boolean(initialAppId) || isLoading}
-            className="w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-blue-500 focus:outline-hidden focus:ring-2 focus:ring-blue-100 disabled:bg-slate-100 disabled:cursor-not-allowed"
+            className="w-full min-h-[40px] rounded-lg border border-[#dae2fd] bg-white px-3 py-2 text-sm text-[#131b2e] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 disabled:bg-[#f2f3ff] disabled:cursor-not-allowed transition-colors"
           >
             {applications.map((app) => (
               <option key={app._id} value={app._id}>
@@ -183,7 +183,7 @@ export function DeploymentForm({
           </select>
         )}
         {(clientErrors.applicationId || serverErrors.applicationId) && (
-          <FormError message={clientErrors.applicationId || serverErrors.applicationId} />
+          <FormError message={clientErrors.applicationId || serverErrors.applicationId} className="mt-1.5" />
         )}
       </div>
 
@@ -204,8 +204,8 @@ export function DeploymentForm({
 
         {/* Environment */}
         <div>
-          <label htmlFor="deployment-env-select" className="block text-sm font-semibold text-slate-800 mb-1">
-            Environment <span className="text-rose-500">*</span>
+          <label htmlFor="deployment-env-select" className="block text-sm font-semibold text-[#131b2e] mb-1.5">
+            Environment <span className="text-[#ba1a1a]">*</span>
           </label>
           <select
             id="deployment-env-select"
@@ -213,14 +213,14 @@ export function DeploymentForm({
             value={formData.environment}
             onChange={handleChange}
             disabled={isLoading}
-            className="w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-blue-500 focus:outline-hidden focus:ring-2 focus:ring-blue-100"
+            className="w-full min-h-[40px] rounded-lg border border-[#dae2fd] bg-white px-3 py-2 text-sm text-[#131b2e] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
           >
             <option value="production">Production</option>
             <option value="staging">Staging</option>
             <option value="development">Development</option>
           </select>
           {(clientErrors.environment || serverErrors.environment) && (
-            <FormError message={clientErrors.environment || serverErrors.environment} />
+            <FormError message={clientErrors.environment || serverErrors.environment} className="mt-1.5" />
           )}
         </div>
 
@@ -252,8 +252,8 @@ export function DeploymentForm({
 
         {/* Status */}
         <div>
-          <label htmlFor="deployment-status-select" className="block text-sm font-semibold text-slate-800 mb-1">
-            Deployment Status <span className="text-rose-500">*</span>
+          <label htmlFor="deployment-status-select" className="block text-sm font-semibold text-[#131b2e] mb-1.5">
+            Deployment Status <span className="text-[#ba1a1a]">*</span>
           </label>
           <select
             id="deployment-status-select"
@@ -261,7 +261,7 @@ export function DeploymentForm({
             value={formData.status}
             onChange={handleChange}
             disabled={isLoading}
-            className="w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-blue-500 focus:outline-hidden focus:ring-2 focus:ring-blue-100"
+            className="w-full min-h-[40px] rounded-lg border border-[#dae2fd] bg-white px-3 py-2 text-sm text-[#131b2e] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
           >
             <option value="success">Success</option>
             <option value="failed">Failed</option>
@@ -270,13 +270,13 @@ export function DeploymentForm({
             <option value="rolled_back">Rolled Back</option>
           </select>
           {(clientErrors.status || serverErrors.status) && (
-            <FormError message={clientErrors.status || serverErrors.status} />
+            <FormError message={clientErrors.status || serverErrors.status} className="mt-1.5" />
           )}
         </div>
 
         {/* Started At */}
         <div>
-          <label htmlFor="deployment-started-input" className="block text-sm font-semibold text-slate-800 mb-1">
+          <label htmlFor="deployment-started-input" className="block text-sm font-semibold text-[#131b2e] mb-1.5">
             Started At
           </label>
           <input
@@ -286,10 +286,10 @@ export function DeploymentForm({
             value={formData.startedAt}
             onChange={handleChange}
             disabled={isLoading}
-            className="w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-blue-500 focus:outline-hidden focus:ring-2 focus:ring-blue-100"
+            className="w-full min-h-[40px] rounded-lg border border-[#dae2fd] bg-white px-3 py-2 text-sm text-[#131b2e] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
           />
           {(clientErrors.startedAt || serverErrors.startedAt) && (
-            <FormError message={clientErrors.startedAt || serverErrors.startedAt} />
+            <FormError message={clientErrors.startedAt || serverErrors.startedAt} className="mt-1.5" />
           )}
         </div>
       </div>
@@ -297,7 +297,7 @@ export function DeploymentForm({
       {/* Completed At (disabled when pending or in_progress) */}
       {!isPendingOrInProgress && (
         <div>
-          <label htmlFor="deployment-completed-input" className="block text-sm font-semibold text-slate-800 mb-1">
+          <label htmlFor="deployment-completed-input" className="block text-sm font-semibold text-[#131b2e] mb-1.5">
             Completed At (Optional)
           </label>
           <input
@@ -307,22 +307,22 @@ export function DeploymentForm({
             value={formData.completedAt}
             onChange={handleChange}
             disabled={isLoading}
-            className="w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-blue-500 focus:outline-hidden focus:ring-2 focus:ring-blue-100"
+            className="w-full min-h-[40px] rounded-lg border border-[#dae2fd] bg-white px-3 py-2 text-sm text-[#131b2e] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
           />
-          <p className="text-xs text-slate-400 mt-1">Must be equal to or later than the start time.</p>
+          <p className="text-xs text-[#5a4136] mt-1">Must be equal to or later than the start time.</p>
           {(clientErrors.completedAt || serverErrors.completedAt) && (
-            <FormError message={clientErrors.completedAt || serverErrors.completedAt} />
+            <FormError message={clientErrors.completedAt || serverErrors.completedAt} className="mt-1.5" />
           )}
         </div>
       )}
 
       {/* Description */}
       <div>
-        <div className="flex items-center justify-between mb-1">
-          <label htmlFor="deployment-desc-input" className="block text-sm font-semibold text-slate-800">
+        <div className="flex items-center justify-between mb-1.5">
+          <label htmlFor="deployment-desc-input" className="block text-sm font-semibold text-[#131b2e]">
             Release Notes / Description (Optional)
           </label>
-          <span className="text-xs text-slate-400 font-mono">
+          <span className="text-xs text-[#5a4136] font-mono">
             {descRemaining} chars left
           </span>
         </div>
@@ -335,21 +335,21 @@ export function DeploymentForm({
           rows={3}
           maxLength={500}
           placeholder="Summary of bug fixes, features, or database migrations included in this release..."
-          className="w-full rounded-lg border border-slate-300 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-hidden focus:ring-2 focus:ring-blue-100"
+          className="w-full rounded-lg border border-[#dae2fd] p-3 text-sm text-[#131b2e] placeholder:text-[#59605f] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
         />
         {(clientErrors.description || serverErrors.description) && (
-          <FormError message={clientErrors.description || serverErrors.description} />
+          <FormError message={clientErrors.description || serverErrors.description} className="mt-1.5" />
         )}
       </div>
 
       {/* Buttons */}
-      <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
+      <div className="flex items-center justify-end gap-3 pt-5 border-t border-[#eaedff]">
         {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
+          <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading} className="min-h-[40px]">
             Cancel
           </Button>
         )}
-        <Button type="submit" variant="primary" disabled={isLoading} className="flex items-center gap-2">
+        <Button type="submit" variant="primary" disabled={isLoading} className="flex items-center gap-2 min-h-[40px] font-semibold px-5">
           {isLoading && <Spinner size="sm" className="text-white" />}
           <span>Record Deployment</span>
         </Button>

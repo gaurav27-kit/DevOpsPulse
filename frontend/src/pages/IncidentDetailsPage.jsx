@@ -5,8 +5,6 @@ import {
   Clock,
   AlertTriangle,
   CheckCircle2,
-  Calendar,
-  Layers,
   Activity,
   ExternalLink
 } from 'lucide-react';
@@ -62,35 +60,38 @@ export function IncidentDetailsPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Top Navigation */}
-      <div>
+      <div className="flex items-center justify-between">
         <Link
           to="/incidents"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5a4136] hover:text-[#131b2e] transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to Incidents</span>
         </Link>
+        <span className="font-mono text-2xs uppercase tracking-wider font-semibold px-2 py-0.5 rounded bg-[#f2f3ff] text-[#59605f] border border-[#dae2fd]">
+          Incident {incident._id.slice(-6)}
+        </span>
       </div>
 
       {/* Incident Header Card */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-6 border-b border-slate-100">
+      <div className="bg-white rounded-xl border border-[#e2e8f0] p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-6 border-b border-[#eaedff]">
           <div className="space-y-2">
             <div className="flex items-center gap-2.5 flex-wrap">
               <SeverityBadge severity={incident.severity} />
               <IncidentStatusBadge status={incident.status} />
             </div>
 
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-2xl font-bold text-[#131b2e] tracking-tight">
               {incident.title}
             </h1>
 
             {application && (
-              <div className="flex items-center gap-2 pt-1 text-xs text-slate-600">
+              <div className="flex items-center gap-2 pt-1 text-xs text-[#5a4136]">
                 <span>Affected Service:</span>
                 <Link
                   to={`/applications/${application._id}`}
-                  className="font-semibold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1"
+                  className="font-semibold text-[#a23f00] hover:text-[#ff6700] hover:underline inline-flex items-center gap-1"
                 >
                   <span>{application.name}</span>
                   <ExternalLink className="h-3 w-3" />
@@ -109,57 +110,57 @@ export function IncidentDetailsPage() {
         {/* Incident Facts Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           <div className="space-y-1">
-            <span className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
-              <Clock className="w-4 h-4 text-slate-400" />
+            <span className="text-xs font-medium text-[#5a4136] flex items-center gap-1.5">
+              <Clock className="w-4 h-4 text-[#59605f]" />
               <span>Started</span>
             </span>
-            <p className="text-sm font-semibold text-slate-900" title={formatDateTime(incident.startedAt)}>
+            <p className="text-sm font-semibold text-[#131b2e]" title={formatDateTime(incident.startedAt)}>
               {formatRelative(incident.startedAt)}
             </p>
-            <p className="text-2xs text-slate-400">{formatDateTime(incident.startedAt)}</p>
+            <p className="text-2xs text-[#5a4136]">{formatDateTime(incident.startedAt)}</p>
           </div>
 
           <div className="space-y-1">
-            <span className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
-              <AlertTriangle className="w-4 h-4 text-slate-400" />
+            <span className="text-xs font-medium text-[#5a4136] flex items-center gap-1.5">
+              <AlertTriangle className="w-4 h-4 text-[#59605f]" />
               <span>Last Failure</span>
             </span>
-            <p className="text-sm font-semibold text-slate-900" title={formatDateTime(incident.lastFailureAt)}>
+            <p className="text-sm font-semibold text-[#131b2e]" title={formatDateTime(incident.lastFailureAt)}>
               {formatRelative(incident.lastFailureAt)}
             </p>
-            <p className="text-2xs text-slate-400">{formatDateTime(incident.lastFailureAt)}</p>
+            <p className="text-2xs text-[#5a4136]">{formatDateTime(incident.lastFailureAt)}</p>
           </div>
 
           <div className="space-y-1">
-            <span className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
-              <Activity className="w-4 h-4 text-slate-400" />
+            <span className="text-xs font-medium text-[#5a4136] flex items-center gap-1.5">
+              <Activity className="w-4 h-4 text-[#59605f]" />
               <span>Failure Probes</span>
             </span>
-            <p className="text-sm font-semibold text-slate-900">
+            <p className="text-sm font-semibold text-[#131b2e] font-mono">
               {incident.failureCount} failed checks
             </p>
           </div>
 
           <div className="space-y-1">
-            <span className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-slate-400" />
+            <span className="text-xs font-medium text-[#5a4136] flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-[#10b981]" />
               <span>Duration</span>
             </span>
-            <p className="text-sm font-semibold text-slate-900">
+            <p className="text-sm font-semibold text-[#131b2e]">
               {durationStr}
             </p>
             {isResolved && incident.resolvedAt && (
-              <p className="text-2xs text-slate-400">Resolved {formatRelative(incident.resolvedAt)}</p>
+              <p className="text-2xs text-[#5a4136]">Resolved {formatRelative(incident.resolvedAt)}</p>
             )}
           </div>
         </div>
       </div>
 
       {/* Incident Timeline Section */}
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
+      <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm space-y-4">
         <div>
-          <h2 className="text-base font-semibold text-slate-900">Timeline & Activity Log</h2>
-          <p className="text-xs text-slate-500">
+          <h2 className="text-base font-semibold text-[#131b2e]">Timeline & Activity Log</h2>
+          <p className="text-xs text-[#5a4136]">
             Chronological audit log of automated system checks, notes, and status transitions.
           </p>
         </div>

@@ -15,6 +15,7 @@ import { IncidentsPage } from './pages/IncidentsPage.jsx';
 import { IncidentDetailsPage } from './pages/IncidentDetailsPage.jsx';
 import { DeploymentsPage } from './pages/DeploymentsPage.jsx';
 import { DeploymentCreatePage } from './pages/DeploymentCreatePage.jsx';
+import { NotificationsPage } from './pages/NotificationsPage.jsx';
 import { NotFoundPage } from './pages/NotFoundPage.jsx';
 
 /**
@@ -55,6 +56,7 @@ export default function App() {
           <Route path="/incidents/:id" element={<IncidentDetailsPage />} />
           <Route path="/deployments" element={<DeploymentsPage />} />
           <Route path="/deployments/new" element={<DeploymentCreatePage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
         </Route>
       </Route>
 

@@ -195,12 +195,12 @@ export function ApplicationDetailsPage() {
   const appDeployments = appDeploymentsData?.deployments || [];
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6">
       {/* Navigation & Actions Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <Link
           to="/applications"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5a4136] hover:text-[#131b2e] transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to Applications</span>
@@ -212,7 +212,7 @@ export function ApplicationDetailsPage() {
             variant="primary"
             onClick={handleRunCheck}
             disabled={runCheckMutation.isPending}
-            className="text-xs py-1.5 px-3 flex items-center gap-1.5"
+            className="text-xs py-1.5 px-3.5 flex items-center gap-1.5 min-h-[38px] font-semibold"
           >
             {runCheckMutation.isPending ? (
               <>
@@ -228,7 +228,7 @@ export function ApplicationDetailsPage() {
           </Button>
 
           <Link to={`/applications/${id}/edit`}>
-            <Button variant="outline" className="text-xs py-1.5 px-3 flex items-center gap-1.5">
+            <Button variant="outline" className="text-xs py-1.5 px-3 flex items-center gap-1.5 min-h-[38px]">
               <Edit2 className="w-3.5 h-3.5" />
               <span>Edit</span>
             </Button>
@@ -237,7 +237,7 @@ export function ApplicationDetailsPage() {
           <Button
             variant="outline"
             onClick={() => setIsDeleteOpen(true)}
-            className="text-xs py-1.5 px-3 text-rose-600 hover:bg-rose-50 border-rose-200 flex items-center gap-1.5"
+            className="text-xs py-1.5 px-3 text-[#ba1a1a] hover:bg-[#ffdad6]/40 border-[#ffb4ab] flex items-center gap-1.5 min-h-[38px]"
           >
             <Trash2 className="w-3.5 h-3.5" />
             <span>Delete</span>
@@ -255,11 +255,11 @@ export function ApplicationDetailsPage() {
       )}
 
       {/* Header Info Card */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-6 border-b border-slate-100">
+      <div className="bg-white rounded-xl border border-[#e2e8f0] p-6 sm:p-8 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-6 border-b border-[#eaedff]">
           <div>
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+              <h1 className="text-2xl font-bold text-[#131b2e] tracking-tight">
                 {application.name}
               </h1>
               <StatusBadge status={application.status} />
@@ -269,7 +269,7 @@ export function ApplicationDetailsPage() {
                 href={application.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1.5 font-medium break-all"
+                className="text-sm text-[#a23f00] hover:text-[#ff6700] hover:underline inline-flex items-center gap-1.5 font-medium font-mono break-all"
               >
                 <span>{application.url}</span>
                 <ExternalLink className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -277,7 +277,7 @@ export function ApplicationDetailsPage() {
             </div>
           </div>
 
-          <span className="capitalize text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-800 self-start sm:self-auto border border-slate-200">
+          <span className="capitalize text-xs font-semibold px-3 py-1 rounded-full bg-[#f2f3ff] text-[#59605f] self-start sm:self-auto border border-[#dae2fd]">
             {application.environment}
           </span>
         </div>
@@ -285,57 +285,57 @@ export function ApplicationDetailsPage() {
         {/* Configuration & Schedule Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 pt-6">
           <div className="space-y-1">
-            <span className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
-              <Clock className="w-4 h-4 text-slate-400" />
+            <span className="text-xs font-medium text-[#5a4136] flex items-center gap-1.5">
+              <Clock className="w-4 h-4 text-[#59605f]" />
               <span>Check Interval</span>
             </span>
-            <p className="text-base font-semibold text-slate-900">{application.checkIntervalSeconds} seconds</p>
+            <p className="text-base font-semibold text-[#131b2e] font-mono">{application.checkIntervalSeconds} seconds</p>
           </div>
 
           <div className="space-y-1">
-            <span className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
-              <Shield className="w-4 h-4 text-slate-400" />
+            <span className="text-xs font-medium text-[#5a4136] flex items-center gap-1.5">
+              <Shield className="w-4 h-4 text-[#59605f]" />
               <span>Request Timeout</span>
             </span>
-            <p className="text-base font-semibold text-slate-900">{application.timeoutMs} ms</p>
+            <p className="text-base font-semibold text-[#131b2e] font-mono">{application.timeoutMs} ms</p>
           </div>
 
           <div className="space-y-1">
-            <span className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
-              <Activity className="w-4 h-4 text-slate-400" />
+            <span className="text-xs font-medium text-[#5a4136] flex items-center gap-1.5">
+              <Activity className="w-4 h-4 text-[#59605f]" />
               <span>Last Checked</span>
             </span>
-            <p className="text-base font-semibold text-slate-900" title={formatDateTime(application.lastCheckedAt)}>
+            <p className="text-base font-semibold text-[#131b2e]" title={formatDateTime(application.lastCheckedAt)}>
               {formatRelative(application.lastCheckedAt)}
             </p>
           </div>
 
           <div className="space-y-1">
-            <span className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+            <span className="text-xs font-medium text-[#5a4136] flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-[#10b981]" />
               <span>Last Successful</span>
             </span>
-            <p className="text-base font-semibold text-slate-900" title={formatDateTime(application.lastSuccessfulAt)}>
+            <p className="text-base font-semibold text-[#131b2e]" title={formatDateTime(application.lastSuccessfulAt)}>
               {formatRelative(application.lastSuccessfulAt)}
             </p>
           </div>
 
           <div className="space-y-1">
-            <span className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
-              <Calendar className="w-4 h-4 text-slate-400" />
+            <span className="text-xs font-medium text-[#5a4136] flex items-center gap-1.5">
+              <Calendar className="w-4 h-4 text-[#59605f]" />
               <span>Next Check Scheduled</span>
             </span>
-            <p className="text-base font-semibold text-slate-900" title={formatDateTime(application.nextCheckAt)}>
+            <p className="text-base font-semibold text-[#131b2e]" title={formatDateTime(application.nextCheckAt)}>
               {formatRelative(application.nextCheckAt)}
             </p>
           </div>
 
           <div className="space-y-1">
-            <span className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
-              <Layers className="w-4 h-4 text-slate-400" />
+            <span className="text-xs font-medium text-[#5a4136] flex items-center gap-1.5">
+              <Layers className="w-4 h-4 text-[#59605f]" />
               <span>Registered On</span>
             </span>
-            <p className="text-base font-semibold text-slate-900">{formatDateTime(application.createdAt)}</p>
+            <p className="text-base font-semibold text-[#131b2e]">{formatDateTime(application.createdAt)}</p>
           </div>
         </div>
       </div>
@@ -343,8 +343,8 @@ export function ApplicationDetailsPage() {
       {/* Analytics & Metrics Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
         <div>
-          <h2 className="text-lg font-bold text-slate-900">Uptime & Latency Telemetry</h2>
-          <p className="text-xs text-slate-500">Aggregated historical performance metrics</p>
+          <h2 className="text-lg font-bold text-[#131b2e]">Uptime & Latency Telemetry</h2>
+          <p className="text-xs text-[#5a4136]">Aggregated historical performance metrics</p>
         </div>
         <RangeSelector />
       </div>
@@ -386,7 +386,7 @@ export function ApplicationDetailsPage() {
           <StatCard
             label="Failed Checks"
             value={summary.failedChecks}
-            valueClassName={summary.failedChecks > 0 ? 'text-rose-600' : 'text-slate-900'}
+            valueClassName={summary.failedChecks > 0 ? 'text-[#ba1a1a]' : 'text-[#131b2e]'}
             hint={summary.failedChecks === 0 ? 'No failures' : 'Errors/timeouts'}
           />
         </div>
@@ -403,11 +403,11 @@ export function ApplicationDetailsPage() {
       )}
 
       {/* Recent Health Checks Section */}
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
+      <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h3 className="text-base font-semibold text-slate-900">Recent Health Checks</h3>
-            <p className="text-xs text-slate-500">
+            <h3 className="text-base font-semibold text-[#131b2e]">Recent Health Checks</h3>
+            <p className="text-xs text-[#5a4136]">
               Detailed chronological log of outgoing probes and responses
             </p>
           </div>
@@ -415,10 +415,10 @@ export function ApplicationDetailsPage() {
           <button
             type="button"
             onClick={handleToggleFailuresOnly}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer self-start sm:self-auto ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer self-start sm:self-auto min-h-[36px] ${
               hcFailed
-                ? 'bg-rose-50 border-rose-300 text-rose-700'
-                : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                ? 'bg-[#ffdad6] border-[#ffb4ab] text-[#93000a]'
+                : 'bg-white border-[#dae2fd] text-[#59605f] hover:bg-[#f2f3ff]'
             }`}
             aria-pressed={hcFailed}
           >
@@ -438,7 +438,7 @@ export function ApplicationDetailsPage() {
             onRetry={refetchChecks}
           />
         ) : healthChecks.length === 0 ? (
-          <div className="py-12 text-center text-sm text-slate-500">
+          <div className="py-12 text-center text-sm text-[#5a4136]">
             {hcFailed ? 'No failed health checks recorded for this filter.' : 'No checks recorded yet.'}
           </div>
         ) : (
@@ -458,15 +458,15 @@ export function ApplicationDetailsPage() {
       {/* Two Column Grid: App Incidents & App Deployments */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Incidents for this application */}
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
+        <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-semibold text-slate-900 flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-slate-500" />
+            <h3 className="text-base font-semibold text-[#131b2e] flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 text-[#59605f]" />
               <span>Incidents for this application</span>
             </h3>
             <Link
               to={`/incidents?applicationId=${id}`}
-              className="text-xs font-semibold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1"
+              className="text-xs font-semibold text-[#a23f00] hover:text-[#ff6700] hover:underline inline-flex items-center gap-1"
             >
               <span>View all</span>
               <ArrowRight className="h-3 w-3" />
@@ -474,19 +474,19 @@ export function ApplicationDetailsPage() {
           </div>
 
           {appIncidents.length > 0 ? (
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-[#eaedff]">
               {appIncidents.map((inc) => (
                 <li key={inc._id} className="py-2.5 first:pt-0 last:pb-0">
                   <Link
                     to={`/incidents/${inc._id}`}
-                    className="block p-1.5 -mx-1.5 rounded-lg hover:bg-slate-50/75 transition-colors"
+                    className="block p-1.5 -mx-1.5 rounded-lg hover:bg-[#f2f3ff]/60 transition-colors"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-slate-900 truncate hover:text-blue-600">
+                        <p className="text-sm font-semibold text-[#131b2e] truncate hover:text-[#a23f00]">
                           {inc.title}
                         </p>
-                        <p className="text-xs text-slate-400 mt-0.5">
+                        <p className="text-xs text-[#5a4136] mt-0.5">
                           Started {formatRelative(inc.startedAt)}
                         </p>
                       </div>
@@ -500,31 +500,31 @@ export function ApplicationDetailsPage() {
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-slate-500 py-6 text-center">
+            <p className="text-sm text-[#5a4136] py-6 text-center">
               No incidents recorded for this application.
             </p>
           )}
         </div>
 
         {/* Deployments for this application */}
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
+        <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-semibold text-slate-900 flex items-center gap-2">
-              <Rocket className="h-4 w-4 text-slate-500" />
+            <h3 className="text-base font-semibold text-[#131b2e] flex items-center gap-2">
+              <Rocket className="h-4 w-4 text-[#59605f]" />
               <span>Recent deployments</span>
             </h3>
             <div className="flex items-center gap-3">
               <Link
                 to={`/deployments/new?applicationId=${id}`}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-[#a23f00] hover:text-[#ff6700] hover:underline"
               >
                 <Plus className="h-3.5 w-3.5" />
                 <span>Record deployment</span>
               </Link>
-              <span className="text-slate-300">&bull;</span>
+              <span className="text-[#eaedff]">&bull;</span>
               <Link
                 to={`/deployments?applicationId=${id}`}
-                className="text-xs font-semibold text-slate-500 hover:text-slate-800 inline-flex items-center gap-1"
+                className="text-xs font-semibold text-[#5a4136] hover:text-[#131b2e] inline-flex items-center gap-1"
               >
                 <span>View all</span>
                 <ArrowRight className="h-3 w-3" />
@@ -533,22 +533,22 @@ export function ApplicationDetailsPage() {
           </div>
 
           {appDeployments.length > 0 ? (
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-[#eaedff]">
               {appDeployments.map((dep) => (
                 <li key={dep._id} className="py-2.5 first:pt-0 last:pb-0">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-xs font-semibold text-slate-900 bg-slate-100 px-2 py-0.5 rounded">
+                        <span className="font-mono text-xs font-semibold text-[#131b2e] bg-[#f2f3ff] border border-[#dae2fd] px-2 py-0.5 rounded">
                           {dep.version}
                         </span>
                         {dep.branch && (
-                          <span className="text-xs text-slate-500 font-mono">
+                          <span className="text-xs text-[#59605f] font-mono">
                             {dep.branch}
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-slate-400 mt-1">
+                      <p className="text-xs text-[#5a4136] mt-1">
                         Deployed {formatRelative(dep.startedAt)}
                       </p>
                     </div>
@@ -558,7 +558,7 @@ export function ApplicationDetailsPage() {
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-slate-500 py-6 text-center">
+            <p className="text-sm text-[#5a4136] py-6 text-center">
               No deployments recorded yet.
             </p>
           )}

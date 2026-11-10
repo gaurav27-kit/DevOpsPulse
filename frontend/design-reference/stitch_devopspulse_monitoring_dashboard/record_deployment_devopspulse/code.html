@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary-container":"#ff6700","secondary-fixed":"#dde4e3","inverse-surface":"#283044","surface-tint":"#a23f00","secondary-container":"#dde4e3","surface":"#faf8ff","surface-container":"#eaedff","surface-dim":"#d2d9f4","secondary":"#59605f","surface-container-lowest":"#ffffff","background":"#faf8ff","surface-container-low":"#f2f3ff","inverse-on-surface":"#eef0ff","on-secondary":"#ffffff","on-secondary-fixed-variant":"#414848","on-primary-fixed":"#351000","tertiary":"#0061a2","error-container":"#ffdad6","on-primary":"#ffffff","outline-variant":"#e3bfb1","on-error-container":"#93000a","tertiary-fixed":"#d1e4ff","on-background":"#131b2e","primary":"#a23f00","tertiary-fixed-dim":"#9dcaff","on-tertiary":"#ffffff","primary-fixed":"#ffdbcd","on-surface":"#131b2e","tertiary-container":"#019cff","on-primary-fixed-variant":"#7c2e00","on-tertiary-container":"#003156","secondary-fixed-dim":"#c1c8c7","on-secondary-container":"#5f6665","on-surface-variant":"#5a4136","on-secondary-fixed":"#161d1d","on-tertiary-fixed-variant":"#00497c","outline":"#8e7164","surface-variant":"#dae2fd","on-primary-container":"#561e00","inverse-primary":"#ffb595","on-error":"#ffffff","surface-container-high":"#e2e7ff","surface-bright":"#faf8ff","primary-fixed-dim":"#ffb595","on-tertiary-fixed":"#001d35","error":"#ba1a1a","surface-container-highest":"#dae2fd"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"space-xs":"0.25rem","space-xl":"2rem","gutter":"1.5rem","space-sm":"0.5rem","space-lg":"1.5rem","gutter-mobile":"1rem","margin-mobile":"1rem","margin":"2rem","space-md":"1rem"},fontFamily:{"body-sm":["Inter"],"display-lg":["Inter"],"label-sm":["Inter"],"headline-sm":["Inter"],"headline-lg":["Inter"],"label-md":["Inter"],"headline-md":["Inter"],"headline-lg-mobile":["Inter"],"code-inline":["Inter"],"body-md":["Inter"],"body-lg":["Inter"]},fontSize:{"body-sm":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"400"}],"display-lg":["36px",{"lineHeight":"44px","letterSpacing":"-0.03em","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"500"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"-0.015em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.025em","fontWeight":"600"}],"label-md":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"500"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-lg-mobile":["22px",{"lineHeight":"28px","letterSpacing":"-0.02em","fontWeight":"600"}],"code-inline":["12px",{"lineHeight":"16px","letterSpacing":"-0.01em","fontWeight":"500"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"-0.005em","fontWeight":"400"}],"body-lg":["15px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 left-0 right-0 z-50 h-16 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 w-full px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-xl"><div class="flex items-center gap-space-sm cursor-pointer select-none"><div class="w-8 h-8 rounded-xl bg-primary-container flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[20px]">vital_signs</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">DevOpsPulse</span><span class="font-label-sm text-label-sm text-primary leading-none mt-space-xs font-semibold">Observability</span></div></div><nav class="hidden xl:flex items-center gap-space-xs" data-active-classes="bg-surface-container-high text-on-surface font-medium rounded-lg"><a class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="dashboard" href="#">Dashboard</a><a class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="applications" href="#">Applications</a><a class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="incidents" href="#">Incidents</a><a class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="incident-details" href="#">Incident Details</a><a aria-current="page" class="px-space-md py-space-xs transition-colors bg-surface-container-high text-on-surface font-medium rounded-lg" data-path="deployments" href="#">Deployments</a><a class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="settings" href="#">Settings</a></nav></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-space-sm px-space-md py-space-xs rounded-xl bg-surface-container-low text-on-surface-variant shadow-[0_1px_4px_rgba(0,0,0,0.02)] cursor-pointer hover:bg-surface-container hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[18px]">search</span><span class="font-body-sm text-body-sm select-none pr-space-md">Search metrics, services...</span><kbd class="px-space-xs py-0.5 rounded bg-surface-container-highest text-on-surface font-code-inline text-code-inline shadow-sm select-none">⌘K</kbd></div><div class="hidden sm:flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-low shadow-[0_1px_4px_rgba(0,0,0,0.02)]"><span class="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span><span class="font-label-sm text-label-sm text-on-surface select-none">All systems operational</span></div><button aria-label="Notifications" class="relative p-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary-container ring-2 ring-surface"></span></button><div class="flex items-center gap-space-sm pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ring-2 ring-primary-fixed"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden lg:flex flex-col text-left select-none"><span class="font-label-md text-label-md text-on-surface leading-tight">Gaurav</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-none">Lead SRE</span></div></div></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-64 bg-surface-container-low/70 backdrop-blur-md z-40 flex flex-col justify-between py-space-lg px-space-md shadow-[0_1px_8px_rgba(0,0,0,0.03)]"><div class="flex flex-col gap-space-lg"><div class="px-space-sm flex items-center justify-between"><span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Workspaces</span><span class="material-symbols-outlined text-on-surface-variant text-[16px] cursor-pointer hover:text-on-surface">unfold_more</span></div><div class="px-space-sm py-space-xs rounded-lg bg-surface flex items-center gap-space-sm shadow-[0_1px_4px_rgba(0,0,0,0.02)]"><div class="w-5 h-5 rounded bg-primary-container text-on-primary flex items-center justify-center font-label-sm text-[10px] font-bold">PR</div><span class="font-body-sm text-body-sm text-on-surface font-medium truncate">Production US-East</span></div><nav class="flex flex-col gap-space-xs" data-active-classes="bg-surface-container-high text-on-surface font-medium"><div class="px-space-sm pt-space-xs pb-space-xs font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">Telemetry</div><a class="px-space-sm py-space-xs rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="dashboard" href="#">Live Monitors</a><a class="px-space-sm py-space-xs rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="applications" href="#">Services &amp; APIs</a><a class="px-space-sm py-space-xs rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="incidents" href="#">Incidents</a><a class="px-space-sm py-space-xs rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="incident-details" href="#">Incident INC-4092</a><a aria-current="page" class="px-space-sm py-space-xs rounded-lg transition-colors bg-surface-container-high text-on-surface font-medium" data-path="deployments" href="#">Deployments</a><div class="px-space-sm pt-space-md pb-space-xs font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">Configuration</div><a class="px-space-sm py-space-xs rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="alert-channels" href="#">Alert Channels</a><a class="px-space-sm py-space-xs rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="settings" href="#">Cluster Settings</a></nav></div><div class="px-space-sm py-space-sm rounded-xl bg-surface shadow-[0_1px_4px_rgba(0,0,0,0.02)] flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-on-surface-variant">SLA 30d</span><span class="font-code-inline text-code-inline text-on-surface font-semibold">99.98%</span></div><div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-primary-container w-[99.98%]"></div></div></div></aside><div class="pl-64"><main class="w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<div class="w-full max-w-7xl mx-auto px-margin-mobile md:px-margin py-space-lg flex flex-col gap-space-lg">
+<!-- Top Breadcrumb & Header Bar -->
+<div class="flex flex-col gap-space-sm">
+<nav aria-label="Breadcrumbs" class="flex items-center gap-space-xs font-label-md text-label-md text-on-surface-variant">
+<span class="hover:text-on-surface transition-colors cursor-pointer">Workspaces</span>
+<span class="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
+<a class="hover:text-on-surface transition-colors font-body-sm text-body-sm" href="#">Deployments</a>
+<span class="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
+<span class="font-body-sm text-body-sm text-on-surface font-semibold">Record deployment</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md pt-space-xs">
+<div>
+<div class="flex items-center gap-space-sm mb-space-xs">
+<span class="px-space-xs py-0.5 rounded bg-surface-container-high text-primary font-code-inline text-code-inline uppercase tracking-wider font-semibold">Audit Event Log</span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+<span class="font-code-inline text-code-inline text-on-surface-variant">ENV: US-EAST-1</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight leading-tight">Record deployment</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 max-w-2xl">
+            Manually log a deployment event for correlation with latency, error rates, and active incidents across telemetry graphs.
+          </p>
+</div>
+<div class="flex items-center gap-space-sm self-start md:self-auto">
+<div class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container shadow-sm text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-tertiary">history</span>
+<span class="font-label-sm text-label-sm">Last manual sync: <strong class="font-semibold text-on-surface">12m ago</strong></span>
+</div>
+</div>
+</div>
+</div>
+<!-- Notice Banner -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-low shadow-sm p-space-md flex items-start gap-space-md">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary-container"></div>
+<div class="p-1.5 rounded-lg bg-primary-fixed text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-space-sm">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Audit trail enforcement active</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Manual deployments are tagged with a <span class="inline-flex items-center px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface font-code-inline text-[11px] font-medium mx-1">Manual entry</span> badge in system audit logs and timelines to distinguish them from CI/CD pipeline webhooks.
+          </p>
+</div>
+<span class="font-label-sm text-label-sm text-primary whitespace-nowrap cursor-pointer hover:underline self-start sm:self-auto font-medium">Telemetry policy →</span>
+</div>
+</div>
+<!-- Main Grid: Two Columns (Form + Side Guidance Panel) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Primary Form Container (8 Cols) -->
+<div class="lg:col-span-8 flex flex-col gap-space-lg">
+<form class="rounded-xl bg-surface-container-lowest shadow-sm p-space-lg flex flex-col gap-space-lg" onsubmit="event.preventDefault();">
+<!-- Section 1: Target & Artifact -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="w-5 h-5 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center font-code-inline text-[11px] font-bold">1</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Target &amp; Artifact Details</h2>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Fields with * are mandatory</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Application Select -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-medium flex items-center justify-between" for="app-select">
+<span>Application <span class="text-error">*</span></span>
+<span class="font-code-inline text-code-inline text-on-surface-variant font-normal">telemetry-node</span>
+</label>
+<div class="relative">
+<select class="w-full h-[38px] px-space-sm pr-9 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-sm appearance-none cursor-pointer focus:bg-surface-container-low transition-colors" id="app-select">
+<option selected="" value="orders-api">Orders API (orders-api.prd)</option>
+<option value="auth-service">Auth Service (auth-service.prd)</option>
+<option value="portfolio-web">Portfolio Website (portfolio-front)</option>
+<option value="staging-frontend">Staging Frontend (core-staging)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">expand_more</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Maps latency metrics and logs to service namespace.</p>
+</div>
+<!-- Version Input -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-medium" for="version-input">
+                  Release Version <span class="text-error">*</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-2.5 text-on-surface-variant text-[18px]">sell</span>
+<input class="w-full h-[38px] pl-9 pr-space-sm rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-sm focus:bg-surface-container-low transition-colors" id="version-input" placeholder="e.g. v2.15.0" type="text" value="v2.15.0"/>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Semantic version tag matching GitHub/GitLab release.</p>
+</div>
+</div>
+<!-- Git Branch & Commit SHA (With Simulated Validation Error) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Branch -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-medium" for="branch-input">
+                  Source Branch
+                </label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-2.5 text-on-surface-variant text-[18px]">fork_right</span>
+<input class="w-full h-[38px] pl-9 pr-space-sm rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-sm focus:bg-surface-container-low transition-colors" id="branch-input" placeholder="e.g. main or hotfix/api-patch" type="text" value="main"/>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Deployment trigger source branch.</p>
+</div>
+<!-- Commit SHA with Error state -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-error font-medium flex items-center justify-between" for="commit-input">
+<span>Commit SHA <span class="text-error">*</span></span>
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-code-inline text-[11px] font-semibold">Invalid length</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-2.5 text-error text-[18px]">commit</span>
+<input class="w-full h-[38px] pl-9 pr-9 rounded-lg bg-error-container/20 text-on-surface font-code-inline text-code-inline shadow-sm focus:bg-error-container/30 transition-colors" id="commit-input" type="text" value="12a4b"/>
+<span class="material-symbols-outlined absolute right-2.5 text-error text-[18px]">error</span>
+</div>
+<!-- Validation Error Message -->
+<div class="flex items-center gap-1 text-error mt-0.5">
+<span class="material-symbols-outlined text-[15px]">report</span>
+<span class="font-label-sm text-label-sm font-semibold">Commit SHA must be 7 to 40 hex characters</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Accepts short (7-char) or full SHA-1/SHA-256 hash.</p>
+</div>
+</div>
+</div>
+<div class="h-px w-full bg-surface-container-high"></div>
+<!-- Section 2: Environment & Deployment State -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center gap-space-xs pb-space-xs">
+<span class="w-5 h-5 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center font-code-inline text-[11px] font-bold">2</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Execution Context &amp; Status</h2>
+</div>
+<!-- Environment Select -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-medium" for="env-select">Target Environment</label>
+<div class="relative max-w-md">
+<select class="w-full h-[38px] px-space-sm pr-9 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-sm appearance-none cursor-pointer focus:bg-surface-container-low transition-colors" id="env-select">
+<option selected="" value="production">Production (production-us-east)</option>
+<option value="staging">Staging (staging-mesh)</option>
+<option value="development">Development (dev-preview-cluster)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">expand_more</span>
+</div>
+</div>
+<!-- Status Radio Pills -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface font-medium">Deployment Status <span class="text-error">*</span></label>
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-space-xs pt-1">
+<!-- Pill: Success -->
+<label class="group relative flex items-center gap-2 p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-all">
+<input checked="" class="sr-only" name="deploy-status" type="radio" value="success"/>
+<span class="w-2 h-2 rounded-full bg-secondary shrink-0"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-semibold text-on-surface group-hover:text-primary">Success</span>
+<span class="font-code-inline text-[11px] text-on-surface-variant">Live</span>
+</div>
+</label>
+<!-- Pill: Failed -->
+<label class="group relative flex items-center gap-2 p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-all">
+<input class="sr-only" name="deploy-status" type="radio" value="failed"/>
+<span class="w-2 h-2 rounded-full bg-error shrink-0"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Failed</span>
+<span class="font-code-inline text-[11px] text-on-surface-variant">Non-zero</span>
+</div>
+</label>
+<!-- Pill: Rolled back -->
+<label class="group relative flex items-center gap-2 p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-all">
+<input class="sr-only" name="deploy-status" type="radio" value="rolled_back"/>
+<span class="w-2 h-2 rounded-full bg-primary shrink-0"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Rolled back</span>
+<span class="font-code-inline text-[11px] text-on-surface-variant">Reverted</span>
+</div>
+</label>
+<!-- Pill: In progress -->
+<label class="group relative flex items-center gap-2 p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-all">
+<input class="sr-only" name="deploy-status" type="radio" value="in_progress"/>
+<span class="w-2 h-2 rounded-full bg-tertiary-container shrink-0 animate-ping"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-semibold text-on-surface">In progress</span>
+<span class="font-code-inline text-[11px] text-on-surface-variant">Deploying</span>
+</div>
+</label>
+<!-- Pill: Pending -->
+<label class="group relative flex items-center gap-2 p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-all">
+<input class="sr-only" name="deploy-status" type="radio" value="pending"/>
+<span class="w-2 h-2 rounded-full bg-outline shrink-0"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Pending</span>
+<span class="font-code-inline text-[11px] text-on-surface-variant">Queued</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Started & Completed Timestamps with Validation -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md pt-space-xs">
+<!-- Started at -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-medium" for="started-at">Started at <span class="text-error">*</span></label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-2.5 text-on-surface-variant text-[18px]">schedule</span>
+<input class="w-full h-[38px] pl-9 pr-space-sm rounded-lg bg-surface-container-lowest text-on-surface font-code-inline text-code-inline shadow-sm focus:bg-surface-container-low transition-colors" id="started-at" type="text" value="2025-05-12 14:30 UTC"/>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">UTC timestamp when deploy script began.</p>
+</div>
+<!-- Completed at (Validation Error + Disabled note toggle) -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-error font-medium" for="completed-at">Completed at</label>
+<span class="font-code-inline text-[11px] text-error font-semibold">Temporal Error</span>
+</div>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-2.5 text-error text-[18px]">event_busy</span>
+<input class="w-full h-[38px] pl-9 pr-9 rounded-lg bg-error-container/20 text-on-surface font-code-inline text-code-inline shadow-sm focus:bg-error-container/30 transition-colors" id="completed-at" type="text" value="2025-05-12 14:15 UTC"/>
+<span class="material-symbols-outlined absolute right-2.5 text-error text-[18px]">error</span>
+</div>
+<!-- Validation Error Note -->
+<div class="flex items-center gap-1 text-error mt-0.5">
+<span class="material-symbols-outlined text-[15px]">report</span>
+<span class="font-label-sm text-label-sm font-semibold">Completed time cannot be before the start time</span>
+</div>
+<!-- Helper card explaining disabled behavior -->
+<div class="mt-1 p-space-sm rounded-lg bg-surface-container flex items-start gap-space-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-tertiary shrink-0 mt-0.5">info</span>
+<span class="font-body-sm text-body-sm leading-snug">
+                    Completed at is automatically disabled when status is <strong class="text-on-surface font-semibold">Pending</strong> or <strong class="text-on-surface font-semibold">In progress</strong>.
+                  </span>
+</div>
+</div>
+</div>
+</div>
+<div class="h-px w-full bg-surface-container-high"></div>
+<!-- Section 3: Release Notes & Metadata -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="w-5 h-5 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center font-code-inline text-[11px] font-bold">3</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Description &amp; Release Notes</h2>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-tertiary flex items-center gap-1 cursor-pointer hover:underline">
+<span class="material-symbols-outlined text-[14px]">markdown</span> Markdown supported
+                </span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<div class="relative">
+<textarea class="w-full p-space-sm rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-sm focus:bg-surface-container-low transition-colors leading-relaxed" id="release-notes" maxlength="500" rows="4">Patch fixes intermittent gRPC timeouts when reconciling order status against Redis clusters. Optimized batch pipeline backoff policy and updated socket pool threshold.</textarea>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Include JIRA, PR keys or commit messages for trace correlation.</span>
+<div class="px-2 py-0.5 rounded bg-surface-container font-code-inline text-[11px] font-medium text-on-surface-variant">
+<span class="text-on-surface font-semibold">142</span> / 500 characters
+                </div>
+</div>
+</div>
+</div>
+<!-- Action Footer Buttons -->
+<div class="pt-space-md border-t border-transparent flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">security</span>
+<span class="font-body-sm text-body-sm">Signed as <strong class="text-on-surface font-semibold">Gaurav (Lead SRE)</strong></span>
+</div>
+<div class="flex items-center gap-space-sm w-full sm:w-auto">
+<button class="w-full sm:w-auto px-space-lg py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors text-center font-medium" type="button">
+                Cancel
+              </button>
+<button class="w-full sm:w-auto px-space-xl py-2 rounded-lg bg-primary-container hover:bg-surface-tint text-on-primary font-label-md text-label-md shadow-sm transition-all text-center font-semibold flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined text-[18px]">publish</span>
+                Save deployment
+              </button>
+</div>
+</div>
+</form>
+</div>
+<!-- Side Guidance & Correlation Information (4 Cols) -->
+<div class="lg:col-span-4 flex flex-col gap-space-lg">
+<!-- Why Record Deployments Card -->
+<div class="rounded-xl bg-surface-container-lowest shadow-sm p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">insights</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Why record deployments?</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Observability Value Engine</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Telemetry spikes often happen within minutes of binary drops. Logging releases pinpoints causal relationships automatically.
+          </p>
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<!-- Feature Item 1 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-start gap-space-sm">
+<div class="w-6 h-6 rounded bg-primary-fixed text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">sync_problem</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Incident Correlation</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+                  Overlays release markers directly onto 99th-percentile response latency graphs during outages.
+                </span>
+</div>
+</div>
+<!-- Feature Item 2 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-start gap-space-sm">
+<div class="w-6 h-6 rounded bg-tertiary-fixed text-tertiary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">timer</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Automated MTTR Tracking</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+                  Calculates time between rollback commits and health probe stabilization without manual metrics.
+                </span>
+</div>
+</div>
+<!-- Feature Item 3 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-start gap-space-sm">
+<div class="w-6 h-6 rounded bg-surface-container-highest text-on-surface flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">menu_book</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Runbook Integration</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+                  Directly pairs service health badges with target artifact binaries to run targeted triage diagnostics.
+                </span>
+</div>
+</div>
+</div>
+<!-- Real-time Latency Overlay preview mockup -->
+<div class="mt-space-xs p-space-md rounded-xl bg-surface-container flex flex-col gap-space-xs">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-on-surface">Timeline Overlay Preview</span>
+<span class="font-code-inline text-[11px] text-primary">LIVE SIMULATION</span>
+</div>
+<div class="h-20 w-full relative flex items-end pt-4 pb-2 px-1">
+<!-- SVG Sparkline with deployment marker -->
+<svg class="w-full h-full overflow-visible text-tertiary" fill="none" viewbox="0 0 240 60">
+<path d="M 0 45 Q 30 42 60 44 T 120 40 T 150 15 T 180 18 T 210 22 T 240 24" fill="none" stroke="currentColor" stroke-width="2"></path>
+<!-- Deployment marker flag -->
+<line stroke="#ff6700" stroke-dasharray="3 2" stroke-width="1.5" x1="140" x2="140" y1="5" y2="55"></line>
+<circle cx="140" cy="18" fill="#ff6700" r="4"></circle>
+<text fill="#a23f00" font-family="Inter" font-size="9" font-weight="600" x="146" y="16">v2.15.0</text>
+</svg>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Vertical orange flag illustrates automated deployment alignment with the latency surge.
+            </p>
+</div>
+</div>
+<!-- Quick Integration Card -->
+<div class="rounded-xl bg-surface-container-lowest shadow-sm p-space-lg flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Prefer Automated CI/CD?</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">terminal</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Avoid manual input by triggering the DevOpsPulse webhooks inside GitHub Actions or GitLab pipelines:
+          </p>
+<div class="p-space-xs px-space-sm rounded-lg bg-surface-container-high font-code-inline text-[11px] text-on-surface flex items-center justify-between">
+<span class="truncate">curl -X POST api.pulse/v1/deploy ...</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant cursor-pointer hover:text-on-surface">content_copy</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 
 /**
@@ -24,7 +25,7 @@ axiosClient.interceptors.response.use(
   (error) => {
     const errorData = error.response?.data;
     const message = errorData?.message || error.message || 'An unexpected error occurred';
-    
+
     // Convert array of [{ field, message }] to convenient key-value map: { [field]: message }
     const fieldErrors = {};
     if (Array.isArray(errorData?.errors)) {

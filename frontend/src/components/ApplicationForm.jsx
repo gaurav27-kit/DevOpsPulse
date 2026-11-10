@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { Sliders } from 'lucide-react';
 import { Input } from './Input.jsx';
 import { Button } from './Button.jsx';
 import { FormError } from './FormError.jsx';
 
 /**
  * Reusable form component for registering and editing monitored applications.
+ * Styled with DevOpsPulse design tokens.
  */
 export function ApplicationForm({
   initialValues = {},
@@ -89,93 +91,102 @@ export function ApplicationForm({
   const getFieldError = (field) => serverErrors[field] || clientErrors[field];
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-6">
-      <FormError message={generalError} />
-
-      <Input
-        label="Application Name"
-        id="name"
-        name="name"
-        placeholder="e.g. Production API, Auth Service"
-        value={formData.name}
-        onChange={handleChange}
-        error={getFieldError('name')}
-        required
-        disabled={isLoading}
-      />
-
-      <Input
-        label="Endpoint URL"
-        id="url"
-        name="url"
-        type="url"
-        placeholder="https://api.example.com/health"
-        helperText="Must be a publicly accessible HTTP or HTTPS endpoint (SSRF protected)."
-        value={formData.url}
-        onChange={handleChange}
-        error={getFieldError('url')}
-        required
-        disabled={isLoading}
-      />
-
-      {/* Environment Select */}
-      <div>
-        <label htmlFor="environment" className="block text-sm font-medium text-slate-700 mb-1">
-          Environment <span className="text-rose-500">*</span>
-        </label>
-        <select
-          id="environment"
-          name="environment"
-          value={formData.environment}
-          onChange={handleChange}
-          disabled={isLoading}
-          className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-xs focus:border-indigo-500 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
-        >
-          <option value="production">Production</option>
-          <option value="staging">Staging</option>
-          <option value="development">Development</option>
-        </select>
+    <div className="bg-white rounded-xl border border-[#e2e8f0] p-6 sm:p-8 shadow-sm">
+      <div className="flex items-center justify-between pb-5 border-b border-[#eaedff] mb-6">
+        <div className="flex items-center gap-2.5">
+          <Sliders className="h-5 w-5 text-[#a23f00]" aria-hidden="true" />
+          <h2 className="text-base font-semibold text-[#131b2e]">Target Endpoint & Probing Parameters</h2>
+        </div>
+        <span className="text-xs text-[#5a4136] font-medium">* Required fields</span>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <form onSubmit={handleSubmit} noValidate className="space-y-6">
+        <FormError message={generalError} />
+
         <Input
-          label="Check Interval (seconds)"
-          id="checkIntervalSeconds"
-          name="checkIntervalSeconds"
-          type="number"
-          min="30"
-          max="3600"
-          helperText="Range: 30 to 3600s (default: 300s / 5 min)"
-          value={formData.checkIntervalSeconds}
+          label="Application Name"
+          id="name"
+          name="name"
+          placeholder="e.g. Production API, Auth Service"
+          value={formData.name}
           onChange={handleChange}
-          error={getFieldError('checkIntervalSeconds')}
+          error={getFieldError('name')}
           required
           disabled={isLoading}
         />
 
         <Input
-          label="Request Timeout (ms)"
-          id="timeoutMs"
-          name="timeoutMs"
-          type="number"
-          min="1000"
-          max="30000"
-          step="500"
-          helperText="Range: 1000 to 30000 ms (default: 10000 ms)"
-          value={formData.timeoutMs}
+          label="Endpoint URL"
+          id="url"
+          name="url"
+          type="url"
+          placeholder="https://api.example.com/health"
+          helperText="Must be a publicly accessible HTTP or HTTPS endpoint (SSRF protected)."
+          value={formData.url}
           onChange={handleChange}
-          error={getFieldError('timeoutMs')}
+          error={getFieldError('url')}
           required
           disabled={isLoading}
         />
-      </div>
 
-      <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
-        <Button type="submit" variant="primary" isLoading={isLoading} className="py-2.5 px-6">
-          {submitLabel}
-        </Button>
-      </div>
-    </form>
+        {/* Environment Select */}
+        <div>
+          <label htmlFor="environment" className="block text-sm font-semibold text-[#131b2e] mb-1.5">
+            Environment <span className="text-[#ba1a1a]">*</span>
+          </label>
+          <select
+            id="environment"
+            name="environment"
+            value={formData.environment}
+            onChange={handleChange}
+            disabled={isLoading}
+            className="block w-full min-h-[40px] rounded-lg border border-[#dae2fd] bg-white px-3 py-2 text-sm text-[#131b2e] shadow-2xs focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25"
+          >
+            <option value="production">Production</option>
+            <option value="staging">Staging</option>
+            <option value="development">Development</option>
+          </select>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <Input
+            label="Check Interval (seconds)"
+            id="checkIntervalSeconds"
+            name="checkIntervalSeconds"
+            type="number"
+            min="30"
+            max="3600"
+            helperText="Range: 30 to 3600s (default: 300s / 5 min)"
+            value={formData.checkIntervalSeconds}
+            onChange={handleChange}
+            error={getFieldError('checkIntervalSeconds')}
+            required
+            disabled={isLoading}
+          />
+
+          <Input
+            label="Request Timeout (ms)"
+            id="timeoutMs"
+            name="timeoutMs"
+            type="number"
+            min="1000"
+            max="30000"
+            step="500"
+            helperText="Range: 1000 to 30000 ms (default: 10000 ms)"
+            value={formData.timeoutMs}
+            onChange={handleChange}
+            error={getFieldError('timeoutMs')}
+            required
+            disabled={isLoading}
+          />
+        </div>
+
+        <div className="pt-5 border-t border-[#eaedff] flex items-center justify-end gap-3">
+          <Button type="submit" variant="primary" isLoading={isLoading} className="py-2.5 px-6 font-semibold">
+            {submitLabel}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
-

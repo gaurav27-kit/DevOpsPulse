@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-primary": "#ffffff", "surface-container-high": "#e2e7ff", "primary-fixed-dim": "#ffb595", "on-surface": "#131b2e", "surface-container": "#eaedff", "on-tertiary-fixed": "#001d35", "on-secondary-container": "#5f6665", "surface-bright": "#faf8ff", "surface-variant": "#dae2fd", "on-primary-fixed": "#351000", "tertiary-container": "#019cff", "on-secondary-fixed": "#161d1d", "on-surface-variant": "#5a4136", "error": "#ba1a1a", "surface-tint": "#a23f00", "secondary": "#59605f", "on-tertiary-fixed-variant": "#00497c", "on-tertiary": "#ffffff", "on-error-container": "#93000a", "background": "#faf8ff", "tertiary-fixed-dim": "#9dcaff", "surface-container-low": "#f2f3ff", "surface-container-lowest": "#ffffff", "secondary-fixed": "#dde4e3", "on-tertiary-container": "#003156", "tertiary": "#0061a2", "primary-fixed": "#ffdbcd", "primary": "#a23f00", "surface": "#faf8ff", "surface-dim": "#d2d9f4", "secondary-container": "#dde4e3", "on-secondary-fixed-variant": "#414848", "surface-container-highest": "#dae2fd", "primary-container": "#ff6700", "inverse-primary": "#ffb595", "error-container": "#ffdad6", "inverse-on-surface": "#eef0ff", "secondary-fixed-dim": "#c1c8c7", "on-primary-fixed-variant": "#7c2e00", "outline-variant": "#e3bfb1", "outline": "#8e7164", "tertiary-fixed": "#d1e4ff", "on-error": "#ffffff", "on-primary-container": "#561e00", "inverse-surface": "#283044", "on-secondary": "#ffffff", "on-background": "#131b2e" }, borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, spacing: { "space-xs": "0.25rem", "gutter-mobile": "1rem", "margin-mobile": "1rem", "space-xl": "2rem", "space-lg": "1.5rem", "space-md": "1rem", "margin": "2rem", "space-sm": "0.5rem", "gutter": "1.5rem" }, fontFamily: { "label-md": ["Inter"], "headline-lg-mobile": ["Inter"], "headline-lg": ["Inter"], "body-md": ["Inter"], "body-sm": ["Inter"], "code-inline": ["Inter"], "headline-md": ["Inter"], "headline-sm": ["Inter"], "display-lg": ["Inter"], "label-sm": ["Inter"], "body-lg": ["Inter"] }, fontSize: { "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "500" }], "headline-lg-mobile": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.025em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "-0.005em", "fontWeight": "400" }], "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }], "code-inline": ["12px", { "lineHeight": "16px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "600" }], "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }], "body-lg": ["15px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "400" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-gutter-mobile flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="DevOpsPulse Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1W9-qTRdQWw6hqromKROXMY-sLxf8VfAtVrd04YzDDUI8w27xzBlSJZzQJ4_FlZ90ZjUC6DVqx3FCuN6R8hAQpZozujwXBiflNBQKq4ouPyDh7_XcdSNF3QqqxZpRDaT9mTqQl87sq-U1oVkyATXUwLsclWaTXAAG4h4zCT55QwWYg4YizwkaTv2V0FjrmuCSIhAo3sJ75RCt_61Y3R5iMIvsePS6Sy1U8DviZys0pE5A"/><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">DevOpsPulse</span><span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-surface-container-high"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span><span class="font-label-sm text-label-sm text-on-surface-variant font-medium text-[10px] leading-none uppercase tracking-wider">Live</span></span></div><span class="font-label-sm text-label-sm text-on-surface-variant">Deployments (Mobile)   Devopspulse</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Open User Menu" class="min-w-[44px] min-h-[44px] p-space-xs flex items-center gap-space-xs rounded-xl hover:bg-surface-container-low transition-colors" id="drawer-trigger"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFpdSckDQhDL42SV_x8y2TEU0FvVw-MLRLqMF2gos9voTNptnymL7xhlZHAaXeqBLnZFLBo9MArM_JXnYEQ_FqURUwkNjCrYkCw0DQDjBB0f9cGOobTqTEjpy16aRXFBBNjgbE7VzqfKNTnFJMdVQp7v2aSqkAD5c-NQISCLXeqy8Rm5KihNVnNH1CGfYyibN3BUHcCoIfzAeKMe9YUhY5QkI7nL9p3iBT5pXMLZkQ"/><span class="material-symbols-outlined text-on-surface-variant text-[20px]">menu</span></button></div></div></header><div class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" id="menu-drawer-backdrop"></div><aside class="fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-surface-container-lowest shadow-[0_4px_24px_rgba(0,0,0,0.12)] translate-x-full transition-transform duration-300 ease-out flex flex-col pt-safe pb-safe" id="menu-drawer"><div class="p-space-lg flex items-center justify-between"><div class="flex items-center gap-space-md"><img alt="Profile" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFpdSckDQhDL42SV_x8y2TEU0FvVw-MLRLqMF2gos9voTNptnymL7xhlZHAaXeqBLnZFLBo9MArM_JXnYEQ_FqURUwkNjCrYkCw0DQDjBB0f9cGOobTqTEjpy16aRXFBBNjgbE7VzqfKNTnFJMdVQp7v2aSqkAD5c-NQISCLXeqy8Rm5KihNVnNH1CGfYyibN3BUHcCoIfzAeKMe9YUhY5QkI7nL9p3iBT5pXMLZkQ"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface leading-snug">Alex Rivera</span><span class="font-label-sm text-label-sm text-primary-container font-medium">Student tier</span></div></div><button aria-label="Close Drawer" class="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" id="drawer-close"><span class="material-symbols-outlined">close</span></button></div><div class="px-space-lg py-space-sm flex-1 flex flex-col gap-space-xs"><div class="py-space-xs"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Workspace</span></div><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors min-h-[44px]" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">monitoring</span><span class="font-body-md text-body-md font-medium">Dashboard</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors min-h-[44px]" data-path="applications-mobile-devopspulse" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span class="font-body-md text-body-md font-medium">Applications</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors min-h-[44px]" data-path="incidents" href="#"><span class="material-symbols-outlined text-[20px]">notification_important</span><span class="font-body-md text-body-md font-medium">Incidents</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors min-h-[44px]" data-path="deployments-mobile-devopspulse" href="#"><span class="material-symbols-outlined text-[20px]">deployed_code</span><span class="font-body-md text-body-md font-medium">Deployments</span></a></div><div class="p-space-lg flex flex-col gap-space-xs"><button class="w-full flex items-center justify-between px-space-md py-space-sm rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors min-h-[44px]"><span class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[20px]">dark_mode</span><span class="font-body-md text-body-md">Theme Toggle</span></span><span class="font-label-sm text-label-sm text-secondary">Light</span></button><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-xl text-error hover:bg-error-container/20 transition-colors min-h-[44px]" href="#"><span class="material-symbols-outlined text-[20px]">logout</span><span class="font-body-md text-body-md font-medium">Log out</span></a></div></aside><script>const trigger=document.getElementById('drawer-trigger');const closeBtn=document.getElementById('drawer-close');const drawer=document.getElementById('menu-drawer');const backdrop=document.getElementById('menu-drawer-backdrop');function toggleDrawer(open){if(open){backdrop.classList.remove('opacity-0','pointer-events-none');backdrop.classList.add('opacity-100');drawer.classList.remove('translate-x-full');drawer.classList.add('translate-x-0');}else{backdrop.classList.remove('opacity-100');backdrop.classList.add('opacity-0','pointer-events-none');drawer.classList.remove('translate-x-0');drawer.classList.add('translate-x-full');}}if(trigger&&closeBtn&&drawer&&backdrop){trigger.addEventListener('click',()=>toggleDrawer(true));closeBtn.addEventListener('click',()=>toggleDrawer(false));backdrop.addEventListener('click',()=>toggleDrawer(false));}</script><main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen"><div class="flex flex-col w-full px-gutter-mobile gap-space-md">
+<!-- Top Hero & Context Banner -->
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<div class="flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Deployments</h1>
+<span class="inline-flex items-center px-space-xs py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">48 total</span>
+</div>
+<button class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary-container text-on-primary font-label-md text-label-md shadow-sm active:scale-95 transition-all" id="open-record-modal">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Record</span>
+</button>
+</div>
+<!-- DevOps Pulse System Health Mini Pill -->
+<div class="flex items-center justify-between bg-surface-container-lowest p-space-sm rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">sync</span>
+<span class="font-body-sm text-body-sm text-on-surface">Sync status: GitHub App connected</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-semibold">99.8% flow</span>
+</div>
+</div>
+<!-- Search and Quick Filter Bar -->
+<div class="flex flex-col gap-space-xs">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full pl-9 pr-8 py-2 bg-surface-container-lowest rounded-xl font-body-sm text-body-sm text-on-surface placeholder:text-on-secondary-container/70 shadow-sm focus:outline-none" id="deployment-search" placeholder="Filter by service, commit sha, or branch..." type="search"/>
+<button class="absolute right-2.5 top-2 text-on-surface-variant hover:text-on-surface p-0.5">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+</div>
+<!-- Filter Chips Scroll Area -->
+<div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 text-nowrap" id="filter-chip-group">
+<button class="filter-chip px-3 py-1 rounded-full bg-on-surface text-on-primary font-label-sm text-label-sm font-semibold shadow-xs" data-filter="all">All</button>
+<button class="filter-chip px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high font-label-sm text-label-sm" data-filter="failed">Failed (1)</button>
+<button class="filter-chip px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high font-label-sm text-label-sm" data-filter="in_progress">In Progress (1)</button>
+<button class="filter-chip px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high font-label-sm text-label-sm" data-filter="success">Success (42)</button>
+<button class="filter-chip px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high font-label-sm text-label-sm" data-filter="rolled_back">Rolled back (4)</button>
+<button class="filter-chip px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high font-label-sm text-label-sm" data-filter="prod">Production</button>
+<button class="filter-chip px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high font-label-sm text-label-sm" data-filter="staging">Staging</button>
+</div>
+</div>
+<!-- Deployments List Stack -->
+<div class="flex flex-col gap-space-sm" id="deployments-container">
+<!-- Card 1: Orders API (Failed, Production, Manual Entry) -->
+<article class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm relative overflow-hidden transition-all duration-200">
+<!-- Top header line of card -->
+<div class="flex items-start justify-between gap-space-xs">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">Orders API</h2>
+<span class="font-code-inline text-code-inline px-1.5 py-0.5 rounded-md bg-surface-container-high text-on-surface font-semibold">v2.14.2</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Production • Cloud Run us-central1</span>
+</div>
+<!-- Status Badge: Failed -->
+<div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span>Failed</span>
+</div>
+</div>
+<!-- Git / Meta information -->
+<div class="grid grid-cols-2 gap-space-xs p-space-xs rounded-xl bg-surface-container-low text-on-surface">
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">fork_right</span>
+<span class="font-code-inline text-code-inline truncate text-on-surface">release/v2.14</span>
+</div>
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">commit</span>
+<span class="font-code-inline text-code-inline truncate text-primary">#c48f21e</span>
+</div>
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">schedule</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">18m ago (2m 14s)</span>
+</div>
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-error">error</span>
+<span class="font-label-sm text-label-sm text-error truncate">Exit code 1 (DB timeout)</span>
+</div>
+</div>
+<!-- Badges & Action Bottom Bar -->
+<div class="flex items-center justify-between pt-1 gap-2">
+<!-- Manual entry tag with interactive popover tooltip -->
+<div class="relative">
+<button class="tooltip-trigger inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm active:bg-secondary-fixed-dim" type="button">
+<span class="material-symbols-outlined text-[14px]">edit_note</span>
+<span>Manual entry</span>
+<span class="material-symbols-outlined text-[14px]">info</span>
+</button>
+<div class="tooltip-content hidden absolute bottom-full left-0 mb-1.5 z-20 w-52 p-2.5 rounded-xl bg-inverse-surface text-inverse-on-surface font-body-sm text-body-sm shadow-md">
+<p>Entered by you, not verified by an integration webhook.</p>
+</div>
+</div>
+<!-- Quick Rollback Action Trigger -->
+<button class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold active:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-[16px]">history</span>
+<span>Rollback</span>
+</button>
+</div>
+</article>
+<!-- Card 2: Auth Service (In Progress, Live pulse) -->
+<article class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm relative overflow-hidden transition-all duration-200">
+<div class="flex items-start justify-between gap-space-xs">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">Auth Service</h2>
+<span class="font-code-inline text-code-inline px-1.5 py-0.5 rounded-md bg-surface-container-high text-on-surface font-semibold">v3.0.1-rc</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Production • Kubernetes cluster-01</span>
+</div>
+<!-- Status Badge: In Progress with pulsating amber indicator -->
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm shrink-0">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-container opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary-container"></span>
+</span>
+<span class="font-medium">In Progress</span>
+</div>
+</div>
+<!-- Git / Meta information -->
+<div class="grid grid-cols-2 gap-space-xs p-space-xs rounded-xl bg-surface-container-low text-on-surface">
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">fork_right</span>
+<span class="font-code-inline text-code-inline truncate text-on-surface">main</span>
+</div>
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">commit</span>
+<span class="font-code-inline text-code-inline truncate text-primary">#3d91ae0</span>
+</div>
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">timer</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Started 5m ago</span>
+</div>
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-primary-container animate-spin">progress_activity</span>
+<span class="font-label-sm text-label-sm text-on-surface truncate">Running (5m)</span>
+</div>
+</div>
+<!-- Live progress micro-bar -->
+<div class="flex flex-col gap-1 pt-0.5">
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span>Step 3 of 4: Canaries deploying</span>
+<span class="font-semibold text-primary">75%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary-container h-1.5 rounded-full w-3/4 transition-all duration-500"></div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center justify-between pt-1">
+<span class="inline-flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">terminal</span>
+<span>Streaming pipeline logs</span>
+</span>
+<button class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-surface-container text-on-surface font-label-sm text-label-sm active:bg-surface-container-high">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Inspect</span>
+</button>
+</div>
+</article>
+<!-- Card 3: Portfolio Website (Success, GitHub Actions) -->
+<article class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm relative overflow-hidden transition-all duration-200">
+<div class="flex items-start justify-between gap-space-xs">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">Portfolio Website</h2>
+<span class="font-code-inline text-code-inline px-1.5 py-0.5 rounded-md bg-surface-container-high text-on-surface font-semibold">v1.8.0</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Production • Vercel Edge</span>
+</div>
+<!-- Status Badge: Success -->
+<div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-low text-on-surface font-label-sm text-label-sm shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+<span class="font-medium text-emerald-800">Success</span>
+</div>
+</div>
+<!-- Git / Meta info -->
+<div class="grid grid-cols-2 gap-space-xs p-space-xs rounded-xl bg-surface-container-low text-on-surface">
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">fork_right</span>
+<span class="font-code-inline text-code-inline truncate text-on-surface">main</span>
+</div>
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">commit</span>
+<span class="font-code-inline text-code-inline truncate text-primary">#8b10bca</span>
+</div>
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">schedule</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">2h ago</span>
+</div>
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">timer</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Duration: 1m 20s</span>
+</div>
+</div>
+<!-- Bottom Source & Action -->
+<div class="flex items-center justify-between pt-1">
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[15px] text-tertiary">rocket_launch</span>
+<span class="font-medium">GitHub Actions</span>
+</div>
+<button class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-surface-container-low text-on-surface font-label-sm text-label-sm hover:bg-surface-container">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+<span>View Site</span>
+</button>
+</div>
+</article>
+<!-- Card 4: Staging Frontend (Rolled back, Staging, Manual Entry) -->
+<article class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm relative overflow-hidden transition-all duration-200">
+<div class="flex items-start justify-between gap-space-xs">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">Staging Frontend</h2>
+<span class="font-code-inline text-code-inline px-1.5 py-0.5 rounded-md bg-surface-container-high text-on-surface font-semibold">v1.4.0</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Staging • Netlify Preview #114</span>
+</div>
+<!-- Status Badge: Rolled back -->
+<div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-medium">Rolled back</span>
+</div>
+</div>
+<!-- Git / Meta information -->
+<div class="grid grid-cols-2 gap-space-xs p-space-xs rounded-xl bg-surface-container-low text-on-surface">
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">fork_right</span>
+<span class="font-code-inline text-code-inline truncate text-on-surface">fix/db-pool</span>
+</div>
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">commit</span>
+<span class="font-code-inline text-code-inline truncate text-primary">#f72a910</span>
+</div>
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">schedule</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">1d ago</span>
+</div>
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">timer</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">3m 50s runtime</span>
+</div>
+</div>
+<!-- Bottom Badges -->
+<div class="flex items-center justify-between pt-1">
+<div class="relative">
+<button class="tooltip-trigger inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm" type="button">
+<span class="material-symbols-outlined text-[14px]">edit_note</span>
+<span>Manual entry</span>
+<span class="material-symbols-outlined text-[14px]">info</span>
+</button>
+<div class="tooltip-content hidden absolute bottom-full left-0 mb-1.5 z-20 w-52 p-2.5 rounded-xl bg-inverse-surface text-inverse-on-surface font-body-sm text-body-sm shadow-md">
+<p>Entered by you, not verified by an integration webhook.</p>
+</div>
+</div>
+<button class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-surface-container-low text-on-surface font-label-sm text-label-sm hover:bg-surface-container">
+<span class="material-symbols-outlined text-[16px]">replay</span>
+<span>Redeploy</span>
+</button>
+</div>
+</article>
+</div>
+<!-- Mobile Pagination Bar -->
+<div class="flex flex-col gap-space-xs py-space-sm">
+<div class="flex items-center justify-between px-space-xs text-on-surface-variant">
+<span class="font-body-sm text-body-sm">Page <strong class="text-on-surface">1</strong> of <strong>6</strong></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">48 total deployments</span>
+</div>
+<div class="grid grid-cols-2 gap-space-sm pt-space-xs">
+<button class="flex items-center justify-center gap-1 py-2 px-3 rounded-xl bg-surface-container text-on-surface-variant/40 font-label-md text-label-md cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+<span>Previous</span>
+</button>
+<button class="flex items-center justify-center gap-1 py-2 px-3 rounded-xl bg-surface-container-lowest text-on-surface font-label-md text-label-md shadow-sm active:bg-surface-container transition-all">
+<span>Next</span>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Manual Record Deployment Modal Sheet (Hidden by default) -->
+<div class="fixed inset-0 bg-inverse-surface/40 backdrop-blur-xs z-50 hidden opacity-0 transition-opacity duration-200" id="record-modal-backdrop"></div>
+<div class="fixed inset-x-0 bottom-0 z-50 bg-surface-container-lowest rounded-t-2xl shadow-xl p-space-lg transform translate-y-full transition-transform duration-300 ease-out flex flex-col gap-space-md max-h-[751px] overflow-y-auto" id="record-modal">
+<div class="flex items-center justify-between border-b pb-space-xs">
+<div class="flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Record Deployment</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Log manual releases or hotfixes</span>
+</div>
+<button class="p-1 rounded-full text-on-surface-variant hover:text-on-surface" id="close-record-modal">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-sm">
+<label class="flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Service name</span>
+<input class="w-full px-3 py-2 bg-surface-container-low rounded-xl font-body-sm text-body-sm text-on-surface focus:outline-none" placeholder="e.g. Payments Gateway" type="text"/>
+</label>
+<div class="grid grid-cols-2 gap-space-sm">
+<label class="flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Version / Tag</span>
+<input class="w-full px-3 py-2 bg-surface-container-low rounded-xl font-body-sm text-body-sm text-on-surface focus:outline-none" placeholder="v1.0.0" type="text"/>
+</label>
+<label class="flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Commit SHA</span>
+<input class="w-full px-3 py-2 bg-surface-container-low rounded-xl font-body-sm text-body-sm text-on-surface focus:outline-none" placeholder="#a1b2c3d" type="text"/>
+</label>
+</div>
+<label class="flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Environment</span>
+<select class="w-full px-3 py-2 bg-surface-container-low rounded-xl font-body-sm text-body-sm text-on-surface focus:outline-none">
+<option>Production</option>
+<option>Staging</option>
+<option>Sandbox / Dev</option>
+</select>
+</label>
+<label class="flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Deployment Status</span>
+<select class="w-full px-3 py-2 bg-surface-container-low rounded-xl font-body-sm text-body-sm text-on-surface focus:outline-none">
+<option>Success</option>
+<option>Failed</option>
+<option>In Progress</option>
+<option>Rolled back</option>
+</select>
+</label>
+</div>
+<div class="flex items-center gap-space-sm pt-space-xs">
+<button class="flex-1 py-2.5 rounded-xl bg-surface-container text-on-surface font-label-md text-label-md" id="cancel-record-modal">Cancel</button>
+<button class="flex-1 py-2.5 rounded-xl bg-primary-container text-on-primary font-label-md text-label-md shadow-sm" id="submit-record-modal">Save Entry</button>
+</div>
+</div>
+</div>
+<script>
+  (function initDeploymentsUI() {
+    // 1. Tooltip logic for "Manual entry" badges
+    const triggers = document.querySelectorAll('.tooltip-trigger');
+    triggers.forEach(trigger => {
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const tooltip = trigger.nextElementSibling;
+        const isHidden = tooltip.classList.contains('hidden');
+        
+        // Hide all tooltips first
+        document.querySelectorAll('.tooltip-content').forEach(t => t.classList.add('hidden'));
+        
+        if (isHidden) {
+          tooltip.classList.remove('hidden');
+        }
+      });
+    });
+
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.tooltip-content').forEach(t => t.classList.add('hidden'));
+    });
+
+    // 2. Chip Filtering Behavior
+    const chips = document.querySelectorAll('.filter-chip');
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => {
+          c.classList.remove('bg-on-surface', 'text-on-primary', 'font-semibold');
+          c.classList.add('bg-surface-container-lowest', 'text-on-surface-variant');
+        });
+        chip.classList.add('bg-on-surface', 'text-on-primary', 'font-semibold');
+        chip.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+      });
+    });
+
+    // 3. Record Modal Controls
+    const openBtn = document.getElementById('open-record-modal');
+    const closeBtn = document.getElementById('close-record-modal');
+    const cancelBtn = document.getElementById('cancel-record-modal');
+    const submitBtn = document.getElementById('submit-record-modal');
+    const modal = document.getElementById('record-modal');
+    const backdrop = document.getElementById('record-modal-backdrop');
+
+    function showModal() {
+      backdrop.classList.remove('hidden');
+      setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
+      modal.classList.remove('translate-y-full');
+    }
+
+    function hideModal() {
+      backdrop.classList.add('opacity-0');
+      modal.classList.add('translate-y-full');
+      setTimeout(() => backdrop.classList.add('hidden'), 200);
+    }
+
+    if (openBtn) openBtn.addEventListener('click', showModal);
+    if (closeBtn) closeBtn.addEventListener('click', hideModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', hideModal);
+    if (backdrop) backdrop.addEventListener('click', hideModal);
+    if (submitBtn) {
+      submitBtn.addEventListener('click', () => {
+        hideModal();
+      });
+    }
+
+    // 4. Ensure Bottom Navigation highlight matches 'Deploys' tab
+    const deployTabs = document.querySelectorAll('nav a[data-path="deployments-mobile-devopspulse"]');
+    deployTabs.forEach(tab => {
+      tab.classList.add('text-primary-container', 'font-semibold');
+      tab.classList.remove('text-on-surface-variant');
+    });
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/85 backdrop-blur-xl shadow-[0_-1px_12px_rgba(0,0,0,0.03)]" data-active-classes="text-primary-container font-semibold"><div class="flex justify-around items-center h-16 px-space-xs"><a class="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] flex-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[22px]">monitoring</span><span class="font-label-sm text-label-sm text-[11px] leading-none">Dashboard</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] flex-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="applications-mobile-devopspulse" href="#"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-label-sm text-label-sm text-[11px] leading-none">Apps</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] flex-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="incidents" href="#"><span class="material-symbols-outlined text-[22px]">notification_important</span><span class="font-label-sm text-label-sm text-[11px] leading-none">Incidents</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] flex-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="deployments-mobile-devopspulse" href="#"><span class="material-symbols-outlined text-[22px]">deployed_code</span><span class="font-label-sm text-label-sm text-[11px] leading-none">Deploys</span></a></div></nav></body></html>

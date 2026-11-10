@@ -14,6 +14,7 @@ import { Spinner } from './Spinner.jsx';
  *   resolved -> read-only
  *
  * Handles HTTP 409 conflicts gracefully with informative feedback and auto-refresh.
+ * Styled with DevOpsPulse design tokens.
  */
 export function StatusActions({ incident, onRefetch }) {
   const [isResolveModalOpen, setIsResolveModalOpen] = useState(false);
@@ -62,8 +63,8 @@ export function StatusActions({ incident, onRefetch }) {
 
   if (currentStatus === 'resolved') {
     return (
-      <div className="flex items-center gap-2 text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2">
-        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" aria-hidden="true" />
+      <div className="flex items-center gap-2 text-xs font-semibold text-[#065f46] bg-[#ecfdf5] border border-[#a7f3d0] rounded-lg px-3.5 py-2">
+        <CheckCircle2 className="h-4 w-4 text-[#10b981] shrink-0" aria-hidden="true" />
         <span>Resolved incidents cannot be changed.</span>
       </div>
     );
@@ -74,16 +75,16 @@ export function StatusActions({ incident, onRefetch }) {
       {actionError && (
         <div
           role="alert"
-          className="flex items-start gap-2 rounded-lg bg-rose-50 border border-rose-200 p-3 text-xs text-rose-800"
+          className="flex items-start gap-2 rounded-lg bg-[#ffdad6] border border-[#ffb4ab] p-3 text-xs text-[#93000a]"
         >
-          <AlertTriangle className="h-4 w-4 shrink-0 text-rose-600 mt-0.5" />
+          <AlertTriangle className="h-4 w-4 shrink-0 text-[#ba1a1a] mt-0.5" />
           <div className="flex-1">
             <p className="font-semibold">{actionError}</p>
           </div>
           <button
             type="button"
             onClick={() => setActionError(null)}
-            className="text-rose-500 hover:text-rose-700 font-bold ml-1 cursor-pointer"
+            className="text-[#93000a] hover:text-[#ba1a1a] font-bold ml-1 cursor-pointer"
           >
             &times;
           </button>
@@ -97,12 +98,12 @@ export function StatusActions({ incident, onRefetch }) {
             variant="outline"
             onClick={handleMarkInvestigating}
             disabled={changeStatusMutation.isPending}
-            className="text-xs py-1.5 px-3 flex items-center gap-1.5 border-amber-300 text-amber-800 hover:bg-amber-50"
+            className="text-xs py-1.5 px-3 flex items-center gap-1.5 border-[#fde68a] bg-[#fffbeb] text-[#92400e] hover:bg-[#fef3c7] min-h-[38px] font-semibold"
           >
             {changeStatusMutation.isPending ? (
               <Spinner size="sm" />
             ) : (
-              <Search className="h-3.5 w-3.5 text-amber-600" />
+              <Search className="h-3.5 w-3.5 text-[#d97706]" />
             )}
             <span>Mark as investigating</span>
           </Button>
@@ -113,7 +114,7 @@ export function StatusActions({ incident, onRefetch }) {
           variant="primary"
           onClick={() => setIsResolveModalOpen(true)}
           disabled={changeStatusMutation.isPending}
-          className="text-xs py-1.5 px-3 flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white"
+          className="text-xs py-1.5 px-3.5 flex items-center gap-1.5 min-h-[38px] font-semibold"
         >
           <CheckCircle2 className="h-3.5 w-3.5" />
           <span>Resolve incident</span>
@@ -136,7 +137,7 @@ export function StatusActions({ incident, onRefetch }) {
         }}
       >
         <div className="space-y-1.5 text-left">
-          <label htmlFor="resolve-note-input" className="block text-xs font-medium text-slate-700">
+          <label htmlFor="resolve-note-input" className="block text-xs font-semibold text-[#131b2e]">
             Resolution note (optional):
           </label>
           <textarea
@@ -146,7 +147,7 @@ export function StatusActions({ incident, onRefetch }) {
             placeholder="Describe what resolved the issue (e.g. rolled back deployment, fixed DNS record)..."
             rows={3}
             maxLength={1000}
-            className="w-full rounded-lg border border-slate-300 p-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-lg border border-[#dae2fd] p-2.5 text-xs text-[#131b2e] placeholder:text-[#59605f] focus:border-[#ff6700] focus:outline-hidden focus:ring-2 focus:ring-[#ff6700]/25 transition-colors"
           />
         </div>
       </ConfirmDialog>

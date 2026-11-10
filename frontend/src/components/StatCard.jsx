@@ -16,18 +16,18 @@ export function StatCard({
   const isNoData = displayValue === 'No data';
 
   return (
-    <div className={`rounded-xl border border-slate-200 bg-white p-5 shadow-xs ${className}`}>
-      <div className="flex items-center justify-between text-slate-500">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+    <div className={`rounded-xl border border-[#e2e8f0] bg-white p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between ${className}`}>
+      <div className="flex items-center justify-between text-[#5a4136]">
+        <span className="text-xs font-semibold uppercase tracking-wider text-[#5a4136]">
           {label}
         </span>
-        {Icon && <Icon className="h-4 w-4 text-slate-400" aria-hidden="true" />}
+        {Icon && <Icon className="h-4 w-4 text-[#59605f]" aria-hidden="true" />}
       </div>
 
-      <div className="mt-2 flex items-baseline gap-2">
+      <div className="my-2 flex items-baseline gap-2">
         <span
-          className={`text-2xl font-bold tracking-tight ${
-            isNoData ? 'text-slate-400 font-normal text-lg' : 'text-slate-900'
+          className={`text-2xl lg:text-3xl font-semibold tracking-tight ${
+            isNoData ? 'text-[#59605f] font-normal text-lg' : 'text-[#131b2e]'
           } ${valueClassName}`}
         >
           {displayValue}
@@ -35,7 +35,7 @@ export function StatCard({
       </div>
 
       {hint && (
-        <div className="mt-1 text-xs text-slate-500">
+        <div className="mt-auto pt-1 text-xs text-[#59605f]">
           {hint}
         </div>
       )}

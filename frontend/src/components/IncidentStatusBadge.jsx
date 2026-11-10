@@ -5,23 +5,24 @@ const STATUS_CONFIG = {
   open: {
     label: 'Open',
     icon: AlertCircle,
-    classes: 'bg-rose-50 text-rose-700 border-rose-200'
+    classes: 'bg-[#ffdad6] text-[#93000a] border-[#ffb4ab]'
   },
   investigating: {
     label: 'Investigating',
     icon: Search,
-    classes: 'bg-amber-50 text-amber-700 border-amber-200'
+    classes: 'bg-[#fffbeb] text-[#92400e] border-[#fde68a]'
   },
   resolved: {
     label: 'Resolved',
     icon: CheckCircle2,
-    classes: 'bg-emerald-50 text-emerald-700 border-emerald-200'
+    classes: 'bg-[#ecfdf5] text-[#065f46] border-[#a7f3d0]'
   }
 };
 
 /**
  * Accessible badge indicating incident lifecycle status.
  * Communicates status via both icon and text, never color alone.
+ * Uses DevOpsPulse design tokens.
  */
 export function IncidentStatusBadge({ status, className = '' }) {
   const config = STATUS_CONFIG[status?.toLowerCase()] || STATUS_CONFIG.open;
