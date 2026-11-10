@@ -55,10 +55,7 @@ export function NotificationsPage() {
 
   useEffect(() => {
     if (isCreateOpen || editingChannel) {
-      const timer = setTimeout(() => {
-        nameInputRef.current?.focus();
-      }, 50);
-      return () => clearTimeout(timer);
+      nameInputRef.current?.focus();
     }
   }, [isCreateOpen, editingChannel]);
 

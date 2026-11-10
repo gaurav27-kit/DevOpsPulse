@@ -58,8 +58,8 @@ test.describe('DevOpsPulse Notification Channels & Alerts Suite', () => {
     // 3. Create a valid Webhook Channel
     await page.getByRole('button', { name: 'Add Channel' }).click();
     await expect(page.getByRole('dialog')).toBeVisible();
-    await page.getByLabel('Channel Name').fill('Ops Webhook Channel');
-    await page.getByLabel('Webhook URL').fill('https://example.com/api/webhooks/ops');
+    await page.locator('#channel-name').fill('Ops Webhook Channel');
+    await page.locator('#channel-url').fill('https://example.com/api/webhooks/ops');
 
     const [createChanResponse] = await Promise.all([
       page.waitForResponse((res) => res.url().includes('/notifications/channels') && res.request().method() === 'POST'),
