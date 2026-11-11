@@ -147,7 +147,7 @@ The automated release quality gate enforces zero regressions before code can be 
 | **Automated Alerting Proofs** (`alertingProof.mjs`) | 1 file | 30 assertions | **30 Passed, 0 Failed** |
 | **SLO Lifecycle & Performance Check** (`check:slo`) | 1 file | 58 assertions | **58 Passed, 0 Failed** |
 | **Playwright End-to-End Suite** (`playwright test`) | 2 files | 5 scenarios | **5 Passed, 0 Failed** |
-| **Total Automated Tests** | **63 files** | **558 tests** | **All 14 Suites Passed** |
+| **Total Automated Tests** | **63 files** | **563 tests** | **All 14 Suites Passed** |
 
 ---
 
