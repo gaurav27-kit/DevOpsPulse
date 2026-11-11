@@ -56,6 +56,9 @@ jobs:
 
       - name: Run Unit Tests (node:test)
         working-directory: backend
+        env:
+          NODE_ENV: test
+          JWT_SECRET: ci_test_jwt_secret_must_be_at_least_32_characters_long
         run: npm test
 
       - name: Run API Integration Tests (Vitest + Supertest)
@@ -88,7 +91,7 @@ jobs:
 
       - name: Run Component & Page Tests (Vitest + RTL)
         working-directory: frontend
-        run: npm test
+        run: npm test -- --run
 
       - name: Build Production Assets (Vite)
         working-directory: frontend
