@@ -91,7 +91,7 @@ jobs:
 
       - name: Run Component & Page Tests (Vitest + RTL)
         working-directory: frontend
-        run: npm test -- --run
+        run: npm test
 
       - name: Build Production Assets (Vite)
         working-directory: frontend
