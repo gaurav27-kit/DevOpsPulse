@@ -76,6 +76,13 @@ const steps = [
     cwd: '.'
   },
   {
+    name: '3b. Total Count Unit Tests',
+    slug: 'total-count-tests',
+    command: 'node',
+    args: ['--test', 'scripts/totalCount.test.js'],
+    cwd: '.'
+  },
+  {
     name: '4. Backend Unit Tests',
     slug: 'backend-unit-tests',
     command: 'npm',
@@ -316,6 +323,19 @@ if (Object.keys(baselineData).length > 0 || updateBaseline) {
 const overallDurationMs = Date.now() - overallStartTime;
 const summaryPath = path.join(reportsDir, 'summary.json');
 
+/**
+ * computeTotalTests(suites) — sums the `tests` field across all suites,
+ * skipping null/undefined (i.e. skipped suites that produced no test count).
+ * This is the canonical total for the run; it must match the per-suite arithmetic.
+ * @param {Array} suites
+ * @returns {number}
+ */
+function computeTotalTests(suites) {
+  return suites.reduce((acc, s) => acc + (typeof s.tests === 'number' ? s.tests : 0), 0);
+}
+
+const totalTests = computeTotalTests(suiteSummaries);
+
 const finalSummary = {
   timestamp: new Date().toISOString(),
   git: {
@@ -329,7 +349,8 @@ const finalSummary = {
     executedSuites: suiteSummaries.filter((s) => s.status !== 'skipped').length,
     passedSuites: suiteSummaries.filter((s) => s.status === 'passed').length,
     failedSuites: suiteSummaries.filter((s) => s.status === 'failed').length,
-    skippedSuites: suiteSummaries.filter((s) => s.status === 'skipped').length
+    skippedSuites: suiteSummaries.filter((s) => s.status === 'skipped').length,
+    totalTests
   },
   suites: suiteSummaries
 };
@@ -342,6 +363,7 @@ if (!allPassed) {
 } else {
   console.log('\n====================================================');
   console.log('✅ ALL QUALITY GATE SUITES PASSED CLEANLY!');
+  console.log(`   Total tests across all suites: ${totalTests}`);
   console.log(`Summary written to: ${summaryPath}`);
   console.log('====================================================');
   process.exit(0);
