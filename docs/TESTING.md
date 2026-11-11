@@ -75,7 +75,7 @@ The automated release quality gate enforces zero regressions before code can be 
 | 10. Socket.IO Security Check | `npm --prefix backend run check:sockets` | Room isolation, cookie auth, abuse disconnect | PASS (13/13) |
 | 11. Alerting Lifecycle Check | `node scripts/alertingCheck.js` | End-to-end alerting lifecycle, deduplication, SSRF | PASS (16/16) |
 | 12. Automated Alerting Proofs | `node scripts/alertingProof.mjs` | Webhook verification, anti-flapping, SMTP capture | PASS (30/30) |
-| 13. SLO Lifecycle & Performance | `npm --prefix backend run check:slo` | Budget math, burn rates, timeseries, target boundaries, 86.4k/864k check scaling | PASS (58/58) |
+| 13. SLO Lifecycle & Performance | `npm --prefix backend run check:slo` | Budget math, burn rates, timeseries, target boundaries, explain IXSCAN proof | PASS (53/53) |
 | 14. Baseline Guard Tests | `node --test scripts/baselineGuard.test.js` | Regression guard logic: drop fails, equal/higher passes, missing fails, update accepts | PASS (6/6) |
 | 15. SLO Rollup & Performance Proof | `node scripts/sloRollupCheck.js` | 7 equivalence datasets, 200 concurrent writes, backfill idempotency, cascade, sub-1000ms list | PASS (101/101) |
 | 16. Playwright E2E | `npm --prefix e2e run test:e2e` | Full user journeys, CRUD, secret dialog, keyboard accessibility, multi-tenant, 9 SLO scenarios | PASS (14/14) |
@@ -149,7 +149,7 @@ The automated release quality gate enforces zero regressions before code can be 
 | **Automated Alerting Proofs** (`alertingProof.mjs`) | 1 file | 30 assertions | **30 Passed, 0 Failed** |
 | **SLO Lifecycle & Performance Check** (`check:slo`) | 1 file | 58 assertions | **58 Passed, 0 Failed** |
 | **Playwright End-to-End Suite** (`playwright test`) | 2 files | 5 scenarios | **5 Passed, 0 Failed** |
-| **Total Automated Tests** | **63 files** | **563 tests** | **All 14 Suites Passed** |
+| **Total Automated Tests** | **74 files** | **712 tests** | **All 16 Executed Suites Passed** |
 
 ---
 
