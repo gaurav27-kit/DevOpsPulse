@@ -58,11 +58,12 @@ try {
 
     const res = spawnSync(cmd, args, {
       cwd: path.resolve(tempDir, cwd),
-      stdio: 'pipe',
+      stdio: ['ignore', 'pipe', 'pipe'],
       shell: isWindows,
       env: mergedEnv,
       encoding: 'utf8',
-      maxBuffer: 50 * 1024 * 1024
+      maxBuffer: 50 * 1024 * 1024,
+      timeout: 600000
     });
 
     const duration = ((Date.now() - start) / 1000).toFixed(2);
@@ -95,7 +96,8 @@ try {
 
   // --- JOB 2: Backend API & Unit Tests ---
   console.log('================ Job 2: Backend API & Unit Tests ================');
-  if (!runCiStep('Backend npm ci', 'backend-npm-ci.log', npmCmd, ['ci'], 'backend')) {
+  const ciArgs = ['ci', '--prefer-offline', '--no-audit', '--no-fund'];
+  if (!runCiStep('Backend npm ci', 'backend-npm-ci.log', npmCmd, ciArgs, 'backend')) {
     overallSuccess = false;
   }
   if (
@@ -130,7 +132,7 @@ try {
 
   // --- JOB 3: Frontend Component Tests & Build ---
   console.log('================ Job 3: Frontend Component Tests & Build ================');
-  if (!runCiStep('Frontend npm ci', 'frontend-npm-ci.log', npmCmd, ['ci'], 'frontend')) {
+  if (!runCiStep('Frontend npm ci', 'frontend-npm-ci.log', npmCmd, ciArgs, 'frontend')) {
     overallSuccess = false;
   }
   if (!runCiStep('Frontend Unit Tests', 'frontend-unit-tests.log', npmCmd, ['test'], 'frontend')) {
@@ -142,7 +144,7 @@ try {
 
   // --- JOB 4: Master Quality Gate Suite ---
   console.log('================ Job 4: Master Quality Gate Suite ================');
-  if (!runCiStep('Root npm ci', 'root-npm-ci.log', npmCmd, ['ci'], '.')) {
+  if (!runCiStep('Root npm ci', 'root-npm-ci.log', npmCmd, ciArgs, '.')) {
     overallSuccess = false;
   }
   if (
