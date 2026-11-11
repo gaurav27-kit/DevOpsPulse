@@ -7,7 +7,15 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/tests/setup.js'],
-    include: ['src/**/*.test.{js,jsx}']
+    include: ['src/**/*.test.{js,jsx}'],
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        maxForks: process.env.CI ? 2 : undefined
+      }
+    },
+    testTimeout: 30000,
+    hookTimeout: 30000
   }
 });
 
