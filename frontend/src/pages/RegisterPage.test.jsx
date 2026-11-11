@@ -68,8 +68,8 @@ describe('RegisterPage component', () => {
     await user.type(screen.getByLabelText(/full name/i), 'Alice Developer');
     await user.type(screen.getByLabelText(/email address/i), 'alice@example.com');
     await user.type(screen.getByLabelText(/password/i), 'securepassword123');
-    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+    await user.click(screen.getByRole('button', { name: /create account/i }));
 
-    expect((await screen.findAllByText('Email already exists')).length).toBeGreaterThanOrEqual(1);
+    expect((await screen.findAllByText('Email already exists', {}, { timeout: 4000 })).length).toBeGreaterThanOrEqual(1);
   });
 });

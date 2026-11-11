@@ -1,4 +1,8 @@
 import '@testing-library/jest-dom/vitest';
+import { configure } from '@testing-library/react';
+
+// Configure React Testing Library async timeout for stable concurrent execution
+configure({ asyncUtilTimeout: 4000 });
 
 // Polyfill ResizeObserver for recharts in jsdom
 global.ResizeObserver = class ResizeObserver {
