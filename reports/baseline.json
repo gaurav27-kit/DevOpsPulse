@@ -18,8 +18,8 @@
   "evidence-parser-tests": {
     "name": "3. Evidence Parser Tests",
     "files": 0,
-    "tests": 16,
-    "passed": 16,
+    "tests": 17,
+    "passed": 17,
     "failed": 0,
     "skipped": 0
   },
@@ -41,9 +41,9 @@
   },
   "frontend-unit-tests": {
     "name": "6. Frontend Unit Tests",
-    "files": 22,
-    "tests": 86,
-    "passed": 86,
+    "files": 31,
+    "tests": 123,
+    "passed": 123,
     "failed": 0,
     "skipped": 0
   },
@@ -101,8 +101,7 @@
     "tests": 53,
     "passed": 53,
     "failed": 0,
-    "skipped": 0,
-    "movedTo": "perf"
+    "skipped": 0
   },
   "baseline-guard-tests": {
     "name": "14. Baseline Guard Tests",
@@ -123,8 +122,8 @@
   "playwright-e2e": {
     "name": "16. Playwright E2E Primary Workflow",
     "files": null,
-    "tests": 5,
-    "passed": 5,
+    "tests": 14,
+    "passed": 14,
     "failed": 0,
     "skipped": 0
   }

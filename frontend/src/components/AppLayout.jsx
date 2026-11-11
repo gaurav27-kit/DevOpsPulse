@@ -6,6 +6,7 @@ import {
   Server,
   AlertTriangle,
   Rocket,
+  Target,
   LogOut,
   Menu,
   X,
@@ -42,6 +43,7 @@ export function AppLayout() {
   const navItems = [
     { name: 'Dashboard', to: '/dashboard', icon: LayoutDashboard, enabled: true },
     { name: 'Applications', to: '/applications', icon: Server, enabled: true },
+    { name: 'SLOs', to: '/slos', icon: Target, enabled: true },
     {
       name: 'Incidents',
       to: '/incidents',

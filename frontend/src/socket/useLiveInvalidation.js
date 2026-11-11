@@ -25,10 +25,12 @@ export function useLiveInvalidation() {
     };
 
     const handleHealthCheckCompleted = (data) => {
+      queryClient.invalidateQueries({ queryKey: ['slos'] });
       if (data?.applicationId) {
         queryClient.invalidateQueries({ queryKey: ['healthChecks', data.applicationId] });
         queryClient.invalidateQueries({ queryKey: ['application', data.applicationId] });
         queryClient.invalidateQueries({ queryKey: ['uptime', data.applicationId] });
+        queryClient.invalidateQueries({ queryKey: ['slo', data.applicationId] });
       }
     };
 

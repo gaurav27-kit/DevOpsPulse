@@ -68,7 +68,7 @@ The automated release quality gate enforces zero regressions before code can be 
 | 3. Evidence Parser Tests | `node --test scripts/parseCounts.test.js` | Test runner output parsing across frameworks and ANSI stripping | PASS (16/16) |
 | 4. Backend Unit Tests | `npm --prefix backend test` | State transitions, uptime math, SSRF IP rules, crypto, notification rules, SLO math | PASS (123/123) |
 | 5. Backend API Tests | `npm --prefix backend run test:api` | Multi-tenant isolation matrix, auth cookies, schema validation, notifications, SLO API | PASS (149/149) |
-| 6. Frontend Unit Tests | `npm --prefix frontend test` | Component rendering, client validation, live hook invalidation, TanStack v5 cache invalidation | PASS (86/86) |
+| 6. Frontend Unit Tests | `npm --prefix frontend test` | Component rendering, client validation, live hook invalidation, TanStack v5 cache invalidation, SLO badges/gauges/charts | PASS (123/123) |
 | 7. Frontend Build | `npm --prefix frontend run build` | Zero syntax or bundling errors; production bundle generated | PASS (1/1) |
 | 8. Incident Flow Check | `npm --prefix backend run check:incidents` | Sequential lifecycle + 20 concurrent checks | PASS (17/17) |
 | 9. Analytics Check | `npm --prefix backend run check:analytics` | Uptime calculation, empty buckets, user isolation, 100+ checks latency | PASS (37/37) |
@@ -78,7 +78,7 @@ The automated release quality gate enforces zero regressions before code can be 
 | 13. SLO Lifecycle & Performance | `npm --prefix backend run check:slo` | Budget math, burn rates, timeseries, target boundaries, 86.4k/864k check scaling | PASS (58/58) |
 | 14. Baseline Guard Tests | `node --test scripts/baselineGuard.test.js` | Regression guard logic: drop fails, equal/higher passes, missing fails, update accepts | PASS (6/6) |
 | 15. SLO Rollup & Performance Proof | `node scripts/sloRollupCheck.js` | 7 equivalence datasets, 200 concurrent writes, backfill idempotency, cascade, sub-1000ms list | PASS (101/101) |
-| 16. Playwright E2E | `npm --prefix e2e run test:e2e` | Full user journeys, CRUD, secret dialog, keyboard accessibility, multi-tenant | PASS (5/5) |
+| 16. Playwright E2E | `npm --prefix e2e run test:e2e` | Full user journeys, CRUD, secret dialog, keyboard accessibility, multi-tenant, 9 SLO scenarios | PASS (14/14) |
 
 ---
 
@@ -97,7 +97,7 @@ The automated release quality gate enforces zero regressions before code can be 
 | **FR-09** | Error Handling & Security Headers | `backend/tests/api/errors.test.js` | Helmet security headers present, CORS client-origin allowlist, malformed JSON returns 400 JSON, payload >10kb rejected, generic 500 without stack trace. | None. |
 | **FR-10** | Release Quality Gate & CI/CD | `scripts/checkSecrets.js`<br>`scripts/checkAll.js`<br>`.github/workflows/ci.yml`<br>`.github/workflows/e2e.yml` | Automated credential scanning, unified quality runner, GitHub Actions CI matrix with MongoDB service container. | None. |
 | **FR-11** | Alerting & Notification Engine | `backend/tests/api/notifications.test.js`<br>`backend/tests/notificationRules.test.js`<br>`scripts/alertingCheck.js`<br>`scripts/alertingProof.mjs` | Multi-channel dispatch, signing secret HMAC-SHA256, SSRF DNS checks, cooldown & flapping prevention, local SMTP capture. | None. |
-| **FR-12** | SLO Monitoring & Daily Rollups (Backend) | `backend/tests/api/slos.test.js`<br>`backend/tests/sloRules.test.js`<br>`backend/scripts/sloCheck.js`<br>`backend/scripts/sloRollupCheck.js`<br>`scripts/baselineGuard.test.js` | Target validation (90-99.999%), 7d/30d rolling windows, integer thousandths arithmetic, 1h/6h burn rates, daily burn-down series, index explain proof on 50k checks, 101 rollup equivalence and sub-1000ms scaling benchmarks. | Calendar windows and custom latency SLIs not supported in MVP. |
+| **FR-12** | SLO Monitoring & Daily Rollups (End-to-End) | `backend/tests/api/slos.test.js`<br>`backend/tests/sloRules.test.js`<br>`backend/scripts/sloCheck.js`<br>`backend/scripts/sloRollupCheck.js`<br>`scripts/baselineGuard.test.js`<br>`frontend/src/pages/SlosPage.test.jsx`<br>`frontend/src/components/Slo*.test.jsx`<br>`frontend/src/tests/sloQueryInvalidation.test.jsx`<br>`e2e/tests/slos.spec.js` | Target validation (90-99.999%), 7d/30d rolling windows, integer thousandths arithmetic, 1h/6h burn rates, daily burn-down series, index explain proof on 50k checks, 101 rollup equivalence and sub-1000ms scaling benchmarks, 9 Playwright E2E UI scenarios, responsive cards/tables, live WebSocket invalidation, WCAG AA compliance. | Calendar windows and custom latency SLIs not supported in MVP. |
 
 ---
 

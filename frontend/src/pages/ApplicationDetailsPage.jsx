@@ -16,7 +16,9 @@ import {
   AlertTriangle,
   Rocket,
   Plus,
-  ArrowRight
+  ArrowRight,
+  Target,
+  X
 } from 'lucide-react';
 import { useApplication, useDeleteApplication } from '../hooks/useApplications.js';
 import {
@@ -24,6 +26,18 @@ import {
   useApplicationHealthChecks,
   useRunCheck
 } from '../hooks/useApplicationHealth.js';
+import {
+  useApplicationSlo,
+  useCreateSlo,
+  useUpdateSlo,
+  useDeleteSlo
+} from '../hooks/useSlo.js';
+import { SloStatusBadge } from '../components/SloStatusBadge.jsx';
+import { ErrorBudgetGauge } from '../components/ErrorBudgetGauge.jsx';
+import { BurnRateCard } from '../components/BurnRateCard.jsx';
+import { BurnDownChart } from '../components/BurnDownChart.jsx';
+import { SloForm } from '../components/SloForm.jsx';
+import { PartialWindowNotice } from '../components/PartialWindowNotice.jsx';
 import { useIncidentsList } from '../hooks/useIncidents.js';
 import { useDeploymentsList } from '../hooks/useDeployments.js';
 import { StatusBadge } from '../components/StatusBadge.jsx';
@@ -79,9 +93,24 @@ export function ApplicationDetailsPage() {
   const runCheckMutation = useRunCheck(id);
   const deleteMutation = useDeleteApplication();
 
+  // SLO Query & Mutations
+  const {
+    data: sloData,
+    isLoading: isSloLoading,
+    isError: isSloError,
+    error: sloError
+  } = useApplicationSlo(id);
+  const createSloMutation = useCreateSlo(id);
+  const updateSloMutation = useUpdateSlo(id);
+  const deleteSloMutation = useDeleteSlo(id);
+
   // Local state
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [checkBanner, setCheckBanner] = useState(null);
+  const [isSloModalOpen, setIsSloModalOpen] = useState(false);
+  const [isDeleteSloOpen, setIsDeleteSloOpen] = useState(false);
+  const [sloServerError, setSloServerError] = useState(null);
+  const [sloBanner, setSloBanner] = useState(null);
 
   const handleRunCheck = async () => {
     setCheckBanner(null);
@@ -149,6 +178,42 @@ export function ApplicationDetailsPage() {
       });
     } catch (err) {
       console.error('Delete error:', err);
+    }
+  };
+
+  const handleOpenCreateSlo = () => {
+    setSloServerError(null);
+    setIsSloModalOpen(true);
+  };
+
+  const handleOpenEditSlo = () => {
+    setSloServerError(null);
+    setIsSloModalOpen(true);
+  };
+
+  const handleSloSubmit = async (formData) => {
+    setSloServerError(null);
+    try {
+      if (sloData?.slo) {
+        await updateSloMutation.mutateAsync(formData);
+        setSloBanner({ type: 'success', message: 'SLO configuration updated successfully.' });
+      } else {
+        await createSloMutation.mutateAsync(formData);
+        setSloBanner({ type: 'success', message: 'SLO configured successfully.' });
+      }
+      setIsSloModalOpen(false);
+    } catch (err) {
+      setSloServerError(err);
+    }
+  };
+
+  const handleDeleteSlo = async () => {
+    try {
+      await deleteSloMutation.mutateAsync();
+      setIsDeleteSloOpen(false);
+      setSloBanner({ type: 'success', message: 'SLO removed successfully.' });
+    } catch (err) {
+      console.error('Delete SLO error:', err);
     }
   };
 
@@ -338,6 +403,119 @@ export function ApplicationDetailsPage() {
             <p className="text-base font-semibold text-[#131b2e]">{formatDateTime(application.createdAt)}</p>
           </div>
         </div>
+      </div>
+
+      {/* SLO Notification Banner */}
+      {sloBanner && (
+        <AlertBanner
+          type={sloBanner.type}
+          message={sloBanner.message}
+          onDismiss={() => setSloBanner(null)}
+        />
+      )}
+
+      {/* Service Level Objective (SLO) Section Card */}
+      <div className="bg-white rounded-xl border border-[#e2e8f0] p-6 shadow-sm" data-testid="slo-section">
+        <div className="flex items-center justify-between pb-4 border-b border-[#eaedff]">
+          <div className="flex items-center gap-2">
+            <Target className="w-5 h-5 text-[#a23f00]" />
+            <h2 className="text-lg font-bold text-[#131b2e]">Service Level Objective (SLO)</h2>
+          </div>
+          {sloData?.slo && (
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleOpenEditSlo}
+                className="text-xs py-1 px-3 flex items-center gap-1.5 min-h-[32px]"
+                data-testid="edit-slo-btn"
+              >
+                <Edit2 className="w-3.5 h-3.5" />
+                <span>Edit SLO</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsDeleteSloOpen(true)}
+                className="text-xs py-1 px-3 text-[#ba1a1a] hover:bg-[#ffdad6]/40 border-[#ffb4ab] flex items-center gap-1.5 min-h-[32px]"
+                data-testid="delete-slo-btn"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Delete SLO</span>
+              </Button>
+            </div>
+          )}
+        </div>
+
+        {isSloLoading ? (
+          <div className="py-8">
+            <Skeleton className="h-32" />
+          </div>
+        ) : !sloData?.slo ? (
+          <div className="py-8 text-center max-w-md mx-auto space-y-3" data-testid="slo-empty-state">
+            <div className="w-12 h-12 rounded-full bg-[#f2f3ff] text-[#59605f] flex items-center justify-center mx-auto">
+              <Target className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-base font-semibold text-[#131b2e]">No SLO configured for this service</h3>
+              <p className="text-xs text-[#5a4136] mt-1">
+                Track availability against an error budget, calculate burn rate, and get alerts before budget exhaustion.
+              </p>
+            </div>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={handleOpenCreateSlo}
+              className="text-xs font-semibold py-2 px-4"
+              data-testid="set-slo-btn"
+            >
+              Set an SLO
+            </Button>
+          </div>
+        ) : (
+          <div className="pt-5 space-y-6" data-testid="slo-configured-state">
+            {/* Headline info */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-3">
+                  <h3 className="text-base font-bold text-[#131b2e]">{sloData.slo.name}</h3>
+                  <SloStatusBadge status={sloData.status} />
+                </div>
+                <p className="text-xs text-[#5a4136] mt-0.5">
+                  {sloData.slo.targetPercent}% target over {sloData.slo.windowDays} days rolling window
+                </p>
+              </div>
+              {sloData.partialWindow && (
+                <PartialWindowNotice
+                  coveragePct={sloData.coveragePct}
+                  windowDays={sloData.slo.windowDays}
+                  totalChecks={sloData.totals?.total}
+                />
+              )}
+            </div>
+
+            {/* Visuals Grid: Gauge & Burn Rate */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+              <ErrorBudgetGauge
+                budgetRemainingPct={sloData.budgetRemainingPct}
+                budgetConsumedPct={sloData.budgetConsumedPct}
+                totalChecks={sloData.totals?.total}
+              />
+              <BurnRateCard
+                burnRate1h={sloData.burnRate1h}
+                burnRate6h={sloData.burnRate6h}
+                fastBurn={sloData.fastBurn}
+                slowBurn={sloData.slowBurn}
+              />
+            </div>
+
+            {/* Burn Down Chart */}
+            <BurnDownChart
+              series={sloData.series}
+              windowDays={sloData.slo.windowDays}
+            />
+          </div>
+        )}
       </div>
 
       {/* Analytics & Metrics Section Header */}
@@ -576,6 +754,56 @@ export function ApplicationDetailsPage() {
         isLoading={deleteMutation.isPending}
         onConfirm={handleDelete}
         onClose={() => setIsDeleteOpen(false)}
+      />
+
+      {/* SLO Create/Edit Modal */}
+      {isSloModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#283044]/50 backdrop-blur-xs overflow-y-auto"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="slo-modal-title"
+        >
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-xl border border-[#e2e8f0] relative my-8">
+            <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#eaedff]">
+              <div className="flex items-center gap-2">
+                <Target className="w-5 h-5 text-[#a23f00]" />
+                <h3 id="slo-modal-title" className="text-lg font-bold text-[#131b2e]">
+                  {sloData?.slo ? 'Edit Service Level Objective' : 'Configure Service Level Objective'}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsSloModalOpen(false)}
+                className="text-[#5a4136] hover:text-[#131b2e] p-1 rounded-lg hover:bg-[#f2f3ff] transition-colors"
+                aria-label="Close dialog"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <SloForm
+              initialData={sloData?.slo || null}
+              onSubmit={handleSloSubmit}
+              onCancel={() => setIsSloModalOpen(false)}
+              isSubmitting={createSloMutation.isPending || updateSloMutation.isPending}
+              serverError={sloServerError}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Delete SLO Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={isDeleteSloOpen}
+        title="Delete SLO?"
+        description={`Are you sure you want to remove the Service Level Objective '${sloData?.slo?.name || ''}' from this application? Historical health check data will not be deleted, but budget tracking will stop.`}
+        confirmText="Yes, delete SLO"
+        cancelText="Cancel"
+        variant="danger"
+        isLoading={deleteSloMutation.isPending}
+        onConfirm={handleDeleteSlo}
+        onClose={() => setIsDeleteSloOpen(false)}
       />
     </div>
   );

@@ -15,6 +15,7 @@ import { IncidentsPage } from './pages/IncidentsPage.jsx';
 import { IncidentDetailsPage } from './pages/IncidentDetailsPage.jsx';
 import { DeploymentsPage } from './pages/DeploymentsPage.jsx';
 import { DeploymentCreatePage } from './pages/DeploymentCreatePage.jsx';
+import { SlosPage } from './pages/SlosPage.jsx';
 import { NotificationsPage } from './pages/NotificationsPage.jsx';
 import { NotFoundPage } from './pages/NotFoundPage.jsx';
 
@@ -52,6 +53,7 @@ export default function App() {
           <Route path="/applications/new" element={<ApplicationCreatePage />} />
           <Route path="/applications/:id" element={<ApplicationDetailsPage />} />
           <Route path="/applications/:id/edit" element={<ApplicationEditPage />} />
+          <Route path="/slos" element={<SlosPage />} />
           <Route path="/incidents" element={<IncidentsPage />} />
           <Route path="/incidents/:id" element={<IncidentDetailsPage />} />
           <Route path="/deployments" element={<DeploymentsPage />} />

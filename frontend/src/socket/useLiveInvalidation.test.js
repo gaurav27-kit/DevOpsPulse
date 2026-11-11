@@ -70,14 +70,16 @@ describe('useLiveInvalidation hook', () => {
     expect(mockQueryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['uptime', 'app1'] });
   });
 
-  it('invalidates healthChecks and uptime on healthcheck:completed event', () => {
+  it('invalidates healthChecks, uptime, and SLO on healthcheck:completed event', () => {
     renderHook(() => useLiveInvalidation());
 
     listeners['healthcheck:completed']({ applicationId: 'app2', success: true });
 
+    expect(mockQueryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['slos'] });
     expect(mockQueryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['healthChecks', 'app2'] });
     expect(mockQueryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['application', 'app2'] });
     expect(mockQueryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['uptime', 'app2'] });
+    expect(mockQueryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['slo', 'app2'] });
   });
 
   it('invalidates incidents and dashboard on incident:created event', () => {
