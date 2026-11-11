@@ -21,7 +21,7 @@ describe('RegisterPage component', () => {
   });
 
   it('validates client constraints: name length, email format, password min 8 chars', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderWithProviders(<RegisterPage />);
 
     // Click submit empty
@@ -42,7 +42,7 @@ describe('RegisterPage component', () => {
 
   it('submits valid registration data', async () => {
     mockRegister.mockResolvedValueOnce({ success: true });
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderWithProviders(<RegisterPage />);
 
     await user.type(screen.getByLabelText(/full name/i), 'Alice Developer');
@@ -62,7 +62,7 @@ describe('RegisterPage component', () => {
       fieldErrors: { email: 'Email already exists' },
       message: 'Email already exists'
     });
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderWithProviders(<RegisterPage />);
 
     await user.type(screen.getByLabelText(/full name/i), 'Alice Developer');
