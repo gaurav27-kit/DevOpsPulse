@@ -16,6 +16,8 @@
     "rollups:backfill": "node scripts/backfillRollups.js",
     "check:slo-rollups": "node scripts/sloRollupCheck.js",
     "check:slo": "npm --prefix backend run check:slo",
+    "check:perf": "node scripts/sloPerf.js",
+    "ci:local": "node scripts/ciLocal.js",
     "check:all": "node scripts/checkAll.js"
   }
 }

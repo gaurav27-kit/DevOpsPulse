@@ -260,3 +260,16 @@ test('Frontend build - success', () => {
   });
 });
 
+test('Custom check scripts - SLO performance suite summary', () => {
+  const sample = `=============================================================\nSLO Performance Suite: 5 passed, 0 failed\n=============================================================`;
+  const result = parseCounts(sample, 'slo-perf');
+  assert.deepEqual(result, {
+    files: 1,
+    tests: 5,
+    passed: 5,
+    failed: 0,
+    skipped: 0
+  });
+});
+
+

@@ -655,127 +655,134 @@ async function main() {
 
     // --------------------------------------------------------------------------
     // j) Scaling Honesty: 86,400 checks single app & list endpoint with 10 apps (Section 3a)
+    // Moved to dedicated perf suite per Step 15 Final A3; runs when --perf flag is passed
     // --------------------------------------------------------------------------
-    console.log('\n[Check j] Scaling honesty: realistic worst-case performance measurements');
+    const runPerf = process.argv.includes('--perf') || process.env.RUN_PERF === 'true';
+    if (runPerf) {
+      console.log('\n[Check j] Scaling honesty: realistic worst-case performance measurements (--perf active)');
 
-    // 1. Single Application with 86,400 checks (30 days at 30-second interval)
-    console.log('  1. Testing single application with 86,400 checks over a 30-day window...');
-    const app86k = await Application.create({
-      name: `App 86k ${suffix}`,
-      url: `https://app-86k-${suffix}.example.com`,
-      ownerId: userA._id,
-      status: 'up',
-      nextCheckAt: new Date()
-    });
-
-    await requestJson(baseUrl, `/applications/${app86k._id}/slo`, {
-      method: 'POST',
-      cookie: cookieA,
-      body: {
-        name: 'App 86k SLO 99.9%',
-        targetPercent: 99.9,
-        windowDays: 30
-      }
-    });
-
-    const total86k = 86400;
-    const batchSize = 20000;
-    const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
-
-    const genStart86k = performance.now();
-    for (let offset = 0; offset < total86k; offset += batchSize) {
-      const chunk = [];
-      const count = Math.min(batchSize, total86k - offset);
-      for (let i = 0; i < count; i++) {
-        const checkIdx = offset + i;
-        chunk.push({
-          applicationId: app86k._id,
-          ownerId: userA._id,
-          checkedAt: new Date(now - (checkIdx * 30000)), // evenly spaced 30 seconds across 30 days
-          success: checkIdx % 100 !== 0,
-          statusCode: checkIdx % 100 === 0 ? 500 : 200,
-          responseTimeMs: 65 + (checkIdx % 20)
-        });
-      }
-      await HealthCheck.insertMany(chunk, { ordered: false });
-    }
-    const genDuration86k = Math.round(performance.now() - genStart86k);
-    console.log(`  Inserted 86,400 checks in ${genDuration86k} ms.`);
-
-    // Measure single app SLO calculation via HTTP endpoint
-    const singleStart = performance.now();
-    const res86k = await requestJson(baseUrl, `/applications/${app86k._id}/slo`, {
-      cookie: cookieA
-    });
-    const singleDurationMs = Number((performance.now() - singleStart).toFixed(2));
-    assertEqual(res86k.status, 200, 'GET /applications/:id/slo for 86,400 checks returns 200');
-    assertEqual(res86k.data?.data?.totals?.total, 86400, 'All 86,400 checks accurately processed');
-    console.log(`  Single App (86,400 checks) Endpoint Latency: ${singleDurationMs} ms.`);
-    assert(singleDurationMs <= 3000, `Single app SLO latency within <= 3000ms threshold (measured: ${singleDurationMs}ms)`);
-    if (singleDurationMs > 2000) {
-      console.log(`  NOTE: Single app SLO calculation latency exceeded 2000ms (${singleDurationMs}ms) under 86,400 check volume.`);
-    }
-
-    // 2. List Endpoint with 10 SLOs of 30-day windows over ~86,400 checks each
-    console.log('\n  2. Testing list endpoint (/api/v1/slos) with 10 applications over ~86,400 checks each...');
-    const listApps = [];
-    for (let a = 0; a < 10; a++) {
-      const appItem = await Application.create({
-        name: `Scale App ${a + 1} ${suffix}`,
-        url: `https://scale-app-${a + 1}-${suffix}.example.com`,
+      // 1. Single Application with 86,400 checks (30 days at 30-second interval)
+      console.log('  1. Testing single application with 86,400 checks over a 30-day window...');
+      const app86k = await Application.create({
+        name: `App 86k ${suffix}`,
+        url: `https://app-86k-${suffix}.example.com`,
         ownerId: userA._id,
         status: 'up',
         nextCheckAt: new Date()
       });
-      listApps.push(appItem);
 
-      await requestJson(baseUrl, `/applications/${appItem._id}/slo`, {
+      await requestJson(baseUrl, `/applications/${app86k._id}/slo`, {
         method: 'POST',
         cookie: cookieA,
         body: {
-          name: `Scale App ${a + 1} SLO`,
-          targetPercent: 99.0 + (a % 10) * 0.09,
+          name: 'App 86k SLO 99.9%',
+          targetPercent: 99.9,
           windowDays: 30
         }
       });
-    }
 
-    // Generate ~86,400 checks for each of the 10 applications
-    console.log('  Generating ~86,400 checks for each of the 10 applications (total ~864,000 documents)...');
-    const scaleGenStart = performance.now();
-    for (const appItem of listApps) {
+      const total86k = 86400;
+      const batchSize = 20000;
+      const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+
+      const genStart86k = performance.now();
       for (let offset = 0; offset < total86k; offset += batchSize) {
         const chunk = [];
         const count = Math.min(batchSize, total86k - offset);
         for (let i = 0; i < count; i++) {
           const checkIdx = offset + i;
           chunk.push({
-            applicationId: appItem._id,
+            applicationId: app86k._id,
             ownerId: userA._id,
-            checkedAt: new Date(now - (checkIdx * 30000)),
+            checkedAt: new Date(now - (checkIdx * 30000)), // evenly spaced 30 seconds across 30 days
             success: checkIdx % 100 !== 0,
             statusCode: checkIdx % 100 === 0 ? 500 : 200,
-            responseTimeMs: 50 + (checkIdx % 30)
+            responseTimeMs: 65 + (checkIdx % 20)
           });
         }
         await HealthCheck.insertMany(chunk, { ordered: false });
       }
-    }
-    const scaleGenDuration = Math.round(performance.now() - scaleGenStart);
-    console.log(`  Inserted ~864,000 checks across 10 applications in ${scaleGenDuration} ms.`);
+      const genDuration86k = Math.round(performance.now() - genStart86k);
+      console.log(`  Inserted 86,400 checks in ${genDuration86k} ms.`);
 
-    // Measure GET /api/v1/slos latency through real HTTP server
-    cookieA = `token=${jwt.sign({ id: userA._id.toString() }, env.JWT_SECRET, { expiresIn: '24h' })}`;
-    const listStart = performance.now();
-    const resList = await requestJson(baseUrl, '/slos?limit=10', {
-      cookie: cookieA
-    });
-    const listDurationMs = Number((performance.now() - listStart).toFixed(2));
-    assertEqual(resList.status, 200, 'GET /api/v1/slos returns 200 for 10 applications');
-    assertEqual(resList.data?.data?.slos?.length, 10, 'Returned 10 SLOs in list endpoint');
-    console.log(`  List Endpoint (10 SLOs x 86,400 checks) Latency: ${listDurationMs} ms.`);
-    if (listDurationMs > 2000) {
-      console.log(`  NOTE: List endpoint latency exceeded 2000ms (${listDurationMs}ms) under 10 x 86,400 check volume (raw check scanning limitation).`);
+      // Measure single app SLO calculation via HTTP endpoint
+      const singleStart = performance.now();
+      const res86k = await requestJson(baseUrl, `/applications/${app86k._id}/slo`, {
+        cookie: cookieA
+      });
+      const singleDurationMs = Number((performance.now() - singleStart).toFixed(2));
+      assertEqual(res86k.status, 200, 'GET /applications/:id/slo for 86,400 checks returns 200');
+      assertEqual(res86k.data?.data?.totals?.total, 86400, 'All 86,400 checks accurately processed');
+      console.log(`  Single App (86,400 checks) Endpoint Latency: ${singleDurationMs} ms.`);
+      assert(singleDurationMs <= 3000, `Single app SLO latency within <= 3000ms threshold (measured: ${singleDurationMs}ms)`);
+      if (singleDurationMs > 2000) {
+        console.log(`  NOTE: Single app SLO calculation latency exceeded 2000ms (${singleDurationMs}ms) under 86,400 check volume.`);
+      }
+
+      // 2. List Endpoint with 10 SLOs of 30-day windows over ~86,400 checks each
+      console.log('\n  2. Testing list endpoint (/api/v1/slos) with 10 applications over ~86,400 checks each...');
+      const listApps = [];
+      for (let a = 0; a < 10; a++) {
+        const appItem = await Application.create({
+          name: `Scale App ${a + 1} ${suffix}`,
+          url: `https://scale-app-${a + 1}-${suffix}.example.com`,
+          ownerId: userA._id,
+          status: 'up',
+          nextCheckAt: new Date()
+        });
+        listApps.push(appItem);
+
+        await requestJson(baseUrl, `/applications/${appItem._id}/slo`, {
+          method: 'POST',
+          cookie: cookieA,
+          body: {
+            name: `Scale App ${a + 1} SLO`,
+            targetPercent: 99.0 + (a % 10) * 0.09,
+            windowDays: 30
+          }
+        });
+      }
+
+      // Generate ~86,400 checks for each of the 10 applications
+      console.log('  Generating ~86,400 checks for each of the 10 applications (total ~864,000 documents)...');
+      const scaleGenStart = performance.now();
+      for (const appItem of listApps) {
+        for (let offset = 0; offset < total86k; offset += batchSize) {
+          const chunk = [];
+          const count = Math.min(batchSize, total86k - offset);
+          for (let i = 0; i < count; i++) {
+            const checkIdx = offset + i;
+            chunk.push({
+              applicationId: appItem._id,
+              ownerId: userA._id,
+              checkedAt: new Date(now - (checkIdx * 30000)),
+              success: checkIdx % 100 !== 0,
+              statusCode: checkIdx % 100 === 0 ? 500 : 200,
+              responseTimeMs: 50 + (checkIdx % 30)
+            });
+          }
+          await HealthCheck.insertMany(chunk, { ordered: false });
+        }
+      }
+      const scaleGenDuration = Math.round(performance.now() - scaleGenStart);
+      console.log(`  Inserted ~864,000 checks across 10 applications in ${scaleGenDuration} ms.`);
+
+      // Measure GET /api/v1/slos latency through real HTTP server
+      cookieA = `token=${jwt.sign({ id: userA._id.toString() }, env.JWT_SECRET, { expiresIn: '24h' })}`;
+      const listStart = performance.now();
+      const resList = await requestJson(baseUrl, '/slos?limit=10', {
+        cookie: cookieA
+      });
+      const listDurationMs = Number((performance.now() - listStart).toFixed(2));
+      assertEqual(resList.status, 200, 'GET /api/v1/slos returns 200 for 10 applications');
+      assertEqual(resList.data?.data?.slos?.length, 10, 'Returned 10 SLOs in list endpoint');
+      console.log(`  List Endpoint (10 SLOs x 86,400 checks) Latency: ${listDurationMs} ms.`);
+      if (listDurationMs > 2000) {
+        console.log(`  NOTE: List endpoint latency exceeded 2000ms (${listDurationMs}ms) under 10 x 86,400 check volume (raw check scanning limitation).`);
+      }
+    } else {
+      console.log('\n[Check j] Heavy volume benchmarks (86,400 & 864,000 checks) moved to perf suite.');
+      console.log('          Skipped in default quality gate. Run with --perf to execute.');
     }
 
   } finally {

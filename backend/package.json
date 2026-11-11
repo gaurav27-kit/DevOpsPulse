@@ -16,7 +16,8 @@
     "check:alerting": "node ../scripts/alertingCheck.js",
     "rollups:backfill": "node ../scripts/backfillRollups.js",
     "check:slo-rollups": "node ../scripts/sloRollupCheck.js",
-    "check:slo": "node scripts/sloCheck.js"
+    "check:slo": "node scripts/sloCheck.js",
+    "check:perf": "node scripts/sloPerf.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

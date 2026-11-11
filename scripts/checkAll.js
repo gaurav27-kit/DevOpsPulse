@@ -24,6 +24,7 @@ const baselineFile = path.resolve(rootDir, 'reports/baseline.json');
 // Parse flags
 const args = process.argv.slice(2);
 const updateBaseline = args.includes('--update-baseline');
+const runPerf = args.includes('--perf') || process.env.RUN_PERF === 'true';
 const skipPlaywright =
   args.includes('--no-playwright') ||
   args.includes('--skip-playwright') ||
@@ -165,6 +166,14 @@ const steps = [
     args: ['run', 'test:e2e'],
     cwd: 'e2e',
     optional: skipPlaywright
+  },
+  {
+    name: '17. SLO Volume Performance Benchmarks (864k checks)',
+    slug: 'slo-perf',
+    command: 'node',
+    args: ['scripts/sloPerf.js'],
+    cwd: '.',
+    optional: !runPerf
   }
 ];
 

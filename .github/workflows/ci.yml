@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Run Secret Scanner
         run: node scripts/checkSecrets.js
@@ -46,7 +46,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
           cache-dependency-path: backend/package-lock.json
 
@@ -71,6 +71,14 @@ jobs:
           CLIENT_ORIGIN: http://localhost:5173
         run: npm run test:api
 
+      - name: Upload Backend Test Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-logs
+          path: backend/*.log
+          retention-days: 7
+
   frontend:
     name: Frontend Component Tests & Build
     runs-on: ubuntu-latest
@@ -81,7 +89,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
           cache-dependency-path: frontend/package-lock.json
 
@@ -97,6 +105,14 @@ jobs:
         working-directory: frontend
         run: npm run build
 
+      - name: Upload Frontend Build Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-test-logs
+          path: frontend/*.log
+          retention-days: 7
+
   audit:
     name: Dependency Security Audit
     runs-on: ubuntu-latest
@@ -107,7 +123,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Backend Production Audit
         working-directory: backend
@@ -140,7 +156,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install Root Dependencies
         run: npm ci
@@ -171,3 +187,20 @@ jobs:
           path: reports/last-run
           retention-days: 14
 
+      - name: Publish Quality Gate Summary to Step Summary
+        if: always()
+        run: |
+          node -e "
+            const fs = require('fs');
+            const summaryFile = 'reports/last-run/summary.json';
+            if (!fs.existsSync(summaryFile)) process.exit(0);
+            const s = JSON.parse(fs.readFileSync(summaryFile, 'utf8'));
+            let md = '### Quality Gate Execution Summary (' + (s.overall.passed ? '✅ PASSED' : '❌ FAILED') + ')\n\n';
+            md += '| # | Suite | Tests | Passed | Failed | Skipped | Duration | Status |\n';
+            md += '|---|---|---|---|---|---|---|---|\n';
+            s.suites.forEach((st, idx) => {
+              md += '| ' + (idx + 1) + ' | ' + st.name + ' | ' + (st.tests ?? '-') + ' | ' + (st.passed ?? '-') + ' | ' + (st.failed ?? '-') + ' | ' + (st.skipped ?? 0) + ' | ' + (st.durationMs / 1000).toFixed(1) + 's | ' + (st.status === 'passed' ? '✅' : '❌') + ' |\n';
+            });
+            md += '\n**Overall Duration**: ' + (s.overall.durationMs / 1000).toFixed(1) + 's | **Git Clean**: ' + s.git.clean + ' | **Commit**: ' + s.git.commit + '\n';
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, md);
+          "

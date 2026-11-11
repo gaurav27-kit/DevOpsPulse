@@ -104,9 +104,10 @@ export function parseCounts(output, slug = '') {
   // "── Results: 17 passed, 0 failed ──"
   // "Proofs Summary: 30 passed, 0 failed (Total: 30)"
   // "--- Socket.IO Test Results: 13 passed, 0 failed ---"
-  // "SLO Check Summary: 41 Passed, 0 Failed"
+  // "SLO Check Summary: 53 Passed, 0 Failed"
+  // "SLO Performance Suite: 5 passed, 0 failed"
   const scriptMatch =
-    clean.match(/(?:Results|Summary|Test Results)[:\s]+(\d+)\s+passed,\s*(\d+)\s+failed/i) ||
+    clean.match(/(?:Results|Summary|Test Results|Performance Suite|Suite)[:\s]+(\d+)\s+passed,\s*(\d+)\s+failed/i) ||
     clean.match(/Summary[:\s]+(\d+)\s+Passed,\s*(\d+)\s+Failed/i) ||
     clean.match(/(\d+)\s+passed,\s*(\d+)\s+failed/i);
   if (scriptMatch) {
