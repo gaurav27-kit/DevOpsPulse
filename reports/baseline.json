@@ -1,0 +1,114 @@
+{
+  "secret-check": {
+    "name": "1. Secret Check",
+    "files": 1,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "secret-matcher-tests": {
+    "name": "2. Secret Matcher Tests",
+    "files": 0,
+    "tests": 11,
+    "passed": 11,
+    "failed": 0,
+    "skipped": 0
+  },
+  "evidence-parser-tests": {
+    "name": "3. Evidence Parser Tests",
+    "files": 0,
+    "tests": 16,
+    "passed": 16,
+    "failed": 0,
+    "skipped": 0
+  },
+  "backend-unit-tests": {
+    "name": "4. Backend Unit Tests",
+    "files": 19,
+    "tests": 123,
+    "passed": 123,
+    "failed": 0,
+    "skipped": 0
+  },
+  "backend-api-tests": {
+    "name": "5. Backend API Integration Tests",
+    "files": 11,
+    "tests": 149,
+    "passed": 149,
+    "failed": 0,
+    "skipped": 0
+  },
+  "frontend-unit-tests": {
+    "name": "6. Frontend Unit Tests",
+    "files": 22,
+    "tests": 86,
+    "passed": 86,
+    "failed": 0,
+    "skipped": 0
+  },
+  "frontend-build": {
+    "name": "7. Frontend Production Build",
+    "files": 1,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "incident-flow-check": {
+    "name": "8. Incident Flow Check",
+    "files": 1,
+    "tests": 17,
+    "passed": 17,
+    "failed": 0,
+    "skipped": 0
+  },
+  "analytics-check": {
+    "name": "9. Analytics Check",
+    "files": 1,
+    "tests": 37,
+    "passed": 37,
+    "failed": 0,
+    "skipped": 0
+  },
+  "socket-security-check": {
+    "name": "10. Socket.IO Security Check",
+    "files": 1,
+    "tests": 13,
+    "passed": 13,
+    "failed": 0,
+    "skipped": 0
+  },
+  "alerting-lifecycle-check": {
+    "name": "11. Alerting Lifecycle Check",
+    "files": 1,
+    "tests": 16,
+    "passed": 16,
+    "failed": 0,
+    "skipped": 0
+  },
+  "automated-alerting-proofs": {
+    "name": "12. Automated Alerting Proofs",
+    "files": 1,
+    "tests": 30,
+    "passed": 30,
+    "failed": 0,
+    "skipped": 0
+  },
+  "slo-check": {
+    "name": "13. SLO Lifecycle & Performance Check",
+    "files": 1,
+    "tests": 58,
+    "passed": 58,
+    "failed": 0,
+    "skipped": 0
+  },
+  "playwright-e2e": {
+    "name": "14. Playwright E2E Primary Workflow",
+    "files": null,
+    "tests": 5,
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0
+  }
+}

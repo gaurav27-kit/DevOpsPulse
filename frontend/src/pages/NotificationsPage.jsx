@@ -120,7 +120,7 @@ export function NotificationsPage() {
   const createMutation = useMutation({
     mutationFn: (data) => notificationsApi.createChannel(data),
     onSuccess: (res) => {
-      queryClient.invalidateQueries(['notifications', 'channels']);
+      queryClient.invalidateQueries({ queryKey: ['notifications', 'channels'] });
       setIsCreateOpen(false);
       resetForm();
       const returnedSecret = res?.data?.signingSecret;
@@ -156,7 +156,7 @@ export function NotificationsPage() {
   const updateMutation = useMutation({
     mutationFn: ({ id, data }) => notificationsApi.updateChannel(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries(['notifications', 'channels']);
+      queryClient.invalidateQueries({ queryKey: ['notifications', 'channels'] });
       setEditingChannel(null);
       setFeedback({ message: 'Channel updated successfully.', variant: 'success' });
     },
@@ -181,8 +181,8 @@ export function NotificationsPage() {
   const deleteMutation = useMutation({
     mutationFn: (id) => notificationsApi.deleteChannel(id),
     onSuccess: () => {
-      queryClient.invalidateQueries(['notifications', 'channels']);
-      queryClient.invalidateQueries(['notifications', 'deliveries']);
+      queryClient.invalidateQueries({ queryKey: ['notifications', 'channels'] });
+      queryClient.invalidateQueries({ queryKey: ['notifications', 'deliveries'] });
       setDeleteChannelConfirm(null);
       setFeedback({ message: 'Channel deleted successfully.', variant: 'success' });
     },
@@ -194,7 +194,7 @@ export function NotificationsPage() {
   const testMutation = useMutation({
     mutationFn: (id) => notificationsApi.testChannel(id),
     onSuccess: (res, channelId) => {
-      queryClient.invalidateQueries(['notifications', 'deliveries']);
+      queryClient.invalidateQueries({ queryKey: ['notifications', 'deliveries'] });
       setTestResult((prev) => ({
         ...prev,
         [channelId]: { status: 'success', message: `Test sent (${res?.data?.status || 'ok'})` }

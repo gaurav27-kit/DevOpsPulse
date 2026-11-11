@@ -116,3 +116,55 @@ jobs:
         continue-on-error: true
         run: npm audit --omit=dev
 
+  quality-gate:
+    name: Master Quality Gate Suite
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd mongosh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Root Dependencies
+        run: npm ci
+
+      - name: Install Backend Dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Run Master Quality Gate Suite (--no-playwright)
+        env:
+          NODE_ENV: test
+          MONGO_URI: mongodb://127.0.0.1:27017/devopspulse
+          MONGO_URI_TEST: mongodb://127.0.0.1:27017/devopspulse_test
+          JWT_SECRET: ci_test_jwt_secret_must_be_at_least_32_characters_long
+          SCHEDULER_ENABLED: false
+          CLIENT_ORIGIN: http://localhost:5173
+        run: node scripts/checkAll.js --no-playwright
+
+      - name: Upload Test & Quality Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-gate-reports
+          path: reports/last-run
+          retention-days: 14
+

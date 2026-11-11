@@ -326,3 +326,66 @@ node scripts/verifyWebhookSignature.mjs `
   --secret "your_64_char_signing_secret"
 ```
 
+---
+
+## 7. Service Level Objectives (SLOs) (`/api/v1/applications/:id/slo` & `/api/v1/slos`)
+
+Service Level Objectives track service reliability against rolling evaluation windows (7 or 30 days) using recorded check telemetry.
+
+### Endpoints
+
+- `POST /api/v1/applications/:id/slo`
+  - Creates an SLO for the specified application.
+  - Body: `{ name: string (1-60), targetPercent: number (90.000 - 99.999), windowDays: 7 | 30 }`
+  - Rejects unrecognized body properties (`.strict()`).
+  - Returns HTTP 201 with the created SLO.
+  - Returns HTTP 409 if the application already has an SLO ("This application already has an SLO") or user exceeds 20 SLOs.
+  - Returns HTTP 404 if the application does not exist or belongs to another user.
+
+- `GET /api/v1/applications/:id/slo`
+  - Returns HTTP 200 with current SLO configuration and aggregated metrics:
+    ```json
+    {
+      "success": true,
+      "data": {
+        "slo": { "_id": "...", "name": "API 99.9%", "targetPercent": 99.9, "windowDays": 30 },
+        "status": "healthy | at_risk | breached | insufficient_data",
+        "sli": 99.95,
+        "errorRatePct": 0.05,
+        "budgetConsumedPct": 50.0,
+        "budgetRemainingPct": 50.0,
+        "totals": { "good": 1999, "bad": 1, "total": 2000 },
+        "coveragePct": 100.0,
+        "partialWindow": false,
+        "burnRate1h": 0.5,
+        "burnRate6h": 0.8,
+        "fastBurn": false,
+        "slowBurn": false,
+        "series": [
+          { "day": "2026-10-11", "total": 288, "bad": 0, "cumulativeBudgetConsumedPct": 0.0 }
+        ],
+        "window": { "from": "2026-10-11T...", "to": "2026-11-10T..." }
+      }
+    }
+    ```
+  - The `series` array returns daily calendar points spanning the rolling window: exactly `windowDays + 1` consecutive UTC calendar days (e.g. 8 points for 7d, 31 points for 30d) because the rolling window starts and ends at partial UTC days. Each point contains `day` (`YYYY-MM-DD`), `total`, `bad`, and `cumulativeBudgetConsumedPct` tracking cumulative budget consumption up to that day. The last point's `cumulativeBudgetConsumedPct` equals the headline `budgetConsumedPct`.
+  - Returns HTTP 404 if no SLO exists for the application.
+
+- `PATCH /api/v1/applications/:id/slo`
+  - Updates mutable fields (`name`, `targetPercent`, `windowDays`). At least one field required.
+  - Returns HTTP 200 with updated SLO object.
+
+- `DELETE /api/v1/applications/:id/slo`
+  - Deletes the SLO definition.
+  - Returns HTTP 200 `{ "success": true, "data": { "deleted": true } }`.
+
+- `GET /api/v1/slos`
+  - List all SLOs belonging to the authenticated user.
+  - Query parameters:
+    - `page` (default 1), `limit` (default 10, max 50)
+    - `status`: filter by `healthy`, `at_risk`, `breached`, `insufficient_data`
+    - `sortBy`: `createdAt` or `name` (sorting by `budgetConsumedPct` is rejected with 400)
+    - `order`: `asc` or `desc`
+  - Returns `{ "success": true, "data": { "slos": [...], "pagination": { "page", "limit", "total", "totalPages" } } }`.
+
+

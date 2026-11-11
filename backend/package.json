@@ -13,7 +13,8 @@
     "check:analytics": "node scripts/analyticsCheck.js",
     "check:sockets": "node scripts/socketCheck.js",
     "seed:demo": "node scripts/seedDemoData.js",
-    "check:alerting": "node ../scripts/alertingCheck.js"
+    "check:alerting": "node ../scripts/alertingCheck.js",
+    "check:slo": "node scripts/sloCheck.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

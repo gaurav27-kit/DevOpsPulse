@@ -4,6 +4,7 @@ import * as applicationController from '../controllers/applicationController.js'
 import * as healthCheckController from '../controllers/healthCheckController.js';
 import { createDeploymentHandler } from '../controllers/deploymentController.js';
 import { getUptimeHandler } from '../controllers/analyticsController.js';
+import * as sloController from '../controllers/sloController.js';
 import { requireAuth } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import { assertSafeUrlSyntax } from '../services/urlSafetyService.js';
@@ -259,6 +260,91 @@ router.get(
   '/:id/uptime',
   validate({ params: mongoIdParamsSchema, query: uptimeQuerySchema }),
   getUptimeHandler
+);
+
+// SLO sub-routes schemas
+const createSloSchema = z
+  .object({
+    name: z
+      .string({ required_error: 'Name is required' })
+      .trim()
+      .min(1, 'Name must be at least 1 character')
+      .max(60, 'Name cannot exceed 60 characters'),
+    targetPercent: z
+      .number({ required_error: 'targetPercent is required' })
+      .min(90.0, 'Target percent must be at least 90%')
+      .max(99.999, 'Target percent cannot exceed 99.999%')
+      .refine(
+        (val) => {
+          const str = String(val);
+          const dec = str.split('.')[1];
+          return !dec || dec.length <= 3;
+        },
+        'Target percent cannot have more than 3 decimal places'
+      ),
+    windowDays: z.union([z.literal(7), z.literal(30)], {
+      errorMap: () => ({ message: 'Window days must be either 7 or 30' })
+    })
+  })
+  .strict();
+
+const updateSloSchema = z
+  .object({
+    name: z
+      .string()
+      .trim()
+      .min(1, 'Name must be at least 1 character')
+      .max(60, 'Name cannot exceed 60 characters')
+      .optional(),
+    targetPercent: z
+      .number()
+      .min(90.0, 'Target percent must be at least 90%')
+      .max(99.999, 'Target percent cannot exceed 99.999%')
+      .refine(
+        (val) => {
+          if (val === undefined) return true;
+          const str = String(val);
+          const dec = str.split('.')[1];
+          return !dec || dec.length <= 3;
+        },
+        'Target percent cannot have more than 3 decimal places'
+      )
+      .optional(),
+    windowDays: z
+      .union([z.literal(7), z.literal(30)], {
+        errorMap: () => ({ message: 'Window days must be either 7 or 30' })
+      })
+      .optional()
+  })
+  .strict()
+  .refine(
+    (data) => Object.keys(data).length > 0,
+    'At least one field must be provided for update'
+  );
+
+// SLO sub-routes
+router.post(
+  '/:id/slo',
+  validate({ params: mongoIdParamsSchema, body: createSloSchema }),
+  sloController.createSlo
+);
+
+router.get(
+  '/:id/slo',
+  validate({ params: mongoIdParamsSchema }),
+  sloController.getSlo
+);
+
+router.patch(
+  '/:id/slo',
+  validate({ params: mongoIdParamsSchema, body: updateSloSchema }),
+  sloController.updateSlo
+);
+
+router.delete(
+  '/:id/slo',
+  validate({ params: mongoIdParamsSchema }),
+  sloController.deleteSlo
 );
 
 export default router;

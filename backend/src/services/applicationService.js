@@ -2,6 +2,7 @@ import { Application } from '../models/Application.js';
 import { HealthCheck } from '../models/HealthCheck.js';
 import { Incident } from '../models/Incident.js';
 import { Deployment } from '../models/Deployment.js';
+import { Slo } from '../models/Slo.js';
 import { AppError } from '../utils/AppError.js';
 import { assertSafeDestination } from './urlSafetyService.js';
 import { closeForUrlChange } from './incidentService.js';
@@ -174,6 +175,7 @@ export const updateApplication = async (ownerId, id, data) => {
  * - Health check telemetry (HealthCheck collection)
  * - Incidents (added in Step 6)
  * - Deployment records (added in Step 7)
+ * - Service Level Objectives (Slo collection - added in Step 15)
  * This prevents orphaned documents and maintains referential integrity.
  */
 export const deleteApplication = async (ownerId, id) => {
@@ -188,6 +190,9 @@ export const deleteApplication = async (ownerId, id) => {
 
   // Cascade: delete all deployment records for this application
   await Deployment.deleteMany({ applicationId: id });
+
+  // Cascade: delete associated SLO for this application
+  await Slo.deleteOne({ applicationId: id });
 
   await Application.deleteOne({ _id: id, ownerId });
 

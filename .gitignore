@@ -23,4 +23,12 @@ Thumbs.db
 
 # Logs
 *.log
+reports/*
+!reports/baseline.json
+
+# Test outputs & Playwright artifacts
+test-results/
+playwright-report/
+*/test-results/
+*/playwright-report/
 

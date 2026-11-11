@@ -74,9 +74,20 @@ Frontend runs on `http://localhost:5173`.
   - Pure rule engine with minimum severity thresholds, anti-flapping cooldowns (5m), and per-user hourly rate caps (30/hr).
   - Deduplication unique index ensuring zero duplicate alerts per incident event.
 
+- **Service Level Objectives (SLO) Monitoring (Release 3 - Backend)**:
+  - Check-count based SLI reliability metrics evaluated across 7-day or 30-day rolling windows.
+  - User-defined targets between 90.000% and 99.999% (up to 3 decimal places) using integer thousandths arithmetic.
+  - Real-time error budget tracking: budget consumed %, budget remaining %, and health classification (`healthy`, `at_risk`, `breached`, `insufficient_data`).
+  - Multi-window burn rate tracking over 1-hour (`burnRate1h`) and 6-hour (`burnRate6h`) lookback intervals with fast-burn (`>= 14.4`) and slow-burn (`>= 6.0`) alert flags.
+  - Daily UTC burn-down time series with forward carry-over for empty days.
+  - High-performance indexed aggregations leveraging `{ applicationId: 1, checkedAt: -1 }` with 0 `COLLSCAN` operations across 50,000+ checks.
+
 ### Known Limitations
 
+- **Raw check scanning for SLO computations**: SLO computation scans every individual health check recorded in the rolling window (e.g. up to 86,400 checks for a 30-day window at 30-second frequency), meaning query cost scales directly with check frequency and window duration. Planned daily rollups will store pre-aggregated daily summaries (`{ date, totalChecks, goodChecks }`) so evaluations only scan ~30 lightweight rollup records plus the partial active day.
 - **In-process, non-durable retries**: Webhook delivery retries (1s, 5s, 30s) are managed in-process with bounded concurrency (max 5 in flight). If the server crashes or restarts mid-flight, pending deliveries older than 2 minutes are marked as `failed` with error type `interrupted` upon restart rather than resumed from an external durable message broker (e.g. RabbitMQ or Redis Streams).
 - **Account-owner email only**: Email notifications are dispatched exclusively to the verified account owner's email address. Arbitrary third-party recipients are disallowed by design to prevent open-relay spam abuse.
 - **No SMS or native push**: Alerting supports Email and Webhooks only. SMS and mobile push notifications are out of scope for Release 2.
+- **Rolling windows only**: SLO evaluation uses rolling 7-day or 30-day lookbacks. Calendar-month and quarterly windows are not supported in MVP.
+- **Single availability SLI**: SLOs evaluate check-count availability (`HealthCheck.success === true`). Custom latency-threshold SLIs (e.g., P99 latency < 200ms) and multi-SLO configurations per application are deferred to subsequent releases.
 

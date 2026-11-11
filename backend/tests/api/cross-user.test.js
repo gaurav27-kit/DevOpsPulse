@@ -7,6 +7,7 @@ import { Incident } from '../../src/models/Incident.js';
 import { Deployment } from '../../src/models/Deployment.js';
 import { NotificationChannel } from '../../src/models/NotificationChannel.js';
 import { NotificationDelivery } from '../../src/models/NotificationDelivery.js';
+import { Slo } from '../../src/models/Slo.js';
 import { encrypt, generateSigningSecret } from '../../src/utils/crypto.js';
 import { createTestUser, getAuthCookie } from '../helpers.js';
 
@@ -65,7 +66,11 @@ describe('Cross-User Authorization Matrix (Multi-tenant Isolation)', () => {
     { method: 'PATCH', routePattern: '/api/v1/notifications/channels/:id', getPath: () => `/api/v1/notifications/channels/${channelA._id}`, body: { name: 'Hacked' } },
     { method: 'POST', routePattern: '/api/v1/notifications/channels/:id/rotate-secret', getPath: () => `/api/v1/notifications/channels/${channelA._id}/rotate-secret` },
     { method: 'DELETE', routePattern: '/api/v1/notifications/channels/:id', getPath: () => `/api/v1/notifications/channels/${channelA._id}` },
-    { method: 'POST', routePattern: '/api/v1/notifications/channels/:id/test', getPath: () => `/api/v1/notifications/channels/${channelA._id}/test` }
+    { method: 'POST', routePattern: '/api/v1/notifications/channels/:id/test', getPath: () => `/api/v1/notifications/channels/${channelA._id}/test` },
+    { method: 'POST', routePattern: '/api/v1/applications/:id/slo', getPath: () => `/api/v1/applications/${appA._id}/slo`, body: { name: 'Cross SLO', targetPercent: 99.9, windowDays: 30 } },
+    { method: 'GET', routePattern: '/api/v1/applications/:id/slo', getPath: () => `/api/v1/applications/${appA._id}/slo` },
+    { method: 'PATCH', routePattern: '/api/v1/applications/:id/slo', getPath: () => `/api/v1/applications/${appA._id}/slo`, body: { name: 'Hacked SLO' } },
+    { method: 'DELETE', routePattern: '/api/v1/applications/:id/slo', getPath: () => `/api/v1/applications/${appA._id}/slo` }
   ];
 
   // Collection/User-level protected routes
@@ -78,7 +83,8 @@ describe('Cross-User Authorization Matrix (Multi-tenant Isolation)', () => {
     { method: 'GET', path: '/api/v1/dashboard/summary' },
     { method: 'GET', path: '/api/v1/notifications/channels' },
     { method: 'POST', path: '/api/v1/notifications/channels', body: { name: 'Ch', type: 'webhook', url: 'https://example.com/hook', events: ['incident_opened'] } },
-    { method: 'GET', path: '/api/v1/notifications/deliveries' }
+    { method: 'GET', path: '/api/v1/notifications/deliveries' },
+    { method: 'GET', path: '/api/v1/slos' }
   ];
 
   // Explicit public routes
@@ -144,6 +150,14 @@ describe('Cross-User Authorization Matrix (Multi-tenant Isolation)', () => {
       urlEncrypted: encrypt('https://user-a.example.com/hook'),
       secretEncrypted: encrypt(generateSigningSecret()),
       events: ['incident_opened']
+    });
+
+    await Slo.create({
+      ownerId: userA._id,
+      applicationId: appA._id,
+      name: 'User A SLO',
+      targetPercent: 99.9,
+      windowDays: 30
     });
   });
 
@@ -228,6 +242,12 @@ describe('Cross-User Authorization Matrix (Multi-tenant Isolation)', () => {
     expect(delivRes.status).toBe(200);
     expect(delivRes.body.data.deliveries).toEqual([]);
     expect(delivRes.body.data.pagination.total).toBe(0);
+
+    // SLOs
+    const slosRes = await request(app).get('/api/v1/slos').set('Cookie', cookieB);
+    expect(slosRes.status).toBe(200);
+    expect(slosRes.body.data.slos).toEqual([]);
+    expect(slosRes.body.data.pagination.total).toBe(0);
   });
 
   it('User B dashboard summary contains none of User A data', async () => {

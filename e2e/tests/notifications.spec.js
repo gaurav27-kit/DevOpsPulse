@@ -100,6 +100,15 @@ test.describe('DevOpsPulse Notification Channels & Alerts Suite', () => {
     await page.getByRole('button', { name: 'Delete channel' }).click();
     await expect(deleteDialog).not.toBeVisible();
     await expect(page.locator(`[data-testid="channel-row-${createdChannelId}"]`)).not.toBeVisible();
+
+    // If the email channel was successfully created (SMTP configured environment), delete it too to verify empty state
+    const emailDeleteBtn = page.getByRole('button', { name: 'Delete DevOps Email Channel' });
+    if (await emailDeleteBtn.isVisible()) {
+      await emailDeleteBtn.click();
+      await page.getByRole('dialog').getByRole('button', { name: 'Delete channel' }).click();
+      await expect(page.getByRole('dialog')).not.toBeVisible();
+    }
+
     await expect(page.getByText('No notification channels configured')).toBeVisible();
   });
 

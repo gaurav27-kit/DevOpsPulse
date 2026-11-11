@@ -63,13 +63,20 @@ The automated release quality gate enforces zero regressions before code can be 
 
 | Gate Step | Command | PRD Success Metric / Requirement | Status |
 |---|---|---|---|
-| 1. Secret Scanning | `node scripts/checkSecrets.js` | Zero committed credentials, private keys, or tracked `.env` files | PASS |
-| 2. Secret Unit Tests | `node --test scripts/checkSecrets.test.js` | Secret scanner regex patterns and exclusion rules verified | PASS (10/10) |
-| 3. Backend Unit Tests | `npm --prefix backend test` | State transitions, uptime math, SSRF IP rules, crypto, notification rules | PASS (98/98) |
-| 4. Backend API Tests | `npm --prefix backend run test:api` | Multi-tenant isolation matrix, auth cookies, schema validation, notification dispatch & SSRF | PASS (110/110) |
-| 5. Frontend Unit Tests | `npm --prefix frontend test` | Component rendering, client validation, live hook invalidation | PASS (53/53) |
-| 6. Frontend Build | `npm --prefix frontend run build` | Zero syntax or bundling errors; production bundle generated | PASS |
-| 7. Playwright E2E | `npm --prefix e2e run test:e2e` | Full user journey (register, monitor, incident, timeline, RBAC) | PASS (1/1) |
+| 1. Secret Scanning | `node scripts/checkSecrets.js` | Zero committed credentials, private keys, or tracked `.env` files | PASS (1/1) |
+| 2. Secret Unit Tests | `node --test scripts/checkSecrets.test.js` | Secret scanner regex patterns and exclusion rules verified | PASS (11/11) |
+| 3. Evidence Parser Tests | `node --test scripts/parseCounts.test.js` | Test runner output parsing across frameworks and ANSI stripping | PASS (16/16) |
+| 4. Backend Unit Tests | `npm --prefix backend test` | State transitions, uptime math, SSRF IP rules, crypto, notification rules, SLO math | PASS (123/123) |
+| 5. Backend API Tests | `npm --prefix backend run test:api` | Multi-tenant isolation matrix, auth cookies, schema validation, notifications, SLO API | PASS (149/149) |
+| 6. Frontend Unit Tests | `npm --prefix frontend test` | Component rendering, client validation, live hook invalidation, TanStack v5 cache invalidation | PASS (86/86) |
+| 7. Frontend Build | `npm --prefix frontend run build` | Zero syntax or bundling errors; production bundle generated | PASS (1/1) |
+| 8. Incident Flow Check | `npm --prefix backend run check:incidents` | Sequential lifecycle + 20 concurrent checks | PASS (17/17) |
+| 9. Analytics Check | `npm --prefix backend run check:analytics` | Uptime calculation, empty buckets, user isolation, 100+ checks latency | PASS (37/37) |
+| 10. Socket.IO Security Check | `npm --prefix backend run check:sockets` | Room isolation, cookie auth, abuse disconnect | PASS (13/13) |
+| 11. Alerting Lifecycle Check | `node scripts/alertingCheck.js` | End-to-end alerting lifecycle, deduplication, SSRF | PASS (16/16) |
+| 12. Automated Alerting Proofs | `node scripts/alertingProof.mjs` | Webhook verification, anti-flapping, SMTP capture | PASS (30/30) |
+| 13. SLO Lifecycle & Performance | `npm --prefix backend run check:slo` | Budget math, burn rates, timeseries, target boundaries, 86.4k/864k check scaling | PASS (58/58) |
+| 14. Playwright E2E | `npm --prefix e2e run test:e2e` | Full user journeys, CRUD, secret dialog, keyboard accessibility, multi-tenant | PASS (5/5) |
 
 ---
 
@@ -87,6 +94,8 @@ The automated release quality gate enforces zero regressions before code can be 
 | **FR-08** | Real-Time Updates & Invalidation | `frontend/src/socket/useLiveInvalidation.test.js` | Fake timers test: 5 rapid events in 500ms debounce to exactly 1 query invalidation per key, listeners removed on unmount, reconnect invalidates main queries. | Real WebSocket wire frames tested via React hook mock. |
 | **FR-09** | Error Handling & Security Headers | `backend/tests/api/errors.test.js` | Helmet security headers present, CORS client-origin allowlist, malformed JSON returns 400 JSON, payload >10kb rejected, generic 500 without stack trace. | None. |
 | **FR-10** | Release Quality Gate & CI/CD | `scripts/checkSecrets.js`<br>`scripts/checkAll.js`<br>`.github/workflows/ci.yml`<br>`.github/workflows/e2e.yml` | Automated credential scanning, unified quality runner, GitHub Actions CI matrix with MongoDB service container. | None. |
+| **FR-11** | Alerting & Notification Engine | `backend/tests/api/notifications.test.js`<br>`backend/tests/notificationRules.test.js`<br>`scripts/alertingCheck.js`<br>`scripts/alertingProof.mjs` | Multi-channel dispatch, signing secret HMAC-SHA256, SSRF DNS checks, cooldown & flapping prevention, local SMTP capture. | None. |
+| **FR-12** | SLO Monitoring (Backend) | `backend/tests/api/slos.test.js`<br>`backend/tests/sloRules.test.js`<br>`backend/scripts/sloCheck.js` | Target validation (90-99.999%), 7d/30d rolling windows, integer thousandths arithmetic, 1h/6h burn rates, daily burn-down series, index explain proof on 50k checks. | Calendar windows and custom latency SLIs not supported in MVP. |
 
 ---
 
@@ -120,17 +129,25 @@ The automated release quality gate enforces zero regressions before code can be 
 
 ## 8. Real Test Counts & Metrics
 
-*All counts below were verified against active test runs on 2026-11-03:*
+*All counts below were verified against active test runs recorded in `reports/baseline.json` and `reports/last-run/summary.json`:*
 
-| Test Suite | Total Files | Total Tests | Status | Execution Time |
-|---|---|---|---|---|
-| **Secret Scanner Checks** | 1 file | 10 tests | **10 Passed, 0 Failed** | 2.38s |
-| **Backend Unit Tests** (`node:test`) | 16 files | 76 tests | **76 Passed, 0 Failed** | 8.22s |
-| **Backend API Integration Tests** (`vitest`) | 8 files | 78 tests | **78 Passed, 0 Failed** | 63.20s |
-| **Frontend Unit & Component Tests** (`vitest` + RTL) | 15 files | 53 tests | **53 Passed, 0 Failed** | 52.22s |
-| **Frontend Production Build** (`vite build`) | - | 2372 modules | **Success** | 11.68s |
-| **Playwright End-to-End Suite** | 1 file | 1 scenario (a-g) | **1 Passed, 0 Failed** | 32.90s |
-| **Total Automated Tests** | **41 files** | **218 tests** | **All Passed** | - |
+| Test Suite | Total Files | Total Tests / Proofs | Status |
+|---|---|---|---|
+| **Secret Scanner Checks** (`checkSecrets.js`) | 1 file | 1 test (241 files scanned) | **1 Passed, 0 Failed** |
+| **Secret Matcher Unit Tests** (`checkSecrets.test.js`) | 1 file | 11 tests | **11 Passed, 0 Failed** |
+| **Evidence Parser Unit Tests** (`parseCounts.test.js`) | 1 file | 16 tests | **16 Passed, 0 Failed** |
+| **Backend Unit Tests** (`node:test`) | 19 files | 123 tests | **123 Passed, 0 Failed** |
+| **Backend API Integration Tests** (`vitest`) | 11 files | 149 tests | **149 Passed, 0 Failed** |
+| **Frontend Unit & Component Tests** (`vitest` + RTL) | 22 files | 86 tests | **86 Passed, 0 Failed** |
+| **Frontend Production Build** (`vite build`) | 1 build | 1 test (production bundle) | **1 Passed, 0 Failed** |
+| **Incident Flow Check** (`check:incidents`) | 1 file | 17 assertions | **17 Passed, 0 Failed** |
+| **Analytics Check** (`check:analytics`) | 1 file | 37 assertions | **37 Passed, 0 Failed** |
+| **Socket.IO Security Check** (`check:sockets`) | 1 file | 13 assertions | **13 Passed, 0 Failed** |
+| **Alerting Lifecycle Check** (`alertingCheck.js`) | 1 file | 16 assertions | **16 Passed, 0 Failed** |
+| **Automated Alerting Proofs** (`alertingProof.mjs`) | 1 file | 30 assertions | **30 Passed, 0 Failed** |
+| **SLO Lifecycle & Performance Check** (`check:slo`) | 1 file | 58 assertions | **58 Passed, 0 Failed** |
+| **Playwright End-to-End Suite** (`playwright test`) | 2 files | 5 scenarios | **5 Passed, 0 Failed** |
+| **Total Automated Tests** | **63 files** | **558 tests** | **All 14 Suites Passed** |
 
 ---
 

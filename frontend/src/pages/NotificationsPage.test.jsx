@@ -211,5 +211,83 @@ describe('NotificationsPage component', () => {
     expect(JSON.stringify(localStorage)).not.toContain(syntheticSecret);
     expect(JSON.stringify(sessionStorage)).not.toContain(syntheticSecret);
   });
+
+  it('TanStack Query v5 cache invalidation updates channel list on create, toggle, and delete without reload', async () => {
+    let currentChannels = [
+      {
+        _id: 'chan_1',
+        name: 'Channel Alpha',
+        type: 'email',
+        format: 'generic',
+        enabled: true,
+        minSeverity: 'low',
+        events: ['incident_opened']
+      }
+    ];
+
+    notificationsApi.getChannels.mockImplementation(async () => ({
+      data: { channels: [...currentChannels] }
+    }));
+
+    notificationsApi.createChannel.mockImplementation(async (payload) => {
+      const created = {
+        _id: 'chan_2',
+        name: payload.name,
+        type: payload.type,
+        format: payload.format || 'generic',
+        enabled: true,
+        minSeverity: payload.minSeverity || 'low',
+        events: payload.events || ['incident_opened']
+      };
+      currentChannels.push(created);
+      return { data: { channel: created } };
+    });
+
+    notificationsApi.updateChannel.mockImplementation(async (id, data) => {
+      const ch = currentChannels.find((c) => c._id === id);
+      if (ch) Object.assign(ch, data);
+      return { data: { channel: ch } };
+    });
+
+    notificationsApi.deleteChannel.mockImplementation(async (id) => {
+      currentChannels = currentChannels.filter((c) => c._id !== id);
+      return { data: { deleted: true } };
+    });
+
+    const queryClient = createTestQueryClient();
+    renderWithProviders(<NotificationsPage />, { user: mockUser, queryClient });
+
+    // Initial state: Channel Alpha is visible and Enabled
+    expect(await screen.findByText('Channel Alpha')).toBeInTheDocument();
+    const toggleBtn = screen.getByRole('button', { name: 'Toggle enabled for Channel Alpha' });
+    expect(toggleBtn).toHaveTextContent('Enabled');
+
+    // 1. Create Channel Beta
+    fireEvent.click(screen.getByRole('button', { name: /Add Channel/i }));
+    fireEvent.change(screen.getByLabelText(/Channel Name/i), { target: { value: 'Channel Beta' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Email' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Create Channel' }));
+
+    // Channel Beta appears dynamically in the DOM via TanStack Query invalidation
+    expect(await screen.findByText('Channel Beta')).toBeInTheDocument();
+
+    // 2. Toggle Channel Alpha to disabled
+    fireEvent.click(toggleBtn);
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Toggle enabled for Channel Alpha' })).toHaveTextContent('Disabled');
+    });
+
+    // 3. Delete Channel Beta
+    const deleteBetaButton = screen.getByRole('button', { name: 'Delete Channel Beta' });
+    fireEvent.click(deleteBetaButton);
+    expect(await screen.findByRole('heading', { name: 'Delete Notification Channel' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Delete channel' }));
+
+    // Channel Beta disappears dynamically from the DOM via TanStack Query invalidation
+    await waitFor(() => {
+      expect(screen.queryByText('Channel Beta')).not.toBeInTheDocument();
+    });
+    expect(screen.getByText('Channel Alpha')).toBeInTheDocument();
+  });
 });
 

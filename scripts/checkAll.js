@@ -1,52 +1,243 @@
-import { spawnSync } from 'child_process';
+import fs from 'fs';
 import path from 'path';
+import { spawnSync, execSync } from 'child_process';
+import { parseCounts } from './parseCounts.js';
 
 /**
- * Runner that executes the complete test and verification suite:
- *   1. Secrets scanner (scripts/checkSecrets.js)
- *   2. Secrets scanner unit tests (scripts/checkSecrets.test.js)
- *   3. Backend unit tests (npm test in backend/)
- *   4. Backend API integration tests (npm run test:api in backend/)
- *   5. Frontend component & page tests (npm test in frontend/)
- *   6. Frontend production build (npm run build in frontend/)
- *   7. Incident Flow Check (npm run check:incidents in backend/)
- *   8. Analytics Check (npm run check:analytics in backend/)
- *   9. Socket.IO Security Check (npm run check:sockets in backend/)
- *  10. Alerting Lifecycle Check (node scripts/alertingCheck.js)
- *  11. Automated Alerting Proofs (node scripts/alertingProof.mjs)
- *  12. Playwright E2E Test (npm run test:e2e in e2e/)
+ * DevOpsPulse Master Quality Gate Runner
+ *
+ * Runs all quality gate suites, logs raw output to reports/last-run/<suite>.log,
+ * and records structured run metrics into reports/last-run/summary.json.
+ *
+ * Usage:
+ *   node scripts/checkAll.js                    (runs all suites including Playwright)
+ *   node scripts/checkAll.js --no-playwright    (skips Playwright; for fast CI or environments without browser)
+ *   node scripts/checkAll.js --update-baseline  (updates reports/baseline.json from current run)
  */
 
+const isWindows = process.platform === 'win32';
+const rootDir = process.cwd();
+const reportsDir = path.resolve(rootDir, 'reports/last-run');
+const baselineFile = path.resolve(rootDir, 'reports/baseline.json');
+
+// Parse flags
+const args = process.argv.slice(2);
+const updateBaseline = args.includes('--update-baseline');
+const skipPlaywright =
+  args.includes('--no-playwright') ||
+  args.includes('--skip-playwright') ||
+  process.env.SKIP_PLAYWRIGHT === 'true' ||
+  process.env.NO_PLAYWRIGHT === 'true';
+
+// Ensure reports directory exists and is clean
+if (!fs.existsSync(reportsDir)) {
+  fs.mkdirSync(reportsDir, { recursive: true });
+} else {
+  for (const file of fs.readdirSync(reportsDir)) {
+    try {
+      fs.unlinkSync(path.join(reportsDir, file));
+    } catch {}
+  }
+}
+
+// Get git metadata
+let gitCommit = 'unknown';
+let gitClean = false;
+try {
+  gitCommit = execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
+  const statusOutput = execSync('git status --porcelain', { encoding: 'utf8' }).trim();
+  gitClean = statusOutput.length === 0;
+} catch {
+  // Not a git repository or git command missing
+}
+
 const steps = [
-  { name: '1. Secret Check', command: 'node', args: ['scripts/checkSecrets.js'], cwd: '.' },
-  { name: '2. Secret Matcher Tests', command: 'node', args: ['--test', 'scripts/checkSecrets.test.js'], cwd: '.' },
-  { name: '3. Backend Unit Tests', command: 'npm', args: ['test'], cwd: 'backend' },
-  { name: '4. Backend API Integration Tests', command: 'npm', args: ['run', 'test:api'], cwd: 'backend' },
-  { name: '5. Frontend Unit Tests', command: 'npm', args: ['test', '--', '--run'], cwd: 'frontend' },
-  { name: '6. Frontend Production Build', command: 'npm', args: ['run', 'build'], cwd: 'frontend' },
-  { name: '7. Incident Flow Check', command: 'npm', args: ['run', 'check:incidents'], cwd: 'backend' },
-  { name: '8. Analytics Check', command: 'npm', args: ['run', 'check:analytics'], cwd: 'backend' },
-  { name: '9. Socket.IO Security Check', command: 'npm', args: ['run', 'check:sockets'], cwd: 'backend' },
-  { name: '10. Alerting Lifecycle Check', command: 'node', args: ['scripts/alertingCheck.js'], cwd: '.' },
-  { name: '11. Automated Alerting Proofs', command: 'node', args: ['scripts/alertingProof.mjs'], cwd: '.' },
-  { name: '12. Playwright E2E Primary Workflow', command: 'npm', args: ['run', 'test:e2e'], cwd: 'e2e' }
+  {
+    name: '1. Secret Check',
+    slug: 'secret-check',
+    command: 'node',
+    args: ['scripts/checkSecrets.js'],
+    cwd: '.'
+  },
+  {
+    name: '2. Secret Matcher Tests',
+    slug: 'secret-matcher-tests',
+    command: 'node',
+    args: ['--test', 'scripts/checkSecrets.test.js'],
+    cwd: '.'
+  },
+  {
+    name: '3. Evidence Parser Tests',
+    slug: 'evidence-parser-tests',
+    command: 'node',
+    args: ['--test', 'scripts/parseCounts.test.js'],
+    cwd: '.'
+  },
+  {
+    name: '4. Backend Unit Tests',
+    slug: 'backend-unit-tests',
+    command: 'npm',
+    args: ['test'],
+    cwd: 'backend'
+  },
+  {
+    name: '5. Backend API Integration Tests',
+    slug: 'backend-api-tests',
+    command: 'npm',
+    args: ['run', 'test:api'],
+    cwd: 'backend'
+  },
+  {
+    name: '6. Frontend Unit Tests',
+    slug: 'frontend-unit-tests',
+    command: 'npm',
+    args: ['test', '--', '--run'],
+    cwd: 'frontend'
+  },
+  {
+    name: '7. Frontend Production Build',
+    slug: 'frontend-build',
+    command: 'npm',
+    args: ['run', 'build'],
+    cwd: 'frontend'
+  },
+  {
+    name: '8. Incident Flow Check',
+    slug: 'incident-flow-check',
+    command: 'npm',
+    args: ['run', 'check:incidents'],
+    cwd: 'backend'
+  },
+  {
+    name: '9. Analytics Check',
+    slug: 'analytics-check',
+    command: 'npm',
+    args: ['run', 'check:analytics'],
+    cwd: 'backend'
+  },
+  {
+    name: '10. Socket.IO Security Check',
+    slug: 'socket-security-check',
+    command: 'npm',
+    args: ['run', 'check:sockets'],
+    cwd: 'backend'
+  },
+  {
+    name: '11. Alerting Lifecycle Check',
+    slug: 'alerting-lifecycle-check',
+    command: 'node',
+    args: ['scripts/alertingCheck.js'],
+    cwd: '.'
+  },
+  {
+    name: '12. Automated Alerting Proofs',
+    slug: 'automated-alerting-proofs',
+    command: 'node',
+    args: ['scripts/alertingProof.mjs'],
+    cwd: '.'
+  },
+  {
+    name: '13. SLO Lifecycle & Performance Check',
+    slug: 'slo-check',
+    command: 'npm',
+    args: ['run', 'check:slo'],
+    cwd: 'backend'
+  },
+  {
+    name: '14. Playwright E2E Primary Workflow',
+    slug: 'playwright-e2e',
+    command: 'npm',
+    args: ['run', 'test:e2e'],
+    cwd: 'e2e',
+    optional: skipPlaywright
+  }
 ];
 
 console.log('====================================================');
 console.log('       DevOpsPulse Master Quality Gate Runner       ');
+console.log('====================================================');
+console.log(`Git Commit: ${gitCommit}`);
+console.log(`Working Tree Clean: ${gitClean}`);
+console.log(`Reports Directory: ${reportsDir}`);
+if (skipPlaywright) {
+  console.log('Mode: Headless (--no-playwright active, skipping Playwright E2E)');
+}
+if (updateBaseline) {
+  console.log('Mode: Baseline update requested (--update-baseline active)');
+}
 console.log('====================================================\n');
 
+const suiteSummaries = [];
 let allPassed = true;
-const isWindows = process.platform === 'win32';
+const overallStartTime = Date.now();
 
 for (const step of steps) {
+  if (step.optional) {
+    console.log(`>>> Skipping ${step.name} (--no-playwright requested)...\n`);
+    suiteSummaries.push({
+      name: step.name,
+      suite: step.slug,
+      command: `${step.command} ${step.args.join(' ')}`,
+      cwd: step.cwd,
+      status: 'skipped',
+      exitCode: 0,
+      files: null,
+      tests: null,
+      passed: null,
+      failed: null,
+      skipped: null,
+      startTime: new Date().toISOString(),
+      durationMs: 0,
+      logFile: null
+    });
+    continue;
+  }
+
   console.log(`>>> Running ${step.name}...`);
+  const stepStartTime = Date.now();
   const cmd = isWindows && step.command === 'npm' ? 'npm.cmd' : step.command;
+
   const result = spawnSync(cmd, step.args, {
-    cwd: path.resolve(step.cwd),
-    stdio: 'inherit',
+    cwd: path.resolve(rootDir, step.cwd),
+    stdio: 'pipe',
     shell: isWindows,
-    env: { ...process.env }
+    env: { ...process.env },
+    encoding: 'utf8',
+    maxBuffer: 50 * 1024 * 1024
+  });
+
+  const durationMs = Date.now() - stepStartTime;
+  const stdout = result.stdout || '';
+  const stderr = result.stderr || '';
+  const fullOutput = stdout + (stderr ? (stdout ? '\n' : '') + stderr : '');
+
+  // Forward output to terminal in real-time
+  if (stdout) process.stdout.write(stdout);
+  if (stderr) process.stderr.write(stderr);
+
+  // Write complete raw log
+  const logFileName = `${step.slug}.log`;
+  const logFilePath = path.join(reportsDir, logFileName);
+  fs.writeFileSync(logFilePath, fullOutput, 'utf8');
+
+  const counts = parseCounts(fullOutput, step.slug);
+  const exitCode = result.status ?? (result.error ? 1 : 0);
+
+  suiteSummaries.push({
+    name: step.name,
+    suite: step.slug,
+    command: `${step.command} ${step.args.join(' ')}`,
+    cwd: step.cwd,
+    status: exitCode === 0 ? 'passed' : 'failed',
+    exitCode,
+    files: counts.files,
+    tests: counts.tests,
+    passed: counts.passed,
+    failed: counts.failed,
+    skipped: counts.skipped,
+    startTime: new Date(stepStartTime).toISOString(),
+    durationMs,
+    logFile: `reports/last-run/${logFileName}`
   });
 
   if (result.error) {
@@ -55,20 +246,94 @@ for (const step of steps) {
     break;
   }
 
-  if (result.status !== 0) {
-    console.error(`\n[FAIL] Step "${step.name}" failed with exit code ${result.status}.\n`);
+  if (exitCode !== 0) {
+    console.error(`\n[FAIL] Step "${step.name}" failed with exit code ${exitCode}.\n`);
     allPassed = false;
     break;
   }
-  console.log(`[PASS] ${step.name} completed successfully.\n`);
+
+  console.log(`[PASS] ${step.name} completed successfully (${(durationMs / 1000).toFixed(2)}s).\n`);
 }
 
+// Regression guard against baseline.json
+let baselineRegressionFailed = false;
+let baselineData = {};
+if (fs.existsSync(baselineFile)) {
+  try {
+    baselineData = JSON.parse(fs.readFileSync(baselineFile, 'utf8'));
+  } catch (err) {
+    console.warn(`[WARN] Could not parse baseline file at ${baselineFile}:`, err.message);
+  }
+}
+
+if (!updateBaseline && Object.keys(baselineData).length > 0) {
+  console.log('\n--- Checking Test Count Regressions Against Baseline ---');
+  for (const suite of suiteSummaries) {
+    if (suite.status === 'skipped') continue;
+    const base = baselineData[suite.suite];
+    if (base && typeof base.tests === 'number') {
+      if (suite.tests !== null && suite.tests < base.tests) {
+        console.error(
+          `❌ [REGRESSION FAILURE] Suite "${suite.name}" test count dropped below baseline! Current tests: ${suite.tests}, baseline: ${base.tests}. If this reduction was intentional, run with --update-baseline.`
+        );
+        baselineRegressionFailed = true;
+      } else {
+        console.log(`✔ [BASELINE PASS] ${suite.name}: ${suite.tests} tests (baseline: ${base.tests})`);
+      }
+    }
+  }
+  if (baselineRegressionFailed) {
+    allPassed = false;
+  }
+}
+
+if (updateBaseline && allPassed) {
+  const newBaseline = {};
+  for (const suite of suiteSummaries) {
+    if (suite.status === 'skipped') continue;
+    newBaseline[suite.suite] = {
+      name: suite.name,
+      files: suite.files,
+      tests: suite.tests,
+      passed: suite.passed,
+      failed: suite.failed,
+      skipped: suite.skipped
+    };
+  }
+  fs.writeFileSync(baselineFile, JSON.stringify(newBaseline, null, 2), 'utf8');
+  console.log(`\n✅ Baseline updated successfully at: ${baselineFile}`);
+}
+
+const overallDurationMs = Date.now() - overallStartTime;
+const summaryPath = path.join(reportsDir, 'summary.json');
+
+const finalSummary = {
+  timestamp: new Date().toISOString(),
+  git: {
+    commit: gitCommit,
+    clean: gitClean
+  },
+  overall: {
+    passed: allPassed,
+    durationMs: overallDurationMs,
+    totalSuites: steps.length,
+    executedSuites: suiteSummaries.filter((s) => s.status !== 'skipped').length,
+    passedSuites: suiteSummaries.filter((s) => s.status === 'passed').length,
+    failedSuites: suiteSummaries.filter((s) => s.status === 'failed').length,
+    skippedSuites: suiteSummaries.filter((s) => s.status === 'skipped').length
+  },
+  suites: suiteSummaries
+};
+
+fs.writeFileSync(summaryPath, JSON.stringify(finalSummary, null, 2), 'utf8');
+
 if (!allPassed) {
-  console.error('\n❌ Quality gate failed. Please resolve the failing step above.');
+  console.error('\n❌ Quality gate failed. Summary written to:', summaryPath);
   process.exit(1);
 } else {
   console.log('\n====================================================');
-  console.log('✅ ALL 12 QUALITY GATE SUITES PASSED CLEANLY!');
+  console.log('✅ ALL QUALITY GATE SUITES PASSED CLEANLY!');
+  console.log(`Summary written to: ${summaryPath}`);
   console.log('====================================================');
   process.exit(0);
 }
