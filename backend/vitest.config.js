@@ -4,6 +4,7 @@ export default defineConfig({
   test: {
     environment: 'node',
     globals: true,
+    pool: 'threads',
     setupFiles: ['./tests/setup.js'],
     include: ['tests/api/**/*.test.js'],
     testTimeout: 30000,
