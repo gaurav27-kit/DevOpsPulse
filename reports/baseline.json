@@ -103,6 +103,22 @@
     "failed": 0,
     "skipped": 0
   },
+  "baseline-guard-tests": {
+    "name": "14. Baseline Guard Tests",
+    "files": 0,
+    "tests": 6,
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0
+  },
+  "slo-rollup-check": {
+    "name": "15. SLO Rollup & Performance Proof",
+    "files": 1,
+    "tests": 101,
+    "passed": 101,
+    "failed": 0,
+    "skipped": 0
+  },
   "playwright-e2e": {
     "name": "14. Playwright E2E Primary Workflow",
     "files": null,

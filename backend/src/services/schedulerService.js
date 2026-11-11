@@ -1,5 +1,6 @@
 import { Application } from '../models/Application.js';
 import { HealthCheck } from '../models/HealthCheck.js';
+import { HealthCheckDaily } from '../models/HealthCheckDaily.js';
 import { runHealthCheck } from './healthCheckService.js';
 import { computeNextState } from './statusService.js';
 import { env } from '../config/env.js';
@@ -38,6 +39,33 @@ export async function processCheckResult(application, result) {
     });
   } catch (err) {
     console.error(`[Scheduler] Failed to insert HealthCheck for ${application._id}:`, err.message);
+  }
+
+  // a2) Increment daily rollup counters (atomic upsert; never abort scheduler on failure)
+  const startOfDay = new Date(Date.UTC(checkedAt.getUTCFullYear(), checkedAt.getUTCMonth(), checkedAt.getUTCDate()));
+  try {
+    await HealthCheckDaily.updateOne(
+      { applicationId: application._id, day: startOfDay },
+      {
+        $setOnInsert: { ownerId: application.ownerId },
+        $inc: { total: 1, good: result.success ? 1 : 0 }
+      },
+      { upsert: true }
+    );
+  } catch (err) {
+    if (err.code === 11000) {
+      // Duplicate key race condition during initial upsert: retry once with plain update
+      try {
+        await HealthCheckDaily.updateOne(
+          { applicationId: application._id, day: startOfDay },
+          { $inc: { total: 1, good: result.success ? 1 : 0 } }
+        );
+      } catch (retryErr) {
+        console.error(`[Scheduler] Rollup retry failed for app ${application._id}:`, retryErr.message);
+      }
+    } else {
+      console.error(`[Scheduler] Failed to update HealthCheckDaily for ${application._id}:`, err.message);
+    }
   }
 
   // b) Compute next state (pure function, no DB access)

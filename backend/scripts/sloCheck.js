@@ -94,11 +94,11 @@ async function main() {
     passwordHash
   });
 
-  const tokenA = jwt.sign({ id: userA._id.toString() }, env.JWT_SECRET, { expiresIn: '1h' });
-  const cookieA = `token=${tokenA}`;
+  const tokenA = jwt.sign({ id: userA._id.toString() }, env.JWT_SECRET, { expiresIn: '24h' });
+  let cookieA = `token=${tokenA}`;
 
-  const tokenB = jwt.sign({ id: userB._id.toString() }, env.JWT_SECRET, { expiresIn: '1h' });
-  const cookieB = `token=${tokenB}`;
+  const tokenB = jwt.sign({ id: userB._id.toString() }, env.JWT_SECRET, { expiresIn: '24h' });
+  let cookieB = `token=${tokenB}`;
 
   console.log('\n========================================');
   console.log('       DevOpsPulse SLO Check Suite      ');
@@ -765,6 +765,7 @@ async function main() {
     console.log(`  Inserted ~864,000 checks across 10 applications in ${scaleGenDuration} ms.`);
 
     // Measure GET /api/v1/slos latency through real HTTP server
+    cookieA = `token=${jwt.sign({ id: userA._id.toString() }, env.JWT_SECRET, { expiresIn: '24h' })}`;
     const listStart = performance.now();
     const resList = await requestJson(baseUrl, '/slos?limit=10', {
       cookie: cookieA

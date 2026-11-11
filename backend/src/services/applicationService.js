@@ -1,5 +1,6 @@
 import { Application } from '../models/Application.js';
 import { HealthCheck } from '../models/HealthCheck.js';
+import { HealthCheckDaily } from '../models/HealthCheckDaily.js';
 import { Incident } from '../models/Incident.js';
 import { Deployment } from '../models/Deployment.js';
 import { Slo } from '../models/Slo.js';
@@ -184,6 +185,9 @@ export const deleteApplication = async (ownerId, id) => {
 
   // Cascade: delete all health check records for this application
   await HealthCheck.deleteMany({ applicationId: id });
+
+  // Cascade: delete all daily telemetry rollups for this application (added in Step 15b)
+  await HealthCheckDaily.deleteMany({ applicationId: id });
 
   // Cascade: delete all incidents (active and resolved) for this application
   await Incident.deleteMany({ applicationId: id });

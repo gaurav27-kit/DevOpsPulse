@@ -13,6 +13,8 @@
     "build:frontend": "npm --prefix frontend run build",
     "check:alerting": "node scripts/alertingCheck.js",
     "proof:alerting": "node scripts/alertingProof.mjs",
+    "rollups:backfill": "node scripts/backfillRollups.js",
+    "check:slo-rollups": "node scripts/sloRollupCheck.js",
     "check:slo": "npm --prefix backend run check:slo",
     "check:all": "node scripts/checkAll.js"
   }

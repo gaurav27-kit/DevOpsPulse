@@ -76,7 +76,9 @@ The automated release quality gate enforces zero regressions before code can be 
 | 11. Alerting Lifecycle Check | `node scripts/alertingCheck.js` | End-to-end alerting lifecycle, deduplication, SSRF | PASS (16/16) |
 | 12. Automated Alerting Proofs | `node scripts/alertingProof.mjs` | Webhook verification, anti-flapping, SMTP capture | PASS (30/30) |
 | 13. SLO Lifecycle & Performance | `npm --prefix backend run check:slo` | Budget math, burn rates, timeseries, target boundaries, 86.4k/864k check scaling | PASS (58/58) |
-| 14. Playwright E2E | `npm --prefix e2e run test:e2e` | Full user journeys, CRUD, secret dialog, keyboard accessibility, multi-tenant | PASS (5/5) |
+| 14. Baseline Guard Tests | `node --test scripts/baselineGuard.test.js` | Regression guard logic: drop fails, equal/higher passes, missing fails, update accepts | PASS (6/6) |
+| 15. SLO Rollup & Performance Proof | `node scripts/sloRollupCheck.js` | 7 equivalence datasets, 200 concurrent writes, backfill idempotency, cascade, sub-1000ms list | PASS (101/101) |
+| 16. Playwright E2E | `npm --prefix e2e run test:e2e` | Full user journeys, CRUD, secret dialog, keyboard accessibility, multi-tenant | PASS (5/5) |
 
 ---
 
@@ -95,7 +97,7 @@ The automated release quality gate enforces zero regressions before code can be 
 | **FR-09** | Error Handling & Security Headers | `backend/tests/api/errors.test.js` | Helmet security headers present, CORS client-origin allowlist, malformed JSON returns 400 JSON, payload >10kb rejected, generic 500 without stack trace. | None. |
 | **FR-10** | Release Quality Gate & CI/CD | `scripts/checkSecrets.js`<br>`scripts/checkAll.js`<br>`.github/workflows/ci.yml`<br>`.github/workflows/e2e.yml` | Automated credential scanning, unified quality runner, GitHub Actions CI matrix with MongoDB service container. | None. |
 | **FR-11** | Alerting & Notification Engine | `backend/tests/api/notifications.test.js`<br>`backend/tests/notificationRules.test.js`<br>`scripts/alertingCheck.js`<br>`scripts/alertingProof.mjs` | Multi-channel dispatch, signing secret HMAC-SHA256, SSRF DNS checks, cooldown & flapping prevention, local SMTP capture. | None. |
-| **FR-12** | SLO Monitoring (Backend) | `backend/tests/api/slos.test.js`<br>`backend/tests/sloRules.test.js`<br>`backend/scripts/sloCheck.js` | Target validation (90-99.999%), 7d/30d rolling windows, integer thousandths arithmetic, 1h/6h burn rates, daily burn-down series, index explain proof on 50k checks. | Calendar windows and custom latency SLIs not supported in MVP. |
+| **FR-12** | SLO Monitoring & Daily Rollups (Backend) | `backend/tests/api/slos.test.js`<br>`backend/tests/sloRules.test.js`<br>`backend/scripts/sloCheck.js`<br>`backend/scripts/sloRollupCheck.js`<br>`scripts/baselineGuard.test.js` | Target validation (90-99.999%), 7d/30d rolling windows, integer thousandths arithmetic, 1h/6h burn rates, daily burn-down series, index explain proof on 50k checks, 101 rollup equivalence and sub-1000ms scaling benchmarks. | Calendar windows and custom latency SLIs not supported in MVP. |
 
 ---
 

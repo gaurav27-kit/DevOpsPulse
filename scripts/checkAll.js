@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { spawnSync, execSync } from 'child_process';
 import { parseCounts } from './parseCounts.js';
+import { evaluateBaseline } from './baselineGuard.js';
 
 /**
  * DevOpsPulse Master Quality Gate Runner
@@ -144,7 +145,21 @@ const steps = [
     cwd: 'backend'
   },
   {
-    name: '14. Playwright E2E Primary Workflow',
+    name: '14. Baseline Guard Tests',
+    slug: 'baseline-guard-tests',
+    command: 'node',
+    args: ['--test', 'scripts/baselineGuard.test.js'],
+    cwd: '.'
+  },
+  {
+    name: '15. SLO Rollup & Performance Proof',
+    slug: 'slo-rollup-check',
+    command: 'node',
+    args: ['scripts/sloRollupCheck.js'],
+    cwd: '.'
+  },
+  {
+    name: '16. Playwright E2E Primary Workflow',
     slug: 'playwright-e2e',
     command: 'npm',
     args: ['run', 'test:e2e'],
@@ -256,7 +271,6 @@ for (const step of steps) {
 }
 
 // Regression guard against baseline.json
-let baselineRegressionFailed = false;
 let baselineData = {};
 if (fs.existsSync(baselineFile)) {
   try {
@@ -266,42 +280,28 @@ if (fs.existsSync(baselineFile)) {
   }
 }
 
-if (!updateBaseline && Object.keys(baselineData).length > 0) {
+if (Object.keys(baselineData).length > 0 || updateBaseline) {
   console.log('\n--- Checking Test Count Regressions Against Baseline ---');
-  for (const suite of suiteSummaries) {
-    if (suite.status === 'skipped') continue;
-    const base = baselineData[suite.suite];
-    if (base && typeof base.tests === 'number') {
-      if (suite.tests !== null && suite.tests < base.tests) {
-        console.error(
-          `❌ [REGRESSION FAILURE] Suite "${suite.name}" test count dropped below baseline! Current tests: ${suite.tests}, baseline: ${base.tests}. If this reduction was intentional, run with --update-baseline.`
-        );
-        baselineRegressionFailed = true;
-      } else {
+  const guardResult = evaluateBaseline(suiteSummaries, baselineData, { updateBaseline });
+  if (!guardResult.passed) {
+    for (const failMsg of guardResult.failures) {
+      console.error(`❌ [REGRESSION FAILURE] ${failMsg}`);
+    }
+    allPassed = false;
+  } else {
+    for (const suite of suiteSummaries) {
+      if (suite.status === 'skipped') continue;
+      const base = baselineData[suite.suite];
+      if (base && typeof base.tests === 'number') {
         console.log(`✔ [BASELINE PASS] ${suite.name}: ${suite.tests} tests (baseline: ${base.tests})`);
       }
     }
   }
-  if (baselineRegressionFailed) {
-    allPassed = false;
-  }
-}
 
-if (updateBaseline && allPassed) {
-  const newBaseline = {};
-  for (const suite of suiteSummaries) {
-    if (suite.status === 'skipped') continue;
-    newBaseline[suite.suite] = {
-      name: suite.name,
-      files: suite.files,
-      tests: suite.tests,
-      passed: suite.passed,
-      failed: suite.failed,
-      skipped: suite.skipped
-    };
+  if (updateBaseline && allPassed && guardResult.updatedBaseline) {
+    fs.writeFileSync(baselineFile, JSON.stringify(guardResult.updatedBaseline, null, 2), 'utf8');
+    console.log(`\n✅ Baseline updated successfully at: ${baselineFile}`);
   }
-  fs.writeFileSync(baselineFile, JSON.stringify(newBaseline, null, 2), 'utf8');
-  console.log(`\n✅ Baseline updated successfully at: ${baselineFile}`);
 }
 
 const overallDurationMs = Date.now() - overallStartTime;

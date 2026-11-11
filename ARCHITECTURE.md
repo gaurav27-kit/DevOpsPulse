@@ -50,7 +50,7 @@ flowchart TD
 ```
 backend/src/
   config/        env.js, db.js
-  models/        User, Application, HealthCheck, Incident, Deployment, NotificationChannel, NotificationDelivery, Slo
+  models/        User, Application, HealthCheck, HealthCheckDaily, Incident, Deployment, NotificationChannel, NotificationDelivery, Slo
   middleware/    auth, validate, errorHandler, rateLimiters
   routes/        auth, applications, incidents, deployments, dashboard, notifications, sloRoutes
   controllers/   authController, applicationController, healthCheckController, notificationController, sloController
@@ -79,6 +79,7 @@ erDiagram
   USER ||--o{ NOTIFICATION_DELIVERY : audits
   USER ||--o{ SLO : defines
   APPLICATION ||--o{ HEALTH_CHECK : produces
+  APPLICATION ||--o{ HEALTH_CHECK_DAILY : aggregates
   APPLICATION ||--o{ INCIDENT : has
   APPLICATION ||--o{ DEPLOYMENT : records
   APPLICATION ||--o| SLO : targets
@@ -118,6 +119,14 @@ erDiagram
     number responseTimeMs
     string errorType
     string errorMessage
+  }
+  HEALTH_CHECK_DAILY {
+    ObjectId _id PK
+    ObjectId applicationId FK
+    ObjectId ownerId FK
+    date day "UTC midnight"
+    number total
+    number good
   }
   INCIDENT {
     ObjectId _id PK
