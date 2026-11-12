@@ -39,7 +39,7 @@ describe('Crypto & Sanitization Utilities', () => {
     }, /Unsupported state or unable to authenticate data|bad decrypt/i);
 
     // Tamper with auth tag
-    const tamperedTag = 'f' + parts[1].slice(1);
+    const tamperedTag = (parts[1][0] === 'f' ? '0' : 'f') + parts[1].slice(1);
     const tamperedTagBundle = `${parts[0]}:${tamperedTag}:${parts[2]}`;
     assert.throws(() => {
       decrypt(tamperedTagBundle, testKeyHex);

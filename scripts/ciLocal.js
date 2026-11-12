@@ -44,7 +44,7 @@ try {
   const npmCmd = isWindows ? 'npm.cmd' : 'npm';
   const nodeCmd = isWindows ? 'node.exe' : 'node';
 
-  function runCiStep(name, logFile, cmd, args, cwd, env = {}) {
+  function runCiStep(name, logFile, cmd, args, cwd, env = {}, stepTimeout = 1200000) {
     console.log(`>>> Running: ${name}...`);
     const logFilePath = path.join(ciReportsDir, logFile);
     const start = Date.now();
@@ -63,7 +63,7 @@ try {
       env: mergedEnv,
       encoding: 'utf8',
       maxBuffer: 50 * 1024 * 1024,
-      timeout: 600000
+      timeout: stepTimeout
     });
 
     const duration = ((Date.now() - start) / 1000).toFixed(2);
