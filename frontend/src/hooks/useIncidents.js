@@ -41,11 +41,13 @@ export function useChangeIncidentStatus(id) {
   return useMutation({
     mutationFn: (data) => incidentsApi.changeStatus(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['incident', id] });
-      queryClient.invalidateQueries({ queryKey: ['incidents'] });
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
-      queryClient.invalidateQueries({ queryKey: ['applications'] });
-      queryClient.invalidateQueries({ queryKey: ['application'] });
+      return Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['incident', id] }),
+        queryClient.invalidateQueries({ queryKey: ['incidents'] }),
+        queryClient.invalidateQueries({ queryKey: ['dashboard'] }),
+        queryClient.invalidateQueries({ queryKey: ['applications'] }),
+        queryClient.invalidateQueries({ queryKey: ['application'] })
+      ]);
     }
   });
 }

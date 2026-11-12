@@ -42,7 +42,7 @@ export function useCreateApplication() {
   return useMutation({
     mutationFn: (data) => applicationsApi.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['applications'] });
+      return queryClient.invalidateQueries({ queryKey: ['applications'] });
     }
   });
 }
@@ -57,8 +57,10 @@ export function useUpdateApplication(id) {
   return useMutation({
     mutationFn: (data) => applicationsApi.update(id, data),
     onSuccess: (response) => {
-      queryClient.invalidateQueries({ queryKey: ['applications'] });
-      queryClient.invalidateQueries({ queryKey: ['application', id] });
+      return Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['applications'] }),
+        queryClient.invalidateQueries({ queryKey: ['application', id] })
+      ]);
     }
   });
 }
@@ -73,7 +75,7 @@ export function useDeleteApplication() {
   return useMutation({
     mutationFn: (id) => applicationsApi.remove(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['applications'] });
+      return queryClient.invalidateQueries({ queryKey: ['applications'] });
     }
   });
 }
