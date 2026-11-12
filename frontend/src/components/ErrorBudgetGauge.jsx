@@ -1,4 +1,7 @@
 import React from 'react';
+import { getExhaustedBudgetNote } from '../utils/sloFormatters.js';
+
+export { getExhaustedBudgetNote };
 
 /**
  * ErrorBudgetGauge component rendering a meter representing error budget consumption.
@@ -54,7 +57,10 @@ export function ErrorBudgetGauge({
     barColor = 'bg-amber-500';
   }
 
-  const ariaValueText = `${numericConsumed.toFixed(1)}% consumed, ${numericRemaining.toFixed(1)}% remaining`;
+  const formattedConsumed = numericConsumed.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const formattedRemaining = numericRemaining.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const ariaValueText = `${formattedConsumed}% consumed, ${formattedRemaining}% remaining`;
+  const exhaustedNote = getExhaustedBudgetNote(numericConsumed);
 
   return (
     <div className={`p-4 bg-white rounded-lg border border-slate-200 shadow-sm ${className}`} data-testid="error-budget-gauge">
@@ -64,10 +70,10 @@ export function ErrorBudgetGauge({
         </span>
         <div className="text-right">
           <span className={`text-base font-bold ${numericConsumed >= 100 ? 'text-rose-600' : numericConsumed >= 75 ? 'text-amber-700' : 'text-slate-800'}`}>
-            {numericConsumed.toFixed(1)}%
+            {formattedConsumed}%
           </span>
           <span className="text-xs text-slate-500 ml-1.5 font-medium">
-            ({numericRemaining.toFixed(1)}% remaining)
+            ({formattedRemaining}% remaining)
           </span>
         </div>
       </div>
@@ -97,6 +103,12 @@ export function ErrorBudgetGauge({
         <span>50%</span>
         <span className={numericConsumed >= 100 ? 'text-rose-500 font-bold' : ''}>100%</span>
       </div>
+
+      {exhaustedNote && (
+        <p className="mt-2.5 text-xs font-medium text-rose-700 bg-rose-50 border border-rose-200 rounded px-2.5 py-1.5" data-testid="budget-exhausted-note">
+          {exhaustedNote}
+        </p>
+      )}
     </div>
   );
 }

@@ -46,6 +46,45 @@ describe('ErrorBudgetGauge', () => {
     expect(bar).toHaveStyle({ width: '100%' });
   });
 
+  it('formats large percentage with thousands separator and shows exhausted note for 81671.2', () => {
+    render(
+      <ErrorBudgetGauge
+        budgetConsumedPct={81671.2}
+        budgetRemainingPct={0}
+        totalChecks={1000}
+      />
+    );
+
+    expect(screen.getByText('81,671.2%')).toBeInTheDocument();
+    expect(screen.getByText('(0.0% remaining)')).toBeInTheDocument();
+
+    const note = screen.getByTestId('budget-exhausted-note');
+    expect(note).toBeInTheDocument();
+    expect(note).toHaveTextContent('Budget exhausted: failures were 816.7 times the allowed amount');
+
+    // Visual bar is still capped at 100%
+    const meter = screen.getByRole('meter');
+    const bar = meter.querySelector('div');
+    expect(bar).toHaveStyle({ width: '100%' });
+  });
+
+  it('does not render exhausted note when budgetConsumedPct is <= 1000 (e.g. 999.9)', () => {
+    render(
+      <ErrorBudgetGauge
+        budgetConsumedPct={999.9}
+        budgetRemainingPct={0}
+        totalChecks={1000}
+      />
+    );
+
+    expect(screen.getByText('999.9%')).toBeInTheDocument();
+    expect(screen.queryByTestId('budget-exhausted-note')).toBeNull();
+
+    const meter = screen.getByRole('meter');
+    const bar = meter.querySelector('div');
+    expect(bar).toHaveStyle({ width: '100%' });
+  });
+
   it('renders explicit empty state when budgetConsumedPct is null', () => {
     render(
       <ErrorBudgetGauge

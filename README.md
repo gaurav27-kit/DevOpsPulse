@@ -94,6 +94,6 @@ Frontend runs on `http://localhost:5173`.
 - **In-process, non-durable retries**: Webhook delivery retries (1s, 5s, 30s) are managed in-process with bounded concurrency (max 5 in flight). If the server crashes or restarts mid-flight, pending deliveries older than 2 minutes are marked as `failed` with error type `interrupted` upon restart rather than resumed from an external durable message broker (e.g. RabbitMQ or Redis Streams).
 - **Account-owner email only**: Email notifications are dispatched exclusively to the verified account owner's email address. Arbitrary third-party recipients are disallowed by design to prevent open-relay spam abuse.
 - **No SMS or native push**: Alerting supports Email and Webhooks only. SMS and mobile push notifications are out of scope for Release 2.
-- **Rolling windows only**: SLO evaluation uses rolling 7-day or 30-day lookbacks. Calendar-month and quarterly windows are not supported in MVP.
+- **Rolling windows only**: SLO evaluation uses rolling 7-day or 30-day lookbacks. Calendar-month and quarterly windows are not supported in MVP. An application's SLO uses all health checks recorded for it, including those from before a URL change.
 - **Single availability SLI**: SLOs evaluate check-count availability (`HealthCheck.success === true`). Custom latency-threshold SLIs (e.g., P99 latency < 200ms) and multi-SLO configurations per application are deferred to subsequent releases.
 

@@ -11,6 +11,13 @@ import {
 } from 'recharts';
 import { TrendingDown } from 'lucide-react';
 import { EmptyState } from './EmptyState.jsx';
+import {
+  formatCompactTick,
+  computeYAxisDomainMax,
+  getCappedChartNote
+} from '../utils/sloFormatters.js';
+
+export { formatCompactTick, computeYAxisDomainMax, getCappedChartNote };
 
 /**
  * Deterministically formats ISO date strings as UTC "MMM D" without client timezone shifting.
@@ -36,25 +43,41 @@ export function BurnDownChart({
   height = 260,
   className = ''
 }) {
-  const { hasData, chartData, maxConsumed, endConsumed } = useMemo(() => {
+  const { hasData, chartData, maxConsumed, endConsumed, yAxisDomainMax, isCapped, cappedNote } = useMemo(() => {
     if (!Array.isArray(series) || series.length === 0) {
-      return { hasData: false, chartData: [], maxConsumed: 0, endConsumed: 0 };
+      return {
+        hasData: false,
+        chartData: [],
+        maxConsumed: 0,
+        endConsumed: 0,
+        yAxisDomainMax: 150,
+        isCapped: false,
+        cappedNote: null
+      };
     }
 
     let max = 0;
     let validCount = 0;
 
-    const data = series.map((item) => {
+    series.forEach((item) => {
       const consumed = item.cumulativeBudgetConsumedPct ?? 0;
       if (item.total > 0 || item.cumulativeBudgetConsumedPct !== null) {
         validCount++;
       }
       if (consumed > max) max = consumed;
+    });
 
+    const domainMax = computeYAxisDomainMax(max);
+    const capped = max > domainMax;
+    const note = capped ? getCappedChartNote(domainMax, max) : null;
+
+    const data = series.map((item) => {
+      const consumed = item.cumulativeBudgetConsumedPct ?? 0;
       return {
         day: item.day,
         utcLabel: formatUtcDateLabel(item.day),
         consumed: Number(consumed.toFixed(2)),
+        displayConsumed: Math.min(Number(consumed.toFixed(2)), domainMax),
         totalChecks: item.total,
         badChecks: item.bad
       };
@@ -66,7 +89,10 @@ export function BurnDownChart({
       hasData: validCount > 0,
       chartData: data,
       maxConsumed: max,
-      endConsumed: endVal
+      endConsumed: endVal,
+      yAxisDomainMax: domainMax,
+      isCapped: capped,
+      cappedNote: note
     };
   }, [series]);
 
@@ -113,7 +139,7 @@ export function BurnDownChart({
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={chartData}
-            margin={{ top: 15, right: 20, left: -10, bottom: 5 }}
+            margin={{ top: 15, right: 20, left: 10, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
             <XAxis
@@ -125,19 +151,28 @@ export function BurnDownChart({
               minTickGap={25}
             />
             <YAxis
+              width={55}
               stroke="#64748b"
               fontSize={11}
               tickLine={false}
               axisLine={false}
-              tickFormatter={(v) => `${v}%`}
-              domain={[0, (dataMax) => Math.max(105, Math.ceil(dataMax * 1.1))]}
+              tickFormatter={formatCompactTick}
+              domain={[0, yAxisDomainMax]}
             />
             <Tooltip
-              formatter={(value, name) => [`${value}%`, 'Budget Consumed']}
+              formatter={(value, name, item) => {
+                const rawVal = item?.payload?.consumed ?? value;
+                const formatted = typeof rawVal === 'number'
+                  ? rawVal.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+                  : rawVal;
+                return [`${formatted}%`, 'Budget Consumed'];
+              }}
               labelFormatter={(label, payload) => {
                 const item = payload?.[0]?.payload;
                 if (!item) return label;
-                return `${label} (Total: ${item.totalChecks}, Failed: ${item.badChecks})`;
+                const total = typeof item.totalChecks === 'number' ? item.totalChecks.toLocaleString('en-US') : item.totalChecks;
+                const failed = typeof item.badChecks === 'number' ? item.badChecks.toLocaleString('en-US') : item.badChecks;
+                return `${label} (Total: ${total}, Failed: ${failed})`;
               }}
               contentStyle={{
                 backgroundColor: '#ffffff',
@@ -161,7 +196,7 @@ export function BurnDownChart({
             />
             <Line
               type="monotone"
-              dataKey="consumed"
+              dataKey="displayConsumed"
               stroke="#4f46e5"
               strokeWidth={2}
               dot={{ r: 2, fill: '#4f46e5' }}
@@ -170,6 +205,12 @@ export function BurnDownChart({
           </LineChart>
         </ResponsiveContainer>
       </div>
+
+      {isCapped && (
+        <p className="mt-3 text-xs text-slate-500 font-medium" data-testid="burndown-capped-note">
+          {cappedNote}
+        </p>
+      )}
     </div>
   );
 }

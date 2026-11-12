@@ -7,6 +7,7 @@ import { EmptyState } from '../components/EmptyState.jsx';
 import { Pagination } from '../components/Pagination.jsx';
 import { Skeleton } from '../components/Skeleton.jsx';
 import { formatPercent } from '../utils/formatPercent.js';
+import { formatPercentage, getExhaustedBudgetNote } from '../utils/sloFormatters.js';
 
 export function SlosPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -208,7 +209,7 @@ export function SlosPage() {
                         </td>
                         <td className="py-3.5 px-4">
                           {item.budgetConsumedPct !== null && item.budgetConsumedPct !== undefined ? (
-                            <div className="flex items-center gap-2">
+                            <div>
                               <span
                                 className={`font-mono font-bold ${
                                   item.budgetConsumedPct >= 100
@@ -218,8 +219,13 @@ export function SlosPage() {
                                     : 'text-slate-800'
                                 }`}
                               >
-                                {item.budgetConsumedPct.toFixed(1)}%
+                                {formatPercentage(item.budgetConsumedPct, 1)}
                               </span>
+                              {item.budgetConsumedPct > 1000 && (
+                                <span className="block text-[11px] text-rose-600 font-medium mt-0.5">
+                                  {getExhaustedBudgetNote(item.budgetConsumedPct)}
+                                </span>
+                              )}
                             </div>
                           ) : (
                             <span className="text-slate-400">—</span>
@@ -304,9 +310,14 @@ export function SlosPage() {
                         }`}
                       >
                         {item.budgetConsumedPct !== null && item.budgetConsumedPct !== undefined
-                          ? `${item.budgetConsumedPct.toFixed(1)}%`
+                          ? formatPercentage(item.budgetConsumedPct, 1)
                           : '—'}
                       </span>
+                      {item.budgetConsumedPct > 1000 && (
+                        <span className="block text-[11px] text-rose-600 font-medium mt-0.5">
+                          {getExhaustedBudgetNote(item.budgetConsumedPct)}
+                        </span>
+                      )}
                     </div>
                   </div>
 

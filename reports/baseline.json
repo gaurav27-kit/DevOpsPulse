@@ -42,8 +42,8 @@
   "frontend-unit-tests": {
     "name": "6. Frontend Unit Tests",
     "files": 31,
-    "tests": 123,
-    "passed": 123,
+    "tests": 131,
+    "passed": 131,
     "failed": 0,
     "skipped": 0
   },
