@@ -248,6 +248,10 @@ export async function sendEmailAlert({
   event,
   incident,
   application,
+  slo = null,
+  details = {},
+  severity = 'low',
+  link = null,
   customMailTransport = null
 }) {
   const transporter = getMailTransport(customMailTransport);
@@ -261,31 +265,26 @@ export async function sendEmailAlert({
 
   const isTest = event === 'test';
   const isOpened = event === 'incident_opened';
+  const isSlo = event.startsWith('slo_');
   const appName = application?.name || 'Monitored Service';
   const incTitle = incident?.title || 'Service degradation';
-  const severityStr = (incident?.severity || 'low').toUpperCase();
-  const incidentUrl = `${env.CLIENT_ORIGIN}/incidents/${incident?._id || ''}`;
+  const severityStr = (severity || incident?.severity || 'low').toUpperCase();
+  const defaultIncidentUrl = `${env.CLIENT_ORIGIN}/incidents/${incident?._id || ''}`;
+  const defaultAppUrl = `${env.CLIENT_ORIGIN}/applications/${application?._id || ''}`;
+  const targetUrl = link || (isSlo ? defaultAppUrl : defaultIncidentUrl);
 
-  let rawSubject;
-  if (isTest) {
-    rawSubject = '[DevOpsPulse] TEST: this is a test notification';
-  } else if (isOpened) {
-    rawSubject = `[DevOpsPulse] ${severityStr}: ${appName} is down`;
-  } else {
-    rawSubject = `[DevOpsPulse] Resolved: ${appName} has recovered`;
-  }
-
-  const safeSubject = stripCrlf(rawSubject);
   const safeAppName = escapeHtml(appName);
   const safeTitle = escapeHtml(incTitle);
-  const safeSeverity = escapeHtml(incident?.severity || 'low');
+  const safeSeverity = escapeHtml(severityStr);
 
+  let rawSubject;
   let textBody;
   let htmlHeading;
   let htmlColor;
   let htmlDetails;
 
   if (isTest) {
+    rawSubject = '[DevOpsPulse] TEST: this is a test notification';
     textBody =
       `DevOpsPulse: Test Notification\n\n` +
       `This is a test notification from DevOpsPulse. No real incident exists.\n` +
@@ -298,14 +297,74 @@ export async function sendEmailAlert({
       `This is a test notification from DevOpsPulse. <strong>No real incident exists.</strong><br>` +
       `Your alert channel is active and delivering notifications properly.` +
       `</p>`;
+  } else if (isSlo) {
+    let sloHeadline = '';
+    if (event === 'slo_breached') {
+      sloHeadline = `availability ${details?.sli ?? '—'}% (target ${slo?.targetPercent ?? '99.9'}%)`;
+      htmlHeading = '🚨 SLO Breached';
+      htmlColor = '#ba1a1a';
+    } else if (event === 'slo_at_risk') {
+      sloHeadline = `availability ${details?.sli ?? '—'}% (target ${slo?.targetPercent ?? '99.9'}%)`;
+      htmlHeading = '⚠️ SLO at Risk';
+      htmlColor = '#b45309';
+    } else if (event === 'slo_high_burn_rate') {
+      sloHeadline = `burn rate 1h ${details?.burnRate1h ?? '—'}x / 6h ${details?.burnRate6h ?? '—'}x`;
+      htmlHeading = '🔥 High Burn Rate Detected';
+      htmlColor = details?.level === 'critical' ? '#ba1a1a' : '#d97706';
+    } else if (event === 'slo_recovered') {
+      sloHeadline = `recovered to ${details?.newStatus || 'operational'}`;
+      htmlHeading = '✅ SLO Recovered';
+      htmlColor = '#065f46';
+    } else if (event === 'slo_budget_replenished') {
+      sloHeadline = `budget replenished to ${details?.currentRemainingBudget ?? 100}%`;
+      htmlHeading = '✨ SLO Budget Replenished';
+      htmlColor = '#065f46';
+    } else if (event === 'slo_insufficient_data') {
+      sloHeadline = `insufficient data (${details?.totalChecks ?? 0} checks, min 20)`;
+      htmlHeading = 'ℹ️ Insufficient SLO Data';
+      htmlColor = '#2563eb';
+    } else if (event === 'slo_monitoring_unavailable') {
+      sloHeadline = `monitoring unavailable (no checks for ${details?.elapsedSeconds ?? 0}s)`;
+      htmlHeading = '⚠️ Monitoring Unavailable';
+      htmlColor = '#b45309';
+    } else if (event === 'slo_monitoring_restored') {
+      sloHeadline = `monitoring restored`;
+      htmlHeading = '✅ Monitoring Restored';
+      htmlColor = '#065f46';
+    } else {
+      sloHeadline = event;
+      htmlHeading = 'SLO Alert';
+      htmlColor = '#2563eb';
+    }
+
+    const eventTag = event.toUpperCase().replace(/_/g, ' ');
+    rawSubject = `[${eventTag}] ${appName}: ${sloHeadline}`;
+    textBody =
+      `DevOpsPulse SLO Alert: ${eventTag}\n\n` +
+      `Service: ${appName}\n` +
+      `Severity: ${severityStr}\n` +
+      `Details: ${sloHeadline}\n` +
+      `Timestamp: ${new Date().toISOString()}\n\n` +
+      `View in DevOpsPulse: ${targetUrl}\n`;
+
+    htmlDetails =
+      `<p style="font-size: 15px; margin-bottom: 16px;">` +
+      `<strong>Service:</strong> ${escapeHtml(appName)}<br>` +
+      `<strong>Severity:</strong> <span style="text-transform: uppercase;">${escapeHtml(severityStr)}</span><br>` +
+      `<strong>Details:</strong> ${escapeHtml(sloHeadline)}` +
+      `</p>` +
+      `<div style="margin: 24px 0;">` +
+      `<a href="${targetUrl}" style="background: #070d0d; color: #ffffff; text-decoration: none; padding: 10px 18px; border-radius: 6px; font-weight: 600; font-size: 14px; display: inline-block;">View in DevOpsPulse</a>` +
+      `</div>`;
   } else if (isOpened) {
+    rawSubject = `[DevOpsPulse] ${severityStr}: ${appName} is down`;
     textBody =
       `DevOpsPulse Alert: Incident Opened\n\n` +
       `Service: ${appName}\n` +
       `Severity: ${severityStr}\n` +
       `Details: ${incTitle}\n` +
       `Started: ${incident?.startedAt ? new Date(incident.startedAt).toISOString() : new Date().toISOString()}\n\n` +
-      `View Incident: ${incidentUrl}\n`;
+      `View Incident: ${defaultIncidentUrl}\n`;
     htmlHeading = '🚨 Incident Opened';
     htmlColor = '#ba1a1a';
     htmlDetails =
@@ -315,15 +374,16 @@ export async function sendEmailAlert({
       `<strong>Summary:</strong> ${safeTitle}` +
       `</p>` +
       `<div style="margin: 24px 0;">` +
-      `<a href="${incidentUrl}" style="background: #070d0d; color: #ffffff; text-decoration: none; padding: 10px 18px; border-radius: 6px; font-weight: 600; font-size: 14px; display: inline-block;">View in DevOpsPulse</a>` +
+      `<a href="${defaultIncidentUrl}" style="background: #070d0d; color: #ffffff; text-decoration: none; padding: 10px 18px; border-radius: 6px; font-weight: 600; font-size: 14px; display: inline-block;">View in DevOpsPulse</a>` +
       `</div>`;
   } else {
+    rawSubject = `[DevOpsPulse] Resolved: ${appName} has recovered`;
     textBody =
       `DevOpsPulse Alert: Incident Resolved\n\n` +
       `Service: ${appName}\n` +
       `Status: Recovered and operational\n` +
       `Resolved: ${incident?.resolvedAt ? new Date(incident.resolvedAt).toISOString() : new Date().toISOString()}\n\n` +
-      `View Incident: ${incidentUrl}\n`;
+      `View Incident: ${defaultIncidentUrl}\n`;
     htmlHeading = '✅ Incident Resolved';
     htmlColor = '#065f46';
     htmlDetails =
@@ -332,9 +392,11 @@ export async function sendEmailAlert({
       `<strong>Status:</strong> Recovered and operational` +
       `</p>` +
       `<div style="margin: 24px 0;">` +
-      `<a href="${incidentUrl}" style="background: #070d0d; color: #ffffff; text-decoration: none; padding: 10px 18px; border-radius: 6px; font-weight: 600; font-size: 14px; display: inline-block;">View in DevOpsPulse</a>` +
+      `<a href="${defaultIncidentUrl}" style="background: #070d0d; color: #ffffff; text-decoration: none; padding: 10px 18px; border-radius: 6px; font-weight: 600; font-size: 14px; display: inline-block;">View in DevOpsPulse</a>` +
       `</div>`;
   }
+
+  const safeSubject = stripCrlf(rawSubject);
 
   const htmlBody = `
 <!DOCTYPE html>
@@ -380,9 +442,14 @@ async function executeChannelDispatch({
   channel,
   deliveryId,
   event,
-  incident,
-  application,
+  severity = 'low',
+  incident = null,
+  application = null,
+  slo = null,
+  details = {},
+  link = null,
   ownerUser,
+  sentAtOverride = null,
   customHttpSender = null,
   customMailTransport = null,
   retryBackoffs = RETRY_BACKOFFS
@@ -407,6 +474,10 @@ async function executeChannelDispatch({
         event,
         incident,
         application,
+        slo,
+        details,
+        severity,
+        link,
         customMailTransport
       });
     } else {
@@ -421,19 +492,45 @@ async function executeChannelDispatch({
       }
 
       let payloadObject;
-      const incidentLink = event === 'test' ? null : `${env.CLIENT_ORIGIN}/incidents/${incident?._id || ''}`;
+      const isSlo = event.startsWith('slo_');
+      const defaultIncidentLink = event === 'test' ? null : `${env.CLIENT_ORIGIN}/incidents/${incident?._id || ''}`;
+      const defaultAppLink = `${env.CLIENT_ORIGIN}/applications/${application?._id || ''}`;
+      const targetLink = link || (isSlo ? defaultAppLink : defaultIncidentLink);
 
       if (channel.format === 'slack') {
         if (event === 'test') {
           payloadObject = {
             text: 'TEST: this is a test notification from DevOpsPulse. No real incident exists.'
           };
+        } else if (isSlo) {
+          payloadObject = {
+            text: `[DevOpsPulse] [${event.toUpperCase()}] ${application?.name || 'Service'} - ${(severity || 'low').toUpperCase()} - ${targetLink}`
+          };
         } else {
           const actionText = event === 'incident_opened' ? 'Incident Opened' : 'Incident Resolved';
           payloadObject = {
-            text: `[DevOpsPulse] ${actionText}: ${application?.name || 'Service'} - ${incident?.title || ''} (${incident?.severity || 'low'}) - ${incidentLink}`
+            text: `[DevOpsPulse] ${actionText}: ${application?.name || 'Service'} - ${incident?.title || ''} (${incident?.severity || 'low'}) - ${targetLink}`
           };
         }
+      } else if (isSlo) {
+        payloadObject = {
+          event,
+          severity: severity || 'low',
+          application: {
+            id: application?._id ? application._id.toString() : null,
+            name: application?.name || null
+          },
+          slo: slo
+            ? {
+                name: slo.name,
+                target: slo.targetPercent,
+                windowDays: slo.windowDays
+              }
+            : null,
+          metrics: details || {},
+          timestamp: new Date().toISOString(),
+          link: targetLink
+        };
       } else {
         payloadObject = {
           event,
@@ -451,7 +548,7 @@ async function executeChannelDispatch({
             id: application?._id ? application._id.toString() : null,
             name: application?.name || null
           },
-          link: incidentLink
+          link: targetLink
         };
       }
 
@@ -469,7 +566,7 @@ async function executeChannelDispatch({
     if (result.success) {
       finalStatus = 'sent';
       finalErrorType = null;
-      finalSentAt = new Date();
+      finalSentAt = sentAtOverride ? new Date(sentAtOverride) : new Date();
       break;
     } else {
       finalErrorType = result.errorType;
@@ -501,21 +598,25 @@ async function executeChannelDispatch({
 }
 
 /**
- * Main alerting entrypoint called after incident status mutations.
+ * Unified notification entrypoint used by incidents and SLO events.
  * Fire-and-forget: wrapped completely so it NEVER throws or blocks caller.
  */
-export async function notifyIncidentEvent(
-  incident,
+export async function notifyEvent({
+  ownerId,
   application,
-  event,
+  slo = null,
+  incident = null,
+  type,
+  severity = 'low',
+  dedupeKey = null,
+  details = {},
+  link = null,
   options = {}
-) {
+}) {
   try {
-    if (!incident || !application || !incident.ownerId) {
+    if (!ownerId || !application) {
       return;
     }
-
-    const ownerId = incident.ownerId;
 
     // Load active notification channels with encrypted secrets
     const channels = await NotificationChannel.find({
@@ -527,7 +628,7 @@ export async function notifyIncidentEvent(
       return;
     }
 
-    const now = Date.now();
+    const now = options.now ? (options.now instanceof Date ? options.now.getTime() : options.now) : Date.now();
     const oneHourAgo = new Date(now - 60 * 60 * 1000);
 
     // Retrieve rolling hour delivery count for rate limiting
@@ -537,20 +638,23 @@ export async function notifyIncidentEvent(
       createdAt: { $gte: oneHourAgo }
     });
 
-    // Retrieve last opened alert for this application for anti-flapping cooldown
-    let lastOpenedAt = null;
-    if (event === 'incident_opened') {
-      const lastOpenedDelivery = await NotificationDelivery.findOne({
-        applicationId: application._id,
-        event: 'incident_opened',
-        status: 'sent'
-      })
-        .sort({ createdAt: -1 })
-        .select('createdAt');
+    const isSlo = type.startsWith('slo_');
+    const cooldownMinutes = isSlo
+      ? (env.SLO_ALERT_COOLDOWN_MINUTES || 30)
+      : (env.NOTIFY_COOLDOWN_MINUTES || 5);
 
-      if (lastOpenedDelivery) {
-        lastOpenedAt = lastOpenedDelivery.createdAt;
-      }
+    // Retrieve last notification timestamp for this application + event
+    let lastNotificationAt = null;
+    const lastDelivery = await NotificationDelivery.findOne({
+      applicationId: application._id,
+      event: type,
+      status: 'sent'
+    })
+      .sort({ createdAt: -1 })
+      .select('sentAt createdAt');
+
+    if (lastDelivery) {
+      lastNotificationAt = lastDelivery.sentAt || lastDelivery.createdAt;
     }
 
     // Preload account owner for email channel dispatch
@@ -560,29 +664,38 @@ export async function notifyIncidentEvent(
     }
 
     for (const channel of channels) {
-      // For incident_resolved: check if the opened delivery for this incident+channel was sent
       let openDeliveryWasSent = null;
-      if (event === 'incident_resolved') {
+
+      if (type === 'incident_resolved' && incident?._id) {
         const openedDelivery = await NotificationDelivery.findOne({
           channelId: channel._id,
           incidentId: incident._id,
           event: 'incident_opened'
         }).select('status').lean();
 
-        // null if no record exists at all (legacy or no opened event);
-        // true only if status is 'sent'; false otherwise (skipped, failed, pending)
         openDeliveryWasSent = openedDelivery ? openedDelivery.status === 'sent' : false;
+      } else if (type === 'slo_recovered') {
+        const episode = details?.episode;
+        const breachDedupeKey = `${slo?._id || ''}:slo_breached:${episode}`;
+        const breachedDelivery = await NotificationDelivery.findOne({
+          channelId: channel._id,
+          dedupeKey: breachDedupeKey,
+          status: 'sent'
+        }).select('status').lean();
+
+        openDeliveryWasSent = Boolean(breachedDelivery);
       }
 
       const ruleResult = shouldNotify({
         channel,
-        event,
+        event: type,
         incident,
-        lastOpenedNotificationAt: lastOpenedAt,
+        severity,
+        lastNotificationAt,
         openDeliveryWasSent,
         sentInLastHour,
         now,
-        cooldownMinutes: env.NOTIFY_COOLDOWN_MINUTES,
+        cooldownMinutes,
         ratePerHour: env.NOTIFY_RATE_PER_HOUR
       });
 
@@ -592,14 +705,15 @@ export async function notifyIncidentEvent(
           await NotificationDelivery.create({
             ownerId,
             channelId: channel._id,
-            incidentId: incident._id,
+            incidentId: incident?._id ?? null,
             applicationId: application._id,
-            event,
+            event: type,
+            dedupeKey: dedupeKey ?? null,
             status: 'skipped',
             skipReason: ruleResult.skipReason,
             attempts: 0
           });
-        } catch (err) {
+        } catch {
           // If already recorded or duplicate key, ignore quietly
         }
         continue;
@@ -608,15 +722,20 @@ export async function notifyIncidentEvent(
       // Insert pending delivery with deduplication index
       let deliveryDoc;
       try {
-        deliveryDoc = await NotificationDelivery.create({
+        const createDoc = {
           ownerId,
           channelId: channel._id,
-          incidentId: incident._id,
+          incidentId: incident?._id ?? null,
           applicationId: application._id,
-          event,
+          event: type,
+          dedupeKey: dedupeKey ?? null,
           status: 'pending',
           attempts: 0
-        });
+        };
+        if (options.now) {
+          createDoc.createdAt = new Date(options.now);
+        }
+        deliveryDoc = await NotificationDelivery.create(createDoc);
       } catch (err) {
         // Duplicate key (code 11000) indicates alert already handled: skip quietly
         if (err.code === 11000) {
@@ -630,10 +749,15 @@ export async function notifyIncidentEvent(
         executeChannelDispatch({
           channel,
           deliveryId: deliveryDoc._id,
-          event,
+          event: type,
+          severity,
           incident,
           application,
+          slo,
+          details,
+          link,
           ownerUser,
+          sentAtOverride: options.now,
           customHttpSender: options.customHttpSender || globalHttpSender,
           customMailTransport: options.customMailTransport,
           retryBackoffs: options.retryBackoffs || RETRY_BACKOFFS
@@ -642,6 +766,41 @@ export async function notifyIncidentEvent(
     }
   } catch (err) {
     // Top-level catch: never propagate notification errors to callers
+  }
+}
+
+/**
+ * Main alerting entrypoint called after incident status mutations.
+ * Fire-and-forget: wrapped completely so it NEVER throws or blocks caller.
+ */
+export async function notifyIncidentEvent(
+  incident,
+  application,
+  event,
+  options = {}
+) {
+  try {
+    if (!incident || !application || !incident.ownerId) {
+      return;
+    }
+    return await notifyEvent({
+      ownerId: incident.ownerId,
+      application,
+      incident,
+      type: event,
+      severity: incident.severity || 'low',
+      dedupeKey: null,
+      details: {
+        title: incident.title,
+        failureCount: incident.failureCount,
+        startedAt: incident.startedAt,
+        resolvedAt: incident.resolvedAt
+      },
+      link: `${env.CLIENT_ORIGIN}/incidents/${incident._id || ''}`,
+      options
+    });
+  } catch (err) {
+    // Non-fatal
   }
 }
 

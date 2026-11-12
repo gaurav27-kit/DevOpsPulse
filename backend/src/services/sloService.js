@@ -15,6 +15,7 @@ import { Slo } from '../models/Slo.js';
 import { Application } from '../models/Application.js';
 import { HealthCheck } from '../models/HealthCheck.js';
 import { HealthCheckDaily } from '../models/HealthCheckDaily.js';
+import { SloAlertState } from '../models/SloAlertState.js';
 import { AppError } from '../utils/AppError.js';
 import {
   computeSloStats,
@@ -446,6 +447,9 @@ export async function deleteSlo(ownerId, applicationId) {
   if (!slo) {
     throw new AppError('SLO not found for this application', 404);
   }
+
+  // Cascade: delete associated SLO alert state machine document
+  await SloAlertState.deleteMany({ sloId: slo._id });
 
   return { deleted: true };
 }

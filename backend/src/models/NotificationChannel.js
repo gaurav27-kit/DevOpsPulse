@@ -27,10 +27,21 @@ const notificationChannelSchema = new mongoose.Schema(
     },
     events: {
       type: [String],
-      enum: ['incident_opened', 'incident_resolved'],
+      enum: [
+        'incident_opened',
+        'incident_resolved',
+        'slo_at_risk',
+        'slo_breached',
+        'slo_high_burn_rate',
+        'slo_recovered',
+        'slo_budget_replenished',
+        'slo_insufficient_data',
+        'slo_monitoring_unavailable',
+        'slo_monitoring_restored'
+      ],
       validate: {
         validator: (v) => Array.isArray(v) && v.length > 0,
-        message: 'At least one event subscription (incident_opened or incident_resolved) is required.'
+        message: 'At least one event subscription is required.'
       },
       required: true
     },

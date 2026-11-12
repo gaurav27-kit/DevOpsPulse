@@ -5,7 +5,8 @@ export const SOCKET_EVENTS = Object.freeze({
   HEALTHCHECK_COMPLETED: 'healthcheck:completed',
   INCIDENT_CREATED: 'incident:created',
   INCIDENT_UPDATED: 'incident:updated',
-  DEPLOYMENT_RECORDED: 'deployment:recorded'
+  DEPLOYMENT_RECORDED: 'deployment:recorded',
+  SLO_ALERT: 'slo:alert'
 });
 
 /**
@@ -144,5 +145,31 @@ export function emitDeploymentRecorded(ownerId, deployment) {
     io.to(targetRoom).emit(SOCKET_EVENTS.DEPLOYMENT_RECORDED, payload);
   } catch (err) {
     console.debug('[Socket] emitDeploymentRecorded error:', err.message);
+  }
+}
+
+/**
+ * Emits slo:alert event to the owner's room only.
+ *
+ * @param {string|import('mongoose').Types.ObjectId} ownerId
+ * @param {object} alertData - { sloId, applicationId, type, severity, at }
+ */
+export function emitSloAlert(ownerId, alertData) {
+  try {
+    const io = getIO();
+    if (!io) return;
+
+    const targetRoom = `user:${ownerId.toString()}`;
+    const payload = {
+      sloId: (alertData.sloId?._id || alertData.sloId).toString(),
+      applicationId: (alertData.applicationId?._id || alertData.applicationId).toString(),
+      type: alertData.type,
+      severity: alertData.severity,
+      at: alertData.at instanceof Date ? alertData.at.toISOString() : alertData.at || new Date().toISOString()
+    };
+
+    io.to(targetRoom).emit(SOCKET_EVENTS.SLO_ALERT, payload);
+  } catch (err) {
+    console.debug('[Socket] emitSloAlert error:', err.message);
   }
 }

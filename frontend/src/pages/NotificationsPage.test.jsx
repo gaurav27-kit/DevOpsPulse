@@ -289,5 +289,53 @@ describe('NotificationsPage component', () => {
     });
     expect(screen.getByText('Channel Alpha')).toBeInTheDocument();
   });
+
+  it('channel modal displays SLO Alerts group with 8 checkboxes and submits selected events', async () => {
+    notificationsApi.getChannels.mockResolvedValueOnce({ data: { channels: [] } });
+    notificationsApi.createChannel.mockResolvedValueOnce({
+      data: {
+        channel: {
+          _id: 'chan_slo',
+          name: 'SLO Monitor Webhook',
+          type: 'webhook',
+          events: ['incident_opened', 'incident_resolved', 'slo_breached', 'slo_at_risk'],
+          minSeverity: 'low',
+          enabled: true
+        }
+      }
+    });
+
+    const queryClient = createTestQueryClient();
+    renderWithProviders(<NotificationsPage />, { user: mockUser, queryClient });
+
+    fireEvent.click(await screen.findByRole('button', { name: /Add Channel/i }));
+
+    expect(screen.getByText('SLO Alerts')).toBeInTheDocument();
+    expect(screen.getByText(/SLO at Risk/i)).toBeInTheDocument();
+    expect(screen.getByText(/SLO Breached/i)).toBeInTheDocument();
+    expect(screen.getByText(/High Burn Rate/i)).toBeInTheDocument();
+    expect(screen.getByText(/SLO Recovered/i)).toBeInTheDocument();
+    expect(screen.getByText(/Budget Replenished/i)).toBeInTheDocument();
+    expect(screen.getByText(/Insufficient Data/i)).toBeInTheDocument();
+    expect(screen.getByText(/Monitoring Unavailable/i)).toBeInTheDocument();
+    expect(screen.getByText(/Monitoring Restored/i)).toBeInTheDocument();
+
+    // Fill form and check SLO Breached & SLO at Risk
+    fireEvent.change(screen.getByLabelText(/Channel Name/i), { target: { value: 'SLO Monitor Webhook' } });
+    fireEvent.change(screen.getByLabelText(/Webhook URL/i), { target: { value: 'https://webhook.example.com/alerts' } });
+    fireEvent.click(screen.getByLabelText(/SLO Breached/i));
+    fireEvent.click(screen.getByLabelText(/SLO at Risk/i));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Create Channel' }));
+
+    await waitFor(() => {
+      expect(notificationsApi.createChannel).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: 'SLO Monitor Webhook',
+          events: expect.arrayContaining(['slo_breached', 'slo_at_risk'])
+        })
+      );
+    });
+  });
 });
 

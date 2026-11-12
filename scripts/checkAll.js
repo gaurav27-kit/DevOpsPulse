@@ -160,7 +160,14 @@ const steps = [
     cwd: '.'
   },
   {
-    name: '16. Playwright E2E Primary Workflow',
+    name: '16. Automated SLO Alerting Proofs',
+    slug: 'slo-alert-proof',
+    command: 'node',
+    args: ['scripts/sloAlertProof.mjs'],
+    cwd: '.'
+  },
+  {
+    name: '17. Playwright E2E Primary Workflow',
     slug: 'playwright-e2e',
     command: 'npm',
     args: ['run', 'test:e2e'],
@@ -168,7 +175,7 @@ const steps = [
     optional: skipPlaywright
   },
   {
-    name: '17. SLO Volume Performance Benchmarks (864k checks)',
+    name: '18. SLO Volume Performance Benchmarks (864k checks)',
     slug: 'slo-perf',
     command: 'node',
     args: ['scripts/sloPerf.js'],

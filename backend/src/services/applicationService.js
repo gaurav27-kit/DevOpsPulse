@@ -4,6 +4,7 @@ import { HealthCheckDaily } from '../models/HealthCheckDaily.js';
 import { Incident } from '../models/Incident.js';
 import { Deployment } from '../models/Deployment.js';
 import { Slo } from '../models/Slo.js';
+import { SloAlertState } from '../models/SloAlertState.js';
 import { AppError } from '../utils/AppError.js';
 import { assertSafeDestination } from './urlSafetyService.js';
 import { closeForUrlChange } from './incidentService.js';
@@ -195,8 +196,9 @@ export const deleteApplication = async (ownerId, id) => {
   // Cascade: delete all deployment records for this application
   await Deployment.deleteMany({ applicationId: id });
 
-  // Cascade: delete associated SLO for this application
+  // Cascade: delete associated SLO and SLO alert states for this application
   await Slo.deleteOne({ applicationId: id });
+  await SloAlertState.deleteMany({ applicationId: id });
 
   await Application.deleteOne({ _id: id, ownerId });
 

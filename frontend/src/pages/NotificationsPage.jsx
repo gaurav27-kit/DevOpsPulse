@@ -631,25 +631,108 @@ export function NotificationsPage() {
 
               <div>
                 <label className="block text-xs font-semibold text-[#131b2e] mb-1">Trigger Events</label>
-                <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-sm text-[#414755] cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={formData.events.includes('incident_opened')}
-                      onChange={() => handleToggleEvent('incident_opened')}
-                      className="rounded border-[#e2e8f0] text-[#2563eb] focus:ring-[#2563eb]"
-                    />
-                    <span>Incident Opened (outage detected)</span>
-                  </label>
-                  <label className="flex items-center gap-2 text-sm text-[#414755] cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={formData.events.includes('incident_resolved')}
-                      onChange={() => handleToggleEvent('incident_resolved')}
-                      className="rounded border-[#e2e8f0] text-[#2563eb] focus:ring-[#2563eb]"
-                    />
-                    <span>Incident Resolved (recovery confirmed)</span>
-                  </label>
+                <div className="space-y-3">
+                  <div>
+                    <span className="text-xs font-semibold text-[#475569] block mb-1.5 uppercase tracking-wider">Incident Alerts</span>
+                    <div className="space-y-1.5 pl-1">
+                      <label className="flex items-center gap-2 text-sm text-[#414755] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.events.includes('incident_opened')}
+                          onChange={() => handleToggleEvent('incident_opened')}
+                          className="rounded border-[#e2e8f0] text-[#2563eb] focus:ring-[#2563eb]"
+                        />
+                        <span>Incident Opened (outage detected)</span>
+                      </label>
+                      <label className="flex items-center gap-2 text-sm text-[#414755] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.events.includes('incident_resolved')}
+                          onChange={() => handleToggleEvent('incident_resolved')}
+                          className="rounded border-[#e2e8f0] text-[#2563eb] focus:ring-[#2563eb]"
+                        />
+                        <span>Incident Resolved (recovery confirmed)</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div>
+                    <span className="text-xs font-semibold text-[#475569] block mb-1.5 uppercase tracking-wider">SLO Alerts</span>
+                    <div className="space-y-1.5 pl-1">
+                      <label className="flex items-center gap-2 text-sm text-[#414755] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.events.includes('slo_at_risk')}
+                          onChange={() => handleToggleEvent('slo_at_risk')}
+                          className="rounded border-[#e2e8f0] text-[#2563eb] focus:ring-[#2563eb]"
+                        />
+                        <span>SLO at Risk (error budget &gt; 50% consumed)</span>
+                      </label>
+                      <label className="flex items-center gap-2 text-sm text-[#414755] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.events.includes('slo_breached')}
+                          onChange={() => handleToggleEvent('slo_breached')}
+                          className="rounded border-[#e2e8f0] text-[#2563eb] focus:ring-[#2563eb]"
+                        />
+                        <span>SLO Breached (error budget exhausted)</span>
+                      </label>
+                      <label className="flex items-center gap-2 text-sm text-[#414755] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.events.includes('slo_high_burn_rate')}
+                          onChange={() => handleToggleEvent('slo_high_burn_rate')}
+                          className="rounded border-[#e2e8f0] text-[#2563eb] focus:ring-[#2563eb]"
+                        />
+                        <span>High Burn Rate (accelerated budget burn)</span>
+                      </label>
+                      <label className="flex items-center gap-2 text-sm text-[#414755] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.events.includes('slo_recovered')}
+                          onChange={() => handleToggleEvent('slo_recovered')}
+                          className="rounded border-[#e2e8f0] text-[#2563eb] focus:ring-[#2563eb]"
+                        />
+                        <span>SLO Recovered (back to healthy or at-risk after breach)</span>
+                      </label>
+                      <label className="flex items-center gap-2 text-sm text-[#414755] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.events.includes('slo_budget_replenished')}
+                          onChange={() => handleToggleEvent('slo_budget_replenished')}
+                          className="rounded border-[#e2e8f0] text-[#2563eb] focus:ring-[#2563eb]"
+                        />
+                        <span>Budget Replenished (returned to 100% healthy)</span>
+                      </label>
+                      <label className="flex items-center gap-2 text-sm text-[#414755] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.events.includes('slo_insufficient_data')}
+                          onChange={() => handleToggleEvent('slo_insufficient_data')}
+                          className="rounded border-[#e2e8f0] text-[#2563eb] focus:ring-[#2563eb]"
+                        />
+                        <span>Insufficient Data (not enough checks in window)</span>
+                      </label>
+                      <label className="flex items-center gap-2 text-sm text-[#414755] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.events.includes('slo_monitoring_unavailable')}
+                          onChange={() => handleToggleEvent('slo_monitoring_unavailable')}
+                          className="rounded border-[#e2e8f0] text-[#2563eb] focus:ring-[#2563eb]"
+                        />
+                        <span>Monitoring Unavailable (health checks missing)</span>
+                      </label>
+                      <label className="flex items-center gap-2 text-sm text-[#414755] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.events.includes('slo_monitoring_restored')}
+                          onChange={() => handleToggleEvent('slo_monitoring_restored')}
+                          className="rounded border-[#e2e8f0] text-[#2563eb] focus:ring-[#2563eb]"
+                        />
+                        <span>Monitoring Restored (health checks resumed)</span>
+                      </label>
+                    </div>
+                  </div>
                 </div>
               </div>
 

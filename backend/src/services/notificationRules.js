@@ -42,10 +42,12 @@ export const SEVERITY_LEVELS = Object.freeze({
  *
  * @param {Object} params
  * @param {Object} params.channel - Channel document or plain object
- * @param {string} params.event - 'incident_opened' | 'incident_resolved'
- * @param {Object} params.incident - Incident object with severity ('low'|'medium'|'high'|'critical')
- * @param {Date|number|null} [params.lastOpenedNotificationAt] - Timestamp of previous opened alert for this app
- * @param {boolean|null} [params.openDeliveryWasSent] - For incident_resolved: was the opened delivery for this incident+channel actually sent?
+ * @param {string} params.event - Event type ('incident_opened', 'slo_breached', etc.)
+ * @param {Object} [params.incident] - Incident object with severity ('low'|'medium'|'high'|'critical')
+ * @param {string} [params.severity] - Direct event severity override
+ * @param {Date|number|null} [params.lastOpenedNotificationAt] - Timestamp of previous alert for anti-flapping
+ * @param {Date|number|null} [params.lastNotificationAt] - Alias for lastOpenedNotificationAt
+ * @param {boolean|null} [params.openDeliveryWasSent] - For incident_resolved / slo_recovered: was the initial alert sent?
  * @param {number} params.sentInLastHour - Count of notifications sent by owner in the past 60 mins
  * @param {Date|number} [params.now] - Current timestamp (defaults to Date.now())
  * @param {number} [params.cooldownMinutes=5] - Cooldown duration in minutes
@@ -56,7 +58,9 @@ export function shouldNotify({
   channel,
   event,
   incident,
+  severity = null,
   lastOpenedNotificationAt = null,
+  lastNotificationAt = null,
   openDeliveryWasSent = null,
   sentInLastHour = 0,
   now = Date.now(),
@@ -73,27 +77,36 @@ export function shouldNotify({
 
   // Severity threshold comparison
   const channelMinLevel = SEVERITY_LEVELS[channel.minSeverity || 'low'] || 1;
-  const incidentLevel = SEVERITY_LEVELS[incident?.severity || 'low'] || 1;
+  const effectiveSeverity = severity || incident?.severity || 'low';
+  const incidentLevel = SEVERITY_LEVELS[effectiveSeverity] || 1;
 
   if (incidentLevel < channelMinLevel) {
     return { notify: false, skipReason: 'severity' };
   }
 
-  // Resolved-without-opened guard: only send incident_resolved if the opened
-  // delivery for this exact incident+channel was successfully sent.
-  // When openDeliveryWasSent is null (not provided), skip this check for backwards
-  // compatibility and test convenience.
-  if (event === 'incident_resolved' && openDeliveryWasSent !== null && !openDeliveryWasSent) {
+  // Resolved-without-opened guard: only send incident_resolved or slo_recovered if the opened/breached
+  // delivery for this exact incident/episode and channel was successfully sent.
+  // When openDeliveryWasSent is null (not provided), skip this check for backwards compatibility.
+  if ((event === 'incident_resolved' || event === 'slo_recovered') && openDeliveryWasSent !== null && !openDeliveryWasSent) {
     return { notify: false, skipReason: 'no_open_alert' };
   }
 
-  // Cooldown check applies exclusively to 'incident_opened' to prevent flapping spam
-  if (event === 'incident_opened' && lastOpenedNotificationAt) {
+  // Anti-flapping cooldown check
+  // Exempt events: incident_resolved, slo_recovered, slo_monitoring_restored, slo_budget_replenished, test
+  const isCooldownExempt =
+    event === 'incident_resolved' ||
+    event === 'slo_recovered' ||
+    event === 'slo_monitoring_restored' ||
+    event === 'slo_budget_replenished' ||
+    event === 'test';
+
+  const lastNotif = lastNotificationAt || lastOpenedNotificationAt;
+  if (!isCooldownExempt && lastNotif) {
     const currentTime = now instanceof Date ? now.getTime() : Number(now);
     const lastTime =
-      lastOpenedNotificationAt instanceof Date
-        ? lastOpenedNotificationAt.getTime()
-        : Number(lastOpenedNotificationAt);
+      lastNotif instanceof Date
+        ? lastNotif.getTime()
+        : Number(lastNotif);
 
     const cooldownMs = (cooldownMinutes || 5) * 60 * 1000;
     const elapsedMs = currentTime - lastTime;

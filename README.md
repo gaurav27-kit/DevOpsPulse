@@ -87,8 +87,38 @@ Frontend runs on `http://localhost:5173`.
     - Zero-friction SLO modal dialog for creating/editing targets and rolling windows with instant TanStack Query cache invalidation.
     - WebSocket real-time live invalidation triggering automatic UI refresh on health check completions and incident events.
     - Fully responsive across desktop (1280px+), tablet, and mobile (360px+) viewports with WCAG AA compliant contrast ratios and minimum 40px touch targets.
+  - **SLO Alerting & State Machine (Release 3 - Step 16)**:
+    - Pure rule engine (`decideSloEvents`) with 2-evaluation (>= 60s) transition debouncing.
+    - 8 event types integrated into unified notification dispatch (email, webhook, WebSocket).
+    - Optimistic concurrency locking (`{ sloId, version }`) for multi-worker safe evaluation.
+    - Delivery deduplication via partial unique index `{ channelId, dedupeKey }`.
+
+### SLO Alerting Events & Thresholds
+
+| Event | Severity | Trigger Transition / Condition | Description & Payload |
+|---|---|---|---|
+| `slo_at_risk` | `medium` | `healthy` \| `insufficient_data` &rarr; `at_risk` | Error budget consumed &gt; 50%; reports target, SLI, consumed % |
+| `slo_breached` | `critical` | Any &rarr; `breached` | Error budget exhausted (100% consumed); increments episode counter |
+| `slo_high_burn_rate` | `critical` / `high` | Lookback burn rates exceed thresholds | `critical` when 1h &ge; 14.4x & 6h &ge; 6.0x; `high` when 6h &ge; 6.0x & 1h &ge; 6.0x. Clears when 6h &lt; 3.0x (hysteresis) |
+| `slo_recovered` | `low` | `breached` &rarr; `at_risk` \| `healthy` | Sent only if corresponding breach episode was dispatched to channel |
+| `slo_budget_replenished` | `low` | `at_risk` &rarr; `healthy` | Sent when budget recovers to healthy (&le; 50% consumed) |
+| `slo_insufficient_data` | `low` | Age &gt; 2 &times; 20 &times; interval and &lt; 20 checks | Low data volume warning with coverage % |
+| `slo_monitoring_unavailable` | `high` | No check for &gt; max(3 &times; interval, 300s) | Health check execution ceased while app has history |
+| `slo_monitoring_restored` | `low` | Checks resume after unavailable | Sent once when health checks resume after unavailable event |
+
+#### Alerting Thresholds & Environment Variables
+
+- `SLO_BURN_FAST_1H` (default: `14.4`): Fast 1-hour burn-rate threshold.
+- `SLO_BURN_SLOW_6H` (default: `6.0`): Slow 6-hour burn-rate threshold.
+- `SLO_BURN_CLEAR_6H` (default: `3.0`): Hysteresis clear threshold for 6-hour burn-rate.
+- `SLO_ALERT_COOLDOWN_MINUTES` (default: `30`): Suppression period per `(sloId, event)`; exempts `slo_recovered`, `slo_budget_replenished`, and `slo_monitoring_restored`.
 
 ### Known Limitations
+
+- **SLO Alerting Limitations**:
+  - **Check-count based SLOs**: Evaluates binary health check success/failure counts only; custom latency percentiles (P95/P99) are not evaluated for SLO alerts.
+  - **Single scheduler process**: Background 60s stale monitoring sweep runs via the in-process scheduler; multi-worker environments rely on optimistic locking on `SloAlertState` rather than a distributed lock manager.
+  - **No per-SLO threshold overrides**: Burn rate thresholds (`14.4x`, `6.0x`, `3.0x`) and cooldown durations are configured globally via environment variables rather than on a per-SLO basis.
 
 - **SLO daily rollups architecture & trade-offs**: SLO evaluation utilizes pre-aggregated `HealthCheckDaily` rollups to eliminate full-window raw check scans. Current architectural trade-offs: (1) rollups are atomically maintained on each check result by the application process; (2) rollups operate at UTC daily granularity rather than hourly; (3) the initial boundary day `[windowStart, endOfBoundaryDay)` queries raw checks to preserve exact rolling window precision; and (4) only `total` and `good` counts are tracked in rollups, with short lookbacks (1h, 6h burn rates) querying indexed raw checks.
 - **In-process, non-durable retries**: Webhook delivery retries (1s, 5s, 30s) are managed in-process with bounded concurrency (max 5 in flight). If the server crashes or restarts mid-flight, pending deliveries older than 2 minutes are marked as `failed` with error type `interrupted` upon restart rather than resumed from an external durable message broker (e.g. RabbitMQ or Redis Streams).

@@ -1,4 +1,12 @@
 {
+  "playwright-e2e": {
+    "name": "16. Playwright E2E Primary Workflow",
+    "files": null,
+    "tests": 14,
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0
+  },
   "secret-check": {
     "name": "1. Secret Check",
     "files": 1,
@@ -25,25 +33,25 @@
   },
   "backend-unit-tests": {
     "name": "4. Backend Unit Tests",
-    "files": 19,
-    "tests": 123,
-    "passed": 123,
+    "files": 20,
+    "tests": 134,
+    "passed": 134,
     "failed": 0,
     "skipped": 0
   },
   "backend-api-tests": {
     "name": "5. Backend API Integration Tests",
-    "files": 11,
-    "tests": 149,
-    "passed": 149,
+    "files": 12,
+    "tests": 156,
+    "passed": 156,
     "failed": 0,
     "skipped": 0
   },
   "frontend-unit-tests": {
     "name": "6. Frontend Unit Tests",
     "files": 31,
-    "tests": 131,
-    "passed": 131,
+    "tests": 133,
+    "passed": 133,
     "failed": 0,
     "skipped": 0
   },
@@ -119,11 +127,11 @@
     "failed": 0,
     "skipped": 0
   },
-  "playwright-e2e": {
-    "name": "16. Playwright E2E Primary Workflow",
-    "files": null,
-    "tests": 14,
-    "passed": 14,
+  "slo-alert-proof": {
+    "name": "16. Automated SLO Alerting Proofs",
+    "files": 1,
+    "tests": 31,
+    "passed": 31,
     "failed": 0,
     "skipped": 0
   }

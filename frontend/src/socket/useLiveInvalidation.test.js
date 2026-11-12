@@ -101,5 +101,20 @@ describe('useLiveInvalidation hook', () => {
     expect(mockQueryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['dashboard'] });
     expect(mockQueryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['application', 'app3'] });
   });
+
+  it('invalidates slos, deliveries, and slo query on slo:alert event', () => {
+    renderHook(() => useLiveInvalidation());
+
+    listeners['slo:alert']({
+      sloId: 'slo123',
+      applicationId: 'app123',
+      type: 'slo_breached',
+      severity: 'critical'
+    });
+
+    expect(mockQueryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['slos'] });
+    expect(mockQueryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['notifications', 'deliveries'] });
+    expect(mockQueryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['slo', 'app123'] });
+  });
 });
 

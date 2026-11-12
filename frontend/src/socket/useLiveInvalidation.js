@@ -55,11 +55,23 @@ export function useLiveInvalidation() {
       }
     };
 
+    const handleSloAlert = (data) => {
+      queryClient.invalidateQueries({ queryKey: ['slos'] });
+      queryClient.invalidateQueries({ queryKey: ['notifications', 'deliveries'] });
+      if (data?.applicationId) {
+        queryClient.invalidateQueries({ queryKey: ['slo', data.applicationId] });
+      }
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('devopspulse:slo-alert', { detail: data }));
+      }
+    };
+
     socket.on('application:status', handleApplicationStatus);
     socket.on('healthcheck:completed', handleHealthCheckCompleted);
     socket.on('incident:created', handleIncidentChanged);
     socket.on('incident:updated', handleIncidentChanged);
     socket.on('deployment:recorded', handleDeploymentRecorded);
+    socket.on('slo:alert', handleSloAlert);
 
     return () => {
       socket.off('application:status', handleApplicationStatus);
@@ -67,6 +79,7 @@ export function useLiveInvalidation() {
       socket.off('incident:created', handleIncidentChanged);
       socket.off('incident:updated', handleIncidentChanged);
       socket.off('deployment:recorded', handleDeploymentRecorded);
+      socket.off('slo:alert', handleSloAlert);
     };
   }, [socket, queryClient]);
 }

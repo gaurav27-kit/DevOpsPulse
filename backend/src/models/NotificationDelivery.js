@@ -26,8 +26,24 @@ const notificationDeliverySchema = new mongoose.Schema(
     },
     event: {
       type: String,
-      enum: ['incident_opened', 'incident_resolved', 'test'],
+      enum: [
+        'incident_opened',
+        'incident_resolved',
+        'test',
+        'slo_at_risk',
+        'slo_breached',
+        'slo_high_burn_rate',
+        'slo_recovered',
+        'slo_budget_replenished',
+        'slo_insufficient_data',
+        'slo_monitoring_unavailable',
+        'slo_monitoring_restored'
+      ],
       required: true
+    },
+    dedupeKey: {
+      type: String,
+      default: null
     },
     status: {
       type: String,
@@ -77,6 +93,15 @@ notificationDeliverySchema.index(
   {
     unique: true,
     partialFilterExpression: { incidentId: { $type: 'objectId' } }
+  }
+);
+
+// Deduplication index for dedupeKey-backed events (e.g. SLO alerts)
+notificationDeliverySchema.index(
+  { channelId: 1, dedupeKey: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { dedupeKey: { $type: 'string' } }
   }
 );
 

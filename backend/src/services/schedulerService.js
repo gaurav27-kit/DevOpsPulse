@@ -1,14 +1,17 @@
 import { Application } from '../models/Application.js';
 import { HealthCheck } from '../models/HealthCheck.js';
 import { HealthCheckDaily } from '../models/HealthCheckDaily.js';
+import { Slo } from '../models/Slo.js';
 import { runHealthCheck } from './healthCheckService.js';
 import { computeNextState } from './statusService.js';
 import { env } from '../config/env.js';
 // incidentService imported lazily to avoid circular deps; imported at top since there are none here
 import { handleCheckOutcome } from './incidentService.js';
+import { evaluateSloAlerts } from './sloAlertService.js';
 import { emitApplicationStatus, emitHealthCheckCompleted } from '../sockets/events.js';
 
 let tickInterval = null;
+let staleSweepInterval = null;
 let isTickRunning = false;
 
 /**
@@ -115,6 +118,19 @@ export async function processCheckResult(application, result) {
     // Log without internal details (no stack trace, no IPs)
     console.error(`[Scheduler] Incident handling error for app ${application._id}:`, err.message);
   }
+
+  // e) Trigger SLO alerting evaluation (Step 16)
+  // Throttled to once per 60s per SLO. Errors are caught and logged and never break the scheduler.
+  try {
+    await evaluateSloAlerts({
+      applicationId: updatedApp._id,
+      application: updatedApp,
+      trigger: 'check',
+      now
+    });
+  } catch (err) {
+    console.error(`[Scheduler] SLO alert evaluation error for app ${application._id}:`, err.message);
+  }
 }
 
 /**
@@ -190,10 +206,49 @@ async function tick() {
   }
 }
 
+/**
+ * 60-second stale sweep checking for monitoring unavailability or restoration.
+ * Uses Application.lastCheckedAt; does NOT perform raw check table scans.
+ */
+export async function staleSweep() {
+  try {
+    const slos = await Slo.find({}).lean();
+    if (!slos || slos.length === 0) return;
+
+    const now = new Date();
+    for (const slo of slos) {
+      try {
+        const app = await Application.findById(slo.applicationId).lean();
+        if (!app) continue;
+
+        const intervalSeconds = app.checkIntervalSeconds || 60;
+        const threshold = Math.max(3 * intervalSeconds, 300);
+        const lastChecked = app.lastCheckedAt ? new Date(app.lastCheckedAt).getTime() : 0;
+        const elapsed = (now.getTime() - lastChecked) / 1000;
+
+        if (app.lastCheckedAt && elapsed > threshold) {
+          await evaluateSloAlerts({
+            applicationId: app._id,
+            application: app,
+            slo,
+            trigger: 'sweep',
+            now
+          });
+        }
+      } catch (err) {
+        console.error(`[Scheduler] SLO stale sweep error for SLO ${slo._id}:`, err.message);
+      }
+    }
+  } catch (err) {
+    console.error('[Scheduler] Stale sweep error:', err.message);
+  }
+}
+
 export function start() {
   if (tickInterval) return;
   console.log(`[Scheduler] Starting with tick interval ${env.SCHEDULER_TICK_MS}ms, max concurrency ${env.MAX_CONCURRENT_CHECKS}`);
   tickInterval = setInterval(tick, env.SCHEDULER_TICK_MS);
+  staleSweepInterval = setInterval(staleSweep, 60000);
   // Run immediately on startup so we don't wait a full tick interval
   tick().catch((err) => console.error('[Scheduler] Initial tick error:', err.message));
 }
@@ -202,6 +257,10 @@ export function stop() {
   if (tickInterval) {
     clearInterval(tickInterval);
     tickInterval = null;
-    console.log('[Scheduler] Stopped');
   }
+  if (staleSweepInterval) {
+    clearInterval(staleSweepInterval);
+    staleSweepInterval = null;
+  }
+  console.log('[Scheduler] Stopped');
 }

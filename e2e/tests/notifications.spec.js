@@ -215,5 +215,39 @@ test.describe('DevOpsPulse Notification Channels & Alerts Suite', () => {
     await contextB.close();
   });
 
+  test('5. Create a webhook channel with SLO events and see it listed', async ({ page }) => {
+    const user = generateUserData('slochan');
+    await registerAndGoToNotifications(page, user);
+
+    await page.getByRole('button', { name: 'Add Channel' }).click();
+    await expect(page.getByRole('dialog')).toBeVisible();
+
+    await page.locator('#channel-name').fill('SLO Production Alerts');
+    await page.locator('#channel-url').fill('https://example.com/api/webhooks/slo-alerts');
+
+    // Select SLO event subscriptions
+    await page.getByText(/SLO Breached/i).click();
+    await page.getByText(/High Burn Rate/i).click();
+    await page.getByText(/SLO at Risk/i).click();
+
+    const [createResponse] = await Promise.all([
+      page.waitForResponse((res) => res.url().includes('/notifications/channels') && res.request().method() === 'POST'),
+      page.getByRole('button', { name: 'Create Channel' }).click()
+    ]);
+    const json = await createResponse.json();
+    expect(json.success).toBe(true);
+    expect(json.data.channel.events).toEqual(
+      expect.arrayContaining(['slo_breached', 'slo_high_burn_rate', 'slo_at_risk'])
+    );
+
+    // Confirm and dismiss secret dialog
+    await page.locator('#confirm-secret-saved').check();
+    await page.getByRole('button', { name: 'I have saved it' }).click();
+
+    // Verify channel is listed with name and SLO events
+    await expect(page.getByText('SLO Production Alerts')).toBeVisible();
+    await expect(page.getByText(/slo_breached/i)).toBeVisible();
+  });
+
 });
 

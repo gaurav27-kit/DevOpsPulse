@@ -21,6 +21,19 @@ export const channelParamsSchema = z.object({
   id: objectIdSchema
 }).strict();
 
+export const ALLOWED_CHANNEL_EVENTS = [
+  'incident_opened',
+  'incident_resolved',
+  'slo_at_risk',
+  'slo_breached',
+  'slo_high_burn_rate',
+  'slo_recovered',
+  'slo_budget_replenished',
+  'slo_insufficient_data',
+  'slo_monitoring_unavailable',
+  'slo_monitoring_restored'
+];
+
 export const createChannelSchema = z
   .object({
     name: z.string().trim().min(1, 'Name is required').max(60, 'Name must not exceed 60 characters'),
@@ -29,8 +42,8 @@ export const createChannelSchema = z
     }),
     enabled: z.boolean().optional().default(true),
     events: z
-      .array(z.enum(['incident_opened', 'incident_resolved']))
-      .min(1, 'At least one event (incident_opened or incident_resolved) must be selected'),
+      .array(z.enum(ALLOWED_CHANNEL_EVENTS))
+      .min(1, 'At least one event must be selected'),
     minSeverity: z.enum(['low', 'medium', 'high', 'critical']).optional().default('low'),
     url: z.string().url().max(2048).optional(),
     format: z.enum(['generic', 'slack']).optional().default('generic')
@@ -51,7 +64,7 @@ export const updateChannelSchema = z
     name: z.string().trim().min(1).max(60).optional(),
     enabled: z.boolean().optional(),
     events: z
-      .array(z.enum(['incident_opened', 'incident_resolved']))
+      .array(z.enum(ALLOWED_CHANNEL_EVENTS))
       .min(1)
       .optional(),
     minSeverity: z.enum(['low', 'medium', 'high', 'critical']).optional(),

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import {
@@ -27,11 +27,26 @@ export function AppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [logoutError, setLogoutError] = useState('');
+  const [sloNotice, setSloNotice] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const queryClient = useQueryClient();
 
   // Mount real-time Socket.IO cache invalidation hook
   useLiveInvalidation();
+
+  useEffect(() => {
+    const handleSloAlert = (e) => {
+      const { type, severity } = e.detail || {};
+      const formatType = (type || 'alert').replace(/^slo_/, '').replace(/_/g, ' ');
+      setSloNotice({
+        message: `SLO Alert: ${formatType.toUpperCase()} (${severity || 'notice'})`,
+        type: severity === 'critical' || severity === 'high' ? 'error' : 'info'
+      });
+    };
+
+    window.addEventListener('devopspulse:slo-alert', handleSloAlert);
+    return () => window.removeEventListener('devopspulse:slo-alert', handleSloAlert);
+  }, []);
 
   // Inspect cached dashboard data for active incident count without triggering any network requests
   const cachedDashboard =
@@ -194,6 +209,15 @@ export function AppLayout() {
 
         {/* Page Body */}
         <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
+          {sloNotice && (
+            <div className="mb-6" data-testid="slo-alert-banner">
+              <AlertBanner
+                message={sloNotice.message}
+                type={sloNotice.type}
+                onDismiss={() => setSloNotice(null)}
+              />
+            </div>
+          )}
           {logoutError && (
             <div className="mb-6">
               <AlertBanner

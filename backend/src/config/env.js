@@ -74,5 +74,11 @@ export const env = Object.freeze({
     process.env.NOTIFICATION_ENCRYPTION_KEY ||
     '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
   NOTIFY_RATE_PER_HOUR: Number(process.env.NOTIFY_RATE_PER_HOUR) || 30,
-  NOTIFY_COOLDOWN_MINUTES: Number(process.env.NOTIFY_COOLDOWN_MINUTES) || 5
+  NOTIFY_COOLDOWN_MINUTES: Number(process.env.NOTIFY_COOLDOWN_MINUTES) || 5,
+
+  // SLO Alerting Configuration (Step 16)
+  SLO_BURN_FAST_1H: Number(process.env.SLO_BURN_FAST_1H) || 14.4,
+  SLO_BURN_SLOW_6H: Number(process.env.SLO_BURN_SLOW_6H) || 6.0,
+  SLO_BURN_CLEAR_6H: Number(process.env.SLO_BURN_CLEAR_6H) || 3.0,
+  SLO_ALERT_COOLDOWN_MINUTES: Number(process.env.SLO_ALERT_COOLDOWN_MINUTES) || 30
 });
