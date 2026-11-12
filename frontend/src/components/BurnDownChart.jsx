@@ -14,19 +14,17 @@ import { EmptyState } from './EmptyState.jsx';
 
 /**
  * Deterministically formats ISO date strings as UTC "MMM D" without client timezone shifting.
+ * Strictly uses timeZone: 'UTC' to prevent date rollback in negative-offset timezones (e.g. America/Los_Angeles).
  */
 export function formatUtcDateLabel(dateStr) {
   if (!dateStr) return '';
-  const iso = typeof dateStr === 'string' ? dateStr : new Date(dateStr).toISOString();
-  const datePart = iso.slice(0, 10);
-  const [year, monthStr, dayStr] = datePart.split('-');
-  const monthIdx = parseInt(monthStr, 10) - 1;
-  const day = parseInt(dayStr, 10);
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  if (monthIdx >= 0 && monthIdx < 12 && !isNaN(day)) {
-    return `${months[monthIdx]} ${day}`;
-  }
-  return datePart;
+  const d = new Date(typeof dateStr === 'string' && dateStr.length === 10 ? `${dateStr}T00:00:00.000Z` : dateStr);
+  if (isNaN(d.getTime())) return String(dateStr);
+  return new Intl.DateTimeFormat('en-US', {
+    timeZone: 'UTC',
+    month: 'short',
+    day: 'numeric'
+  }).format(d);
 }
 
 /**

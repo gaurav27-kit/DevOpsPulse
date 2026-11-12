@@ -80,7 +80,7 @@ Frontend runs on `http://localhost:5173`.
   - Real-time error budget tracking: budget consumed %, budget remaining %, and health classification (`healthy`, `at_risk`, `breached`, `insufficient_data`).
   - Multi-window burn rate tracking over 1-hour (`burnRate1h`) and 6-hour (`burnRate6h`) lookback intervals with fast-burn (`>= 14.4`) and slow-burn (`>= 6.0`) alert flags.
   - Daily UTC burn-down time series with forward carry-over for empty days.
-  - Pre-aggregated `HealthCheckDaily` rollups reducing query latency by over 30x with 0 `COLLSCAN` operations across 50,000+ checks.
+  - Pre-aggregated `HealthCheckDaily` rollups with 0 `COLLSCAN` operations on index-covered queries.
   - **Full Frontend User Experience**:
     - Dedicated `/slos` overview page featuring a desktop table, mobile card layout, and status filter pills (`all`, `healthy`, `at_risk`, `breached`, `insufficient_data`).
     - Embedded SLO management in `ApplicationDetailsPage`: visual status badge, semi-circular SVG error budget gauge, multi-window burn rate cards with animated fast-burn warning banner, and daily burn-down chart.
@@ -90,7 +90,7 @@ Frontend runs on `http://localhost:5173`.
 
 ### Known Limitations
 
-- **SLO daily rollups architecture & trade-offs**: SLO evaluation utilizes pre-aggregated `HealthCheckDaily` rollups, reducing query latency by over 30x. Current architectural trade-offs: (1) rollups are atomically maintained on each check result by the application process; (2) rollups operate at UTC daily granularity rather than hourly; (3) the initial boundary day `[windowStart, endOfBoundaryDay)` queries raw checks to preserve exact rolling window precision; and (4) only `total` and `good` counts are tracked in rollups, with short lookbacks (1h, 6h burn rates) querying indexed raw checks.
+- **SLO daily rollups architecture & trade-offs**: SLO evaluation utilizes pre-aggregated `HealthCheckDaily` rollups to eliminate full-window raw check scans. Current architectural trade-offs: (1) rollups are atomically maintained on each check result by the application process; (2) rollups operate at UTC daily granularity rather than hourly; (3) the initial boundary day `[windowStart, endOfBoundaryDay)` queries raw checks to preserve exact rolling window precision; and (4) only `total` and `good` counts are tracked in rollups, with short lookbacks (1h, 6h burn rates) querying indexed raw checks.
 - **In-process, non-durable retries**: Webhook delivery retries (1s, 5s, 30s) are managed in-process with bounded concurrency (max 5 in flight). If the server crashes or restarts mid-flight, pending deliveries older than 2 minutes are marked as `failed` with error type `interrupted` upon restart rather than resumed from an external durable message broker (e.g. RabbitMQ or Redis Streams).
 - **Account-owner email only**: Email notifications are dispatched exclusively to the verified account owner's email address. Arbitrary third-party recipients are disallowed by design to prevent open-relay spam abuse.
 - **No SMS or native push**: Alerting supports Email and Webhooks only. SMS and mobile push notifications are out of scope for Release 2.

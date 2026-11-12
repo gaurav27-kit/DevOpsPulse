@@ -74,7 +74,7 @@ export function BurnRateCard({
         <div className="p-3 bg-slate-50 rounded border border-slate-100">
           <span className="text-[11px] font-medium text-slate-500 block">6-Hour Lookback</span>
           <span
-            className={`text-lg font-bold font-mono ${slowBurn ? 'text-amber-600' : 'text-slate-800'}`}
+            className={`text-lg font-bold font-mono ${slowBurn ? 'text-amber-700' : 'text-slate-800'}`}
             data-testid="burn-rate-6h"
           >
             {formatRate(burnRate6h)}

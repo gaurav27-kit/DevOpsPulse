@@ -214,7 +214,7 @@ export function SlosPage() {
                                   item.budgetConsumedPct >= 100
                                     ? 'text-rose-600'
                                     : item.budgetConsumedPct >= 75
-                                    ? 'text-amber-600'
+                                    ? 'text-amber-700'
                                     : 'text-slate-800'
                                 }`}
                               >
@@ -239,7 +239,7 @@ export function SlosPage() {
                         </td>
                         <td className="py-3.5 px-4 font-mono">
                           {item.burnRate6h !== null && item.burnRate6h !== undefined ? (
-                            <span className={item.slowBurn ? 'text-amber-600 font-bold' : 'text-slate-700'}>
+                            <span className={item.slowBurn ? 'text-amber-700 font-bold' : 'text-slate-700'}>
                               {item.burnRate6h.toFixed(1)}x
                             </span>
                           ) : (
@@ -299,7 +299,7 @@ export function SlosPage() {
                           item.budgetConsumedPct >= 100
                             ? 'text-rose-600'
                             : item.budgetConsumedPct >= 75
-                            ? 'text-amber-600'
+                            ? 'text-amber-700'
                             : 'text-slate-800'
                         }`}
                       >

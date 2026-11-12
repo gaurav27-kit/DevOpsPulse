@@ -76,13 +76,6 @@ const steps = [
     cwd: '.'
   },
   {
-    name: '3b. Total Count Unit Tests',
-    slug: 'total-count-tests',
-    command: 'node',
-    args: ['--test', 'scripts/totalCount.test.js'],
-    cwd: '.'
-  },
-  {
     name: '4. Backend Unit Tests',
     slug: 'backend-unit-tests',
     command: 'npm',

@@ -1,4 +1,4 @@
-# DevOpsPulse Testing Strategy and Release Quality Gate
+ # DevOpsPulse Testing Strategy and Release Quality Gate
 
 This document outlines the testing architecture, test pyramid, acceptance criteria traceability, bugs identified during test authoring, and verification commands for DevOpsPulse.
 
@@ -65,10 +65,10 @@ The automated release quality gate enforces zero regressions before code can be 
 |---|---|---|---|
 | 1. Secret Scanning | `node scripts/checkSecrets.js` | Zero committed credentials, private keys, or tracked `.env` files | PASS (1/1) |
 | 2. Secret Unit Tests | `node --test scripts/checkSecrets.test.js` | Secret scanner regex patterns and exclusion rules verified | PASS (11/11) |
-| 3. Evidence Parser Tests | `node --test scripts/parseCounts.test.js` | Test runner output parsing across frameworks and ANSI stripping | PASS (16/16) |
+| 3. Evidence Parser Tests | `node --test scripts/parseCounts.test.js` | Test runner output parsing across frameworks and ANSI stripping | PASS (17/17) |
 | 4. Backend Unit Tests | `npm --prefix backend test` | State transitions, uptime math, SSRF IP rules, crypto, notification rules, SLO math | PASS (123/123) |
 | 5. Backend API Tests | `npm --prefix backend run test:api` | Multi-tenant isolation matrix, auth cookies, schema validation, notifications, SLO API | PASS (149/149) |
-| 6. Frontend Unit Tests | `npm --prefix frontend test` | Component rendering, client validation, live hook invalidation, TanStack v5 cache invalidation, SLO badges/gauges/charts | PASS (123/123) |
+| 6. Frontend Unit Tests | `npm --prefix frontend test` | Component rendering, client validation, live hook invalidation, TanStack v5 cache invalidation, SLO badges/gauges/charts | PASS (124/124) |
 | 7. Frontend Build | `npm --prefix frontend run build` | Zero syntax or bundling errors; production bundle generated | PASS (1/1) |
 | 8. Incident Flow Check | `npm --prefix backend run check:incidents` | Sequential lifecycle + 20 concurrent checks | PASS (17/17) |
 | 9. Analytics Check | `npm --prefix backend run check:analytics` | Uptime calculation, empty buckets, user isolation, 100+ checks latency | PASS (37/37) |
@@ -137,19 +137,21 @@ The automated release quality gate enforces zero regressions before code can be 
 |---|---|---|---|
 | **Secret Scanner Checks** (`checkSecrets.js`) | 1 file | 1 test (241 files scanned) | **1 Passed, 0 Failed** |
 | **Secret Matcher Unit Tests** (`checkSecrets.test.js`) | 1 file | 11 tests | **11 Passed, 0 Failed** |
-| **Evidence Parser Unit Tests** (`parseCounts.test.js`) | 1 file | 16 tests | **16 Passed, 0 Failed** |
+| **Evidence Parser Unit Tests** (`parseCounts.test.js`) | 1 file | 17 tests | **17 Passed, 0 Failed** |
 | **Backend Unit Tests** (`node:test`) | 19 files | 123 tests | **123 Passed, 0 Failed** |
 | **Backend API Integration Tests** (`vitest`) | 11 files | 149 tests | **149 Passed, 0 Failed** |
-| **Frontend Unit & Component Tests** (`vitest` + RTL) | 22 files | 86 tests | **86 Passed, 0 Failed** |
+| **Frontend Unit & Component Tests** (`vitest` + RTL) | 31 files | 124 tests | **124 Passed, 0 Failed** |
 | **Frontend Production Build** (`vite build`) | 1 build | 1 test (production bundle) | **1 Passed, 0 Failed** |
 | **Incident Flow Check** (`check:incidents`) | 1 file | 17 assertions | **17 Passed, 0 Failed** |
 | **Analytics Check** (`check:analytics`) | 1 file | 37 assertions | **37 Passed, 0 Failed** |
 | **Socket.IO Security Check** (`check:sockets`) | 1 file | 13 assertions | **13 Passed, 0 Failed** |
 | **Alerting Lifecycle Check** (`alertingCheck.js`) | 1 file | 16 assertions | **16 Passed, 0 Failed** |
 | **Automated Alerting Proofs** (`alertingProof.mjs`) | 1 file | 30 assertions | **30 Passed, 0 Failed** |
-| **SLO Lifecycle & Performance Check** (`check:slo`) | 1 file | 58 assertions | **58 Passed, 0 Failed** |
-| **Playwright End-to-End Suite** (`playwright test`) | 2 files | 5 scenarios | **5 Passed, 0 Failed** |
-| **Total Automated Tests** | **74 files** | **712 tests** | **All 16 Executed Suites Passed** |
+| **SLO Lifecycle & Performance Check** (`check:slo`) | 1 file | 53 assertions | **53 Passed, 0 Failed** |
+| **Baseline Guard Tests** (`baselineGuard.test.js`) | 1 file | 6 tests | **6 Passed, 0 Failed** |
+| **SLO Rollup & Performance Proof** (`sloRollupCheck.js`) | 1 file | 101 assertions | **101 Passed, 0 Failed** |
+| **Playwright End-to-End Suite** (`playwright test`) | 3 files | 14 scenarios | **14 Passed, 0 Failed** |
+| **Total Automated Tests** | **74 files** | **713 tests** | **All 16 Executed Suites Passed** |
 
 ---
 

@@ -63,7 +63,7 @@ export function ErrorBudgetGauge({
           Error Budget Consumed
         </span>
         <div className="text-right">
-          <span className={`text-base font-bold ${numericConsumed >= 100 ? 'text-rose-600' : numericConsumed >= 75 ? 'text-amber-600' : 'text-slate-800'}`}>
+          <span className={`text-base font-bold ${numericConsumed >= 100 ? 'text-rose-600' : numericConsumed >= 75 ? 'text-amber-700' : 'text-slate-800'}`}>
             {numericConsumed.toFixed(1)}%
           </span>
           <span className="text-xs text-slate-500 ml-1.5 font-medium">
