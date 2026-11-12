@@ -480,7 +480,7 @@ async function main() {
     const BATCH_SIZE = 5000;
     const TOTAL_CHECKS = 86400;
     const nowPerf = Date.now();
-    const intervalMs = 30000;
+    const intervalMs = 29500;
 
     for (let i = 0; i < TOTAL_CHECKS; i += BATCH_SIZE) {
       const batch = [];
