@@ -1,0 +1,2126 @@
+{
+  "user": {
+    "id": "6ae857e8c8ba1080c43fa1ff",
+    "name": "alex jonhson",
+    "email": "alex@gmail.com"
+  },
+  "auditedAt": "2026-11-12T15:21:49.854Z",
+  "applications": [
+    {
+      "applicationId": "6aead07611d4124430f78664",
+      "name": "Broken Server",
+      "url": "https://httpbin.org/status/503",
+      "status": "down",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6af1d3871188954bd9a90a69",
+      "name": "DummyJSON API",
+      "url": "https://dummyjson.com/products",
+      "status": "up",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6af58f8604c366835bbce2d1",
+      "name": "GitHub Public API",
+      "url": "https://api.github.com/zen",
+      "currentAppStatus": "down",
+      "sloStatus": "breached",
+      "sloConfig": {
+        "targetPercent": 99.9,
+        "windowDays": 30,
+        "createdAt": "2026-11-12T10:07:14.634Z"
+      },
+      "rawCountsInWindow": {
+        "total": 367,
+        "good": 281,
+        "bad": 86
+      },
+      "errorTypeBreakdown": {
+        "none": 281,
+        "http_error": 86
+      },
+      "statusCodeBreakdown": {
+        "200": 281,
+        "403": 86
+      },
+      "perDayCounts": {
+        "2026-11-12": {
+          "good": 281,
+          "bad": 86,
+          "total": 367
+        }
+      },
+      "timeline": {
+        "firstCheckInWindow": "2026-11-12T10:06:08.892Z",
+        "lastCheckInWindow": "2026-11-12T15:21:46.574Z",
+        "allTimeFirstCheck": "2026-11-12T10:06:08.892Z",
+        "allTimeLastCheck": "2026-11-12T15:21:46.574Z"
+      },
+      "rollupComparison": {
+        "rawWindowTotal": 367,
+        "boundaryRawTotal": 0,
+        "rollupTotal": 367,
+        "hybridTotal": 367,
+        "drift": {
+          "totalDiff": 0,
+          "goodDiff": 0,
+          "badDiff": 0
+        }
+      },
+      "independentMetrics": {
+        "sli": 76.57,
+        "errorRatePct": 23.43,
+        "budgetConsumedPct": 23433.24,
+        "budgetRemainingPct": 0,
+        "status": "breached",
+        "coveragePct": 0.73,
+        "partialWindow": true,
+        "burnRate1h": 333.33,
+        "burnRate6h": 234.33,
+        "totals": {
+          "good": 281,
+          "bad": 86,
+          "total": 367
+        }
+      },
+      "apiSloResult": {
+        "slo": {
+          "_id": "6af58fd204c366835bbce453",
+          "ownerId": "6ae857e8c8ba1080c43fa1ff",
+          "applicationId": "6af58f8604c366835bbce2d1",
+          "name": "Availability SLO",
+          "targetPercent": 99.9,
+          "windowDays": 30,
+          "createdAt": "2026-11-12T10:07:14.634Z",
+          "updatedAt": "2026-11-12T10:07:14.634Z",
+          "__v": 0
+        },
+        "status": "breached",
+        "sli": 76.57,
+        "errorRatePct": 23.43,
+        "budgetConsumedPct": 23433.24,
+        "budgetRemainingPct": 0,
+        "totals": {
+          "good": 281,
+          "bad": 86,
+          "total": 367
+        },
+        "coveragePct": 0.73,
+        "partialWindow": true,
+        "burnRate1h": 333.33,
+        "burnRate6h": 234.33,
+        "fastBurn": true,
+        "slowBurn": true,
+        "series": [
+          {
+            "day": "2026-10-13",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-14",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-15",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-16",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-17",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-18",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-19",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-20",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-21",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-22",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-23",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-24",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-25",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-26",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-27",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-28",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-29",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-30",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-31",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-01",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-02",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-03",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-04",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-05",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-06",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-07",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-08",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-09",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-10",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-11",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-12",
+            "total": 367,
+            "bad": 86,
+            "cumulativeBudgetConsumedPct": 23433.24
+          }
+        ],
+        "window": {
+          "from": "2026-10-13T15:21:49.903Z",
+          "to": "2026-11-12T15:21:49.903Z"
+        }
+      },
+      "comparison": {
+        "sli": {
+          "independent": 76.57,
+          "api": 76.57,
+          "diff": 0
+        },
+        "budgetConsumedPct": {
+          "independent": 23433.24,
+          "api": 23433.24,
+          "diff": 0
+        },
+        "budgetRemainingPct": {
+          "independent": 0,
+          "api": 0,
+          "diff": 0
+        },
+        "burnRate1h": {
+          "independent": 333.33,
+          "api": 333.33,
+          "diff": 0
+        },
+        "burnRate6h": {
+          "independent": 234.33,
+          "api": 234.33,
+          "diff": 0
+        },
+        "status": {
+          "independent": "breached",
+          "api": "breached",
+          "matches": true
+        }
+      },
+      "integrity": {
+        "foreignOwnerCount": 0,
+        "futureCheckCount": 0,
+        "duplicateSecondsCount": 1,
+        "totalDuplicateChecks": 1,
+        "duplicateSamples": [
+          {
+            "_id": "2026-11-12 10:07:53",
+            "count": 2
+          }
+        ]
+      },
+      "specialDetails": {
+        "last30Checks": [
+          {
+            "checkedAt": "2026-11-12T15:21:46.574Z",
+            "statusCode": 403,
+            "responseTimeMs": 543,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:21:06.343Z",
+            "statusCode": 403,
+            "responseTimeMs": 339,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:20:26.498Z",
+            "statusCode": 403,
+            "responseTimeMs": 507,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:19:36.145Z",
+            "statusCode": 403,
+            "responseTimeMs": 200,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:18:56.148Z",
+            "statusCode": 403,
+            "responseTimeMs": 236,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:18:16.057Z",
+            "statusCode": 403,
+            "responseTimeMs": 188,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:17:36.127Z",
+            "statusCode": 403,
+            "responseTimeMs": 273,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:16:56.040Z",
+            "statusCode": 403,
+            "responseTimeMs": 202,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:16:16.015Z",
+            "statusCode": 403,
+            "responseTimeMs": 201,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:15:36.007Z",
+            "statusCode": 403,
+            "responseTimeMs": 217,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:14:56.119Z",
+            "statusCode": 403,
+            "responseTimeMs": 337,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:14:15.963Z",
+            "statusCode": 403,
+            "responseTimeMs": 202,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:13:36.068Z",
+            "statusCode": 403,
+            "responseTimeMs": 344,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:12:55.950Z",
+            "statusCode": 403,
+            "responseTimeMs": 247,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:12:15.844Z",
+            "statusCode": 403,
+            "responseTimeMs": 176,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:11:35.814Z",
+            "statusCode": 403,
+            "responseTimeMs": 190,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:10:55.768Z",
+            "statusCode": 403,
+            "responseTimeMs": 172,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:10:15.771Z",
+            "statusCode": 403,
+            "responseTimeMs": 207,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:09:35.756Z",
+            "statusCode": 403,
+            "responseTimeMs": 206,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:08:45.723Z",
+            "statusCode": 403,
+            "responseTimeMs": 198,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:07:22.384Z",
+            "statusCode": 403,
+            "responseTimeMs": 193,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:06:42.407Z",
+            "statusCode": 403,
+            "responseTimeMs": 240,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:05:52.277Z",
+            "statusCode": 403,
+            "responseTimeMs": 141,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:05:12.327Z",
+            "statusCode": 200,
+            "responseTimeMs": 219,
+            "success": true,
+            "errorType": null,
+            "errorMessage": null
+          },
+          {
+            "checkedAt": "2026-11-12T15:04:32.247Z",
+            "statusCode": 200,
+            "responseTimeMs": 159,
+            "success": true,
+            "errorType": null,
+            "errorMessage": null
+          },
+          {
+            "checkedAt": "2026-11-12T15:03:52.190Z",
+            "statusCode": 200,
+            "responseTimeMs": 125,
+            "success": true,
+            "errorType": null,
+            "errorMessage": null
+          },
+          {
+            "checkedAt": "2026-11-12T15:03:12.241Z",
+            "statusCode": 200,
+            "responseTimeMs": 205,
+            "success": true,
+            "errorType": null,
+            "errorMessage": null
+          },
+          {
+            "checkedAt": "2026-11-12T15:02:32.424Z",
+            "statusCode": 200,
+            "responseTimeMs": 418,
+            "success": true,
+            "errorType": null,
+            "errorMessage": null
+          },
+          {
+            "checkedAt": "2026-11-12T15:01:52.323Z",
+            "statusCode": 200,
+            "responseTimeMs": 328,
+            "success": true,
+            "errorType": null,
+            "errorMessage": null
+          },
+          {
+            "checkedAt": "2026-11-12T15:01:12.171Z",
+            "statusCode": 200,
+            "responseTimeMs": 179,
+            "success": true,
+            "errorType": null,
+            "errorMessage": null
+          }
+        ],
+        "statusTransitions": [
+          {
+            "timestamp": "2026-11-12T13:06:09.856Z",
+            "event": "FAILED_TO_DOWN",
+            "triggerCheck": {
+              "statusCode": 403,
+              "errorType": "http_error",
+              "errorMessage": "Server returned an unsuccessful HTTP status code"
+            },
+            "consecutiveFailures": 2
+          },
+          {
+            "timestamp": "2026-11-12T13:26:18.357Z",
+            "event": "RECOVERED_TO_UP",
+            "triggerCheck": {
+              "statusCode": 200,
+              "responseTimeMs": 209
+            },
+            "consecutiveSuccesses": 2
+          },
+          {
+            "timestamp": "2026-11-12T14:03:49.255Z",
+            "event": "FAILED_TO_DOWN",
+            "triggerCheck": {
+              "statusCode": 403,
+              "errorType": "http_error",
+              "errorMessage": "Server returned an unsuccessful HTTP status code"
+            },
+            "consecutiveFailures": 2
+          },
+          {
+            "timestamp": "2026-11-12T14:26:40.232Z",
+            "event": "RECOVERED_TO_UP",
+            "triggerCheck": {
+              "statusCode": 200,
+              "responseTimeMs": 206
+            },
+            "consecutiveSuccesses": 2
+          },
+          {
+            "timestamp": "2026-11-12T15:06:42.407Z",
+            "event": "FAILED_TO_DOWN",
+            "triggerCheck": {
+              "statusCode": 403,
+              "errorType": "http_error",
+              "errorMessage": "Server returned an unsuccessful HTTP status code"
+            },
+            "consecutiveFailures": 2
+          }
+        ],
+        "incidentTimeline": [
+          {
+            "id": "6af5b9c19441b87510d47704",
+            "title": "GitHub Public API is down",
+            "severity": "high",
+            "status": "resolved",
+            "failureCount": 29,
+            "startedAt": "2026-11-12T13:06:09.870Z",
+            "resolvedAt": "2026-11-12T13:26:18.421Z",
+            "durationSeconds": 1209
+          },
+          {
+            "id": "6af5c745b4f592eb3e7244ae",
+            "title": "GitHub Public API is down",
+            "severity": "high",
+            "status": "resolved",
+            "failureCount": 34,
+            "startedAt": "2026-11-12T14:03:49.273Z",
+            "resolvedAt": "2026-11-12T14:26:40.243Z",
+            "durationSeconds": 1371
+          },
+          {
+            "id": "6af5d60208ce186991d471d5",
+            "title": "GitHub Public API is down",
+            "severity": "high",
+            "status": "open",
+            "failureCount": 23,
+            "startedAt": "2026-11-12T15:06:42.418Z",
+            "resolvedAt": null,
+            "durationSeconds": null
+          }
+        ]
+      }
+    },
+    {
+      "applicationId": "6af1d0de1188954bd9a90633",
+      "name": "Google",
+      "url": "https://www.google.com/",
+      "currentAppStatus": "up",
+      "sloStatus": "breached",
+      "sloConfig": {
+        "targetPercent": 99.9,
+        "windowDays": 30,
+        "createdAt": "2026-11-12T09:48:09.089Z"
+      },
+      "rawCountsInWindow": {
+        "total": 174,
+        "good": 172,
+        "bad": 2
+      },
+      "errorTypeBreakdown": {
+        "none": 172,
+        "dns_error": 2
+      },
+      "statusCodeBreakdown": {
+        "200": 172,
+        "null": 2
+      },
+      "perDayCounts": {
+        "2026-11-09": {
+          "good": 43,
+          "bad": 2,
+          "total": 45
+        },
+        "2026-11-10": {
+          "good": 55,
+          "bad": 0,
+          "total": 55
+        },
+        "2026-11-12": {
+          "good": 74,
+          "bad": 0,
+          "total": 74
+        }
+      },
+      "timeline": {
+        "firstCheckInWindow": "2026-11-09T13:55:46.099Z",
+        "lastCheckInWindow": "2026-11-12T15:19:46.254Z",
+        "allTimeFirstCheck": "2026-11-09T13:55:46.099Z",
+        "allTimeLastCheck": "2026-11-12T15:19:46.254Z"
+      },
+      "rollupComparison": {
+        "rawWindowTotal": 174,
+        "boundaryRawTotal": 0,
+        "rollupTotal": 174,
+        "hybridTotal": 174,
+        "drift": {
+          "totalDiff": 0,
+          "goodDiff": 0,
+          "badDiff": 0
+        }
+      },
+      "independentMetrics": {
+        "sli": 98.85,
+        "errorRatePct": 1.15,
+        "budgetConsumedPct": 1149.43,
+        "budgetRemainingPct": 0,
+        "status": "breached",
+        "coveragePct": 10.2,
+        "partialWindow": true,
+        "burnRate1h": 0,
+        "burnRate6h": 0,
+        "totals": {
+          "good": 172,
+          "bad": 2,
+          "total": 174
+        }
+      },
+      "apiSloResult": {
+        "slo": {
+          "_id": "6af58b5904c366835bbccfac",
+          "ownerId": "6ae857e8c8ba1080c43fa1ff",
+          "applicationId": "6af1d0de1188954bd9a90633",
+          "name": "Availability SLO",
+          "targetPercent": 99.9,
+          "windowDays": 30,
+          "createdAt": "2026-11-12T09:48:09.089Z",
+          "updatedAt": "2026-11-12T09:48:09.089Z",
+          "__v": 0
+        },
+        "status": "breached",
+        "sli": 98.85,
+        "errorRatePct": 1.15,
+        "budgetConsumedPct": 1149.43,
+        "budgetRemainingPct": 0,
+        "totals": {
+          "good": 172,
+          "bad": 2,
+          "total": 174
+        },
+        "coveragePct": 10.2,
+        "partialWindow": true,
+        "burnRate1h": 0,
+        "burnRate6h": 0,
+        "fastBurn": false,
+        "slowBurn": false,
+        "series": [
+          {
+            "day": "2026-10-13",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-14",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-15",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-16",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-17",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-18",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-19",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-20",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-21",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-22",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-23",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-24",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-25",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-26",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-27",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-28",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-29",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-30",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-31",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-01",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-02",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-03",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-04",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-05",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-06",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-07",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-08",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-09",
+            "total": 45,
+            "bad": 2,
+            "cumulativeBudgetConsumedPct": 1149.43
+          },
+          {
+            "day": "2026-11-10",
+            "total": 55,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 1149.43
+          },
+          {
+            "day": "2026-11-11",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 1149.43
+          },
+          {
+            "day": "2026-11-12",
+            "total": 74,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 1149.43
+          }
+        ],
+        "window": {
+          "from": "2026-10-13T15:21:50.011Z",
+          "to": "2026-11-12T15:21:50.011Z"
+        }
+      },
+      "comparison": {
+        "sli": {
+          "independent": 98.85,
+          "api": 98.85,
+          "diff": 0
+        },
+        "budgetConsumedPct": {
+          "independent": 1149.43,
+          "api": 1149.43,
+          "diff": 0
+        },
+        "budgetRemainingPct": {
+          "independent": 0,
+          "api": 0,
+          "diff": 0
+        },
+        "burnRate1h": {
+          "independent": 0,
+          "api": 0,
+          "diff": 0
+        },
+        "burnRate6h": {
+          "independent": 0,
+          "api": 0,
+          "diff": 0
+        },
+        "status": {
+          "independent": "breached",
+          "api": "breached",
+          "matches": true
+        }
+      },
+      "integrity": {
+        "foreignOwnerCount": 0,
+        "futureCheckCount": 0,
+        "duplicateSecondsCount": 0,
+        "totalDuplicateChecks": 0,
+        "duplicateSamples": []
+      },
+      "specialDetails": {
+        "last30Checks": [],
+        "statusTransitions": [],
+        "incidentTimeline": []
+      }
+    },
+    {
+      "applicationId": "6af1d15c1188954bd9a906dd",
+      "name": "HTTPBin Failure",
+      "url": "https://httpbin.org/status/500",
+      "status": "down",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6af1d1711188954bd9a90703",
+      "name": "HTTPBin Slow",
+      "url": "https://httpbin.org/delay/5",
+      "status": "degraded",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6af1d1461188954bd9a906ba",
+      "name": "HTTPBin Success",
+      "url": "https://httpbin.org/status/200",
+      "status": "up",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6af1d1211188954bd9a9068d",
+      "name": "JSONPlaceholder",
+      "url": "https://jsonplaceholder.typicode.com/posts",
+      "status": "up",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6af317763d2a1dddb4688c5f",
+      "name": "Payment API Recovery Test",
+      "url": "https://https-httpbin-org-status-418.free.beeceptor.com/health",
+      "currentAppStatus": "down",
+      "sloStatus": "breached",
+      "sloConfig": {
+        "targetPercent": 99.9,
+        "windowDays": 30,
+        "createdAt": "2026-11-12T07:25:01.217Z"
+      },
+      "rawCountsInWindow": {
+        "total": 855,
+        "good": 90,
+        "bad": 765
+      },
+      "errorTypeBreakdown": {
+        "http_error": 759,
+        "none": 90,
+        "dns_error": 4,
+        "timeout": 1,
+        "connection_reset": 1
+      },
+      "statusCodeBreakdown": {
+        "200": 90,
+        "429": 754,
+        "500": 5,
+        "null": 6
+      },
+      "perDayCounts": {
+        "2026-11-10": {
+          "good": 40,
+          "bad": 303,
+          "total": 343
+        },
+        "2026-11-12": {
+          "good": 50,
+          "bad": 462,
+          "total": 512
+        }
+      },
+      "timeline": {
+        "firstCheckInWindow": "2026-11-10T13:09:21.292Z",
+        "lastCheckInWindow": "2026-11-12T15:21:47.145Z",
+        "allTimeFirstCheck": "2026-11-10T13:09:21.292Z",
+        "allTimeLastCheck": "2026-11-12T15:21:47.145Z"
+      },
+      "rollupComparison": {
+        "rawWindowTotal": 855,
+        "boundaryRawTotal": 0,
+        "rollupTotal": 855,
+        "hybridTotal": 855,
+        "drift": {
+          "totalDiff": 0,
+          "goodDiff": 0,
+          "badDiff": 0
+        }
+      },
+      "independentMetrics": {
+        "sli": 10.53,
+        "errorRatePct": 89.47,
+        "budgetConsumedPct": 89473.68,
+        "budgetRemainingPct": 0,
+        "status": "breached",
+        "coveragePct": 6.97,
+        "partialWindow": true,
+        "burnRate1h": 1000,
+        "burnRate6h": 1000,
+        "totals": {
+          "good": 90,
+          "bad": 765,
+          "total": 855
+        }
+      },
+      "apiSloResult": {
+        "slo": {
+          "_id": "6af569cdda0480849c459e38",
+          "ownerId": "6ae857e8c8ba1080c43fa1ff",
+          "applicationId": "6af317763d2a1dddb4688c5f",
+          "name": "Availability SLO",
+          "targetPercent": 99.9,
+          "windowDays": 30,
+          "createdAt": "2026-11-12T07:25:01.217Z",
+          "updatedAt": "2026-11-12T10:02:44.620Z",
+          "__v": 0
+        },
+        "status": "breached",
+        "sli": 10.53,
+        "errorRatePct": 89.47,
+        "budgetConsumedPct": 89473.68,
+        "budgetRemainingPct": 0,
+        "totals": {
+          "good": 90,
+          "bad": 765,
+          "total": 855
+        },
+        "coveragePct": 6.97,
+        "partialWindow": true,
+        "burnRate1h": 1000,
+        "burnRate6h": 1000,
+        "fastBurn": true,
+        "slowBurn": true,
+        "series": [
+          {
+            "day": "2026-10-13",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-14",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-15",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-16",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-17",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-18",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-19",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-20",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-21",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-22",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-23",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-24",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-25",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-26",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-27",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-28",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-29",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-30",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-31",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-01",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-02",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-03",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-04",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-05",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-06",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-07",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-08",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-09",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-10",
+            "total": 343,
+            "bad": 303,
+            "cumulativeBudgetConsumedPct": 35438.6
+          },
+          {
+            "day": "2026-11-11",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 35438.6
+          },
+          {
+            "day": "2026-11-12",
+            "total": 512,
+            "bad": 462,
+            "cumulativeBudgetConsumedPct": 89473.68
+          }
+        ],
+        "window": {
+          "from": "2026-10-13T15:21:50.091Z",
+          "to": "2026-11-12T15:21:50.091Z"
+        }
+      },
+      "comparison": {
+        "sli": {
+          "independent": 10.53,
+          "api": 10.53,
+          "diff": 0
+        },
+        "budgetConsumedPct": {
+          "independent": 89473.68,
+          "api": 89473.68,
+          "diff": 0
+        },
+        "budgetRemainingPct": {
+          "independent": 0,
+          "api": 0,
+          "diff": 0
+        },
+        "burnRate1h": {
+          "independent": 1000,
+          "api": 1000,
+          "diff": 0
+        },
+        "burnRate6h": {
+          "independent": 1000,
+          "api": 1000,
+          "diff": 0
+        },
+        "status": {
+          "independent": "breached",
+          "api": "breached",
+          "matches": true
+        }
+      },
+      "integrity": {
+        "foreignOwnerCount": 0,
+        "futureCheckCount": 0,
+        "duplicateSecondsCount": 0,
+        "totalDuplicateChecks": 0,
+        "duplicateSamples": []
+      },
+      "specialDetails": {
+        "last30Checks": [
+          {
+            "checkedAt": "2026-11-12T15:21:47.145Z",
+            "statusCode": 429,
+            "responseTimeMs": 1113,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:21:06.969Z",
+            "statusCode": 429,
+            "responseTimeMs": 965,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:20:27.150Z",
+            "statusCode": 429,
+            "responseTimeMs": 1158,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:19:36.856Z",
+            "statusCode": 429,
+            "responseTimeMs": 910,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:18:56.869Z",
+            "statusCode": 429,
+            "responseTimeMs": 955,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:18:16.777Z",
+            "statusCode": 429,
+            "responseTimeMs": 907,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:17:36.825Z",
+            "statusCode": 429,
+            "responseTimeMs": 970,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:16:56.717Z",
+            "statusCode": 429,
+            "responseTimeMs": 878,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:16:17.262Z",
+            "statusCode": 429,
+            "responseTimeMs": 1451,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:15:26.707Z",
+            "statusCode": 429,
+            "responseTimeMs": 920,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:14:46.709Z",
+            "statusCode": 429,
+            "responseTimeMs": 932,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:13:57.084Z",
+            "statusCode": 429,
+            "responseTimeMs": 1342,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:13:16.705Z",
+            "statusCode": 429,
+            "responseTimeMs": 992,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:12:36.611Z",
+            "statusCode": 429,
+            "responseTimeMs": 919,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:11:56.577Z",
+            "statusCode": 429,
+            "responseTimeMs": 927,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:11:16.562Z",
+            "statusCode": 429,
+            "responseTimeMs": 943,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:10:36.591Z",
+            "statusCode": 429,
+            "responseTimeMs": 1004,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:09:46.449Z",
+            "statusCode": 429,
+            "responseTimeMs": 907,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:08:46.490Z",
+            "statusCode": 429,
+            "responseTimeMs": 964,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:07:23.175Z",
+            "statusCode": 429,
+            "responseTimeMs": 982,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:06:43.028Z",
+            "statusCode": 429,
+            "responseTimeMs": 859,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:05:53.040Z",
+            "statusCode": 429,
+            "responseTimeMs": 903,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:05:12.995Z",
+            "statusCode": 429,
+            "responseTimeMs": 886,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:04:32.986Z",
+            "statusCode": 429,
+            "responseTimeMs": 898,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:03:52.962Z",
+            "statusCode": 429,
+            "responseTimeMs": 895,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:03:12.921Z",
+            "statusCode": 429,
+            "responseTimeMs": 884,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:02:33.048Z",
+            "statusCode": 429,
+            "responseTimeMs": 1048,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:01:42.873Z",
+            "statusCode": 429,
+            "responseTimeMs": 875,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:01:02.932Z",
+            "statusCode": 429,
+            "responseTimeMs": 941,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          },
+          {
+            "checkedAt": "2026-11-12T15:00:22.875Z",
+            "statusCode": 429,
+            "responseTimeMs": 888,
+            "success": false,
+            "errorType": "http_error",
+            "errorMessage": "Server returned an unsuccessful HTTP status code"
+          }
+        ],
+        "statusTransitions": [
+          {
+            "timestamp": "2026-11-10T13:10:01.176Z",
+            "event": "FAILED_TO_DOWN",
+            "triggerCheck": {
+              "statusCode": 500,
+              "errorType": "http_error",
+              "errorMessage": "Server returned an unsuccessful HTTP status code"
+            },
+            "consecutiveFailures": 2
+          },
+          {
+            "timestamp": "2026-11-10T13:13:21.554Z",
+            "event": "RECOVERED_TO_UP",
+            "triggerCheck": {
+              "statusCode": 200,
+              "responseTimeMs": 1053
+            },
+            "consecutiveSuccesses": 2
+          },
+          {
+            "timestamp": "2026-11-10T13:53:03.797Z",
+            "event": "FAILED_TO_DOWN",
+            "triggerCheck": {
+              "statusCode": 429,
+              "errorType": "http_error",
+              "errorMessage": "Server returned an unsuccessful HTTP status code"
+            },
+            "consecutiveFailures": 2
+          },
+          {
+            "timestamp": "2026-11-12T07:03:47.869Z",
+            "event": "RECOVERED_TO_UP",
+            "triggerCheck": {
+              "statusCode": 200,
+              "responseTimeMs": 976
+            },
+            "consecutiveSuccesses": 2
+          },
+          {
+            "timestamp": "2026-11-12T07:41:10.966Z",
+            "event": "FAILED_TO_DOWN",
+            "triggerCheck": {
+              "statusCode": 429,
+              "errorType": "http_error",
+              "errorMessage": "Server returned an unsuccessful HTTP status code"
+            },
+            "consecutiveFailures": 2
+          }
+        ],
+        "incidentTimeline": [
+          {
+            "id": "6af317a93d2a1dddb4688cfd",
+            "title": "Payment API Recovery Test is down",
+            "severity": "high",
+            "status": "resolved",
+            "failureCount": 5,
+            "startedAt": "2026-11-10T13:10:01.187Z",
+            "resolvedAt": "2026-11-10T13:13:21.586Z",
+            "durationSeconds": 200
+          },
+          {
+            "id": "6af321bf62e57416c3c67d6f",
+            "title": "Payment API Recovery Test is down",
+            "severity": "high",
+            "status": "resolved",
+            "failureCount": 296,
+            "startedAt": "2026-11-10T13:53:03.809Z",
+            "resolvedAt": "2026-11-12T07:03:47.882Z",
+            "durationSeconds": 148244
+          },
+          {
+            "id": "6af56d96da0480849c45aad3",
+            "title": "Payment API Recovery Test is down",
+            "severity": "high",
+            "status": "open",
+            "failureCount": 462,
+            "startedAt": "2026-11-12T07:41:10.975Z",
+            "resolvedAt": null,
+            "durationSeconds": null
+          }
+        ]
+      }
+    },
+    {
+      "applicationId": "6af310bf3d2a1dddb4688121",
+      "name": "Payment API Test2",
+      "url": "https://httpstat.us/200",
+      "status": "down",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6af311513d2a1dddb4688203",
+      "name": "Payment Gateway Test",
+      "url": "https://httpbin.org/status/418",
+      "status": "down",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6ae8709a71494c1b67095ec9",
+      "name": "Production API",
+      "url": "https://api.example.com/health",
+      "status": "down",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6ae8e0e5754d1af07caa5a9c",
+      "name": "[DEMO] Core Authentication Service",
+      "url": "https://auth.pulse-demo.io",
+      "status": "up",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6ae8e0e5754d1af07caa5974",
+      "name": "[DEMO] Notifications & Webhooks Worker",
+      "url": "https://worker-dev.pulse-demo.io",
+      "status": "down",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6ae8e0e5754d1af07caa584b",
+      "name": "[DEMO] Payment & Checkout Gateway",
+      "url": "https://checkout.pulse-demo.io",
+      "status": "up",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6ae8e0e5754d1af07caa5bc0",
+      "name": "[DEMO] Search & Catalog API",
+      "url": "https://catalog-staging.pulse-demo.io",
+      "status": "up",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6aeacf5a11d4124430f785af",
+      "name": "example",
+      "url": "https://example.com/",
+      "status": "up",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6aead34611d4124430f78a56",
+      "name": "scmc",
+      "url": "https://smart-complaint-management-system-kappa.vercel.app/",
+      "currentAppStatus": "up",
+      "sloStatus": "breached",
+      "sloConfig": {
+        "targetPercent": 99.9,
+        "windowDays": 30,
+        "createdAt": "2026-11-12T09:47:33.752Z"
+      },
+      "rawCountsInWindow": {
+        "total": 1321,
+        "good": 1306,
+        "bad": 15
+      },
+      "errorTypeBreakdown": {
+        "none": 1306,
+        "dns_error": 13,
+        "timeout": 1,
+        "connection_reset": 1
+      },
+      "statusCodeBreakdown": {
+        "200": 1306,
+        "null": 15
+      },
+      "perDayCounts": {
+        "2026-11-04": {
+          "good": 21,
+          "bad": 0,
+          "total": 21
+        },
+        "2026-11-09": {
+          "good": 359,
+          "bad": 6,
+          "total": 365
+        },
+        "2026-11-10": {
+          "good": 403,
+          "bad": 7,
+          "total": 410
+        },
+        "2026-11-12": {
+          "good": 523,
+          "bad": 2,
+          "total": 525
+        }
+      },
+      "timeline": {
+        "firstCheckInWindow": "2026-11-04T06:40:10.565Z",
+        "lastCheckInWindow": "2026-11-12T15:21:26.223Z",
+        "allTimeFirstCheck": "2026-11-04T06:40:10.565Z",
+        "allTimeLastCheck": "2026-11-12T15:21:26.223Z"
+      },
+      "rollupComparison": {
+        "rawWindowTotal": 1321,
+        "boundaryRawTotal": 0,
+        "rollupTotal": 1321,
+        "hybridTotal": 1321,
+        "drift": {
+          "totalDiff": 0,
+          "goodDiff": 0,
+          "badDiff": 0
+        }
+      },
+      "independentMetrics": {
+        "sli": 98.86,
+        "errorRatePct": 1.14,
+        "budgetConsumedPct": 1135.5,
+        "budgetRemainingPct": 0,
+        "status": "breached",
+        "coveragePct": 27.87,
+        "partialWindow": true,
+        "burnRate1h": 0,
+        "burnRate6h": 2.52,
+        "totals": {
+          "good": 1306,
+          "bad": 15,
+          "total": 1321
+        }
+      },
+      "apiSloResult": {
+        "slo": {
+          "_id": "6af58b3504c366835bbccf04",
+          "ownerId": "6ae857e8c8ba1080c43fa1ff",
+          "applicationId": "6aead34611d4124430f78a56",
+          "name": "Availability SLO",
+          "targetPercent": 99.9,
+          "windowDays": 30,
+          "createdAt": "2026-11-12T09:47:33.752Z",
+          "updatedAt": "2026-11-12T10:03:10.155Z",
+          "__v": 0
+        },
+        "status": "breached",
+        "sli": 98.86,
+        "errorRatePct": 1.14,
+        "budgetConsumedPct": 1135.5,
+        "budgetRemainingPct": 0,
+        "totals": {
+          "good": 1306,
+          "bad": 15,
+          "total": 1321
+        },
+        "coveragePct": 27.87,
+        "partialWindow": true,
+        "burnRate1h": 0,
+        "burnRate6h": 2.52,
+        "fastBurn": false,
+        "slowBurn": false,
+        "series": [
+          {
+            "day": "2026-10-13",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-14",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-15",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-16",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-17",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-18",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-19",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-20",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-21",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-22",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-23",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-24",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-25",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-26",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-27",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-28",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-29",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-30",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-10-31",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-01",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-02",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-03",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-04",
+            "total": 21,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-05",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-06",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-07",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-08",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 0
+          },
+          {
+            "day": "2026-11-09",
+            "total": 365,
+            "bad": 6,
+            "cumulativeBudgetConsumedPct": 454.2
+          },
+          {
+            "day": "2026-11-10",
+            "total": 410,
+            "bad": 7,
+            "cumulativeBudgetConsumedPct": 984.1
+          },
+          {
+            "day": "2026-11-11",
+            "total": 0,
+            "bad": 0,
+            "cumulativeBudgetConsumedPct": 984.1
+          },
+          {
+            "day": "2026-11-12",
+            "total": 525,
+            "bad": 2,
+            "cumulativeBudgetConsumedPct": 1135.5
+          }
+        ],
+        "window": {
+          "from": "2026-10-13T15:21:50.234Z",
+          "to": "2026-11-12T15:21:50.234Z"
+        }
+      },
+      "comparison": {
+        "sli": {
+          "independent": 98.86,
+          "api": 98.86,
+          "diff": 0
+        },
+        "budgetConsumedPct": {
+          "independent": 1135.5,
+          "api": 1135.5,
+          "diff": 0
+        },
+        "budgetRemainingPct": {
+          "independent": 0,
+          "api": 0,
+          "diff": 0
+        },
+        "burnRate1h": {
+          "independent": 0,
+          "api": 0,
+          "diff": 0
+        },
+        "burnRate6h": {
+          "independent": 2.52,
+          "api": 2.52,
+          "diff": 0
+        },
+        "status": {
+          "independent": "breached",
+          "api": "breached",
+          "matches": true
+        }
+      },
+      "integrity": {
+        "foreignOwnerCount": 0,
+        "futureCheckCount": 0,
+        "duplicateSecondsCount": 0,
+        "totalDuplicateChecks": 0,
+        "duplicateSamples": []
+      },
+      "specialDetails": {
+        "last30Checks": [],
+        "statusTransitions": [],
+        "incidentTimeline": []
+      }
+    },
+    {
+      "applicationId": "6aeacfad11d4124430f785d8",
+      "name": "slow site",
+      "url": "https://httpbin.org/delay/3",
+      "status": "degraded",
+      "hasSlo": false
+    },
+    {
+      "applicationId": "6aead00011d4124430f78604",
+      "name": "timeout",
+      "url": "https://httpbin.org/delay/10",
+      "status": "down",
+      "hasSlo": false
+    }
+  ]
+}

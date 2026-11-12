@@ -41,9 +41,9 @@
   },
   "backend-api-tests": {
     "name": "5. Backend API Integration Tests",
-    "files": 12,
-    "tests": 156,
-    "passed": 156,
+    "files": 13,
+    "tests": 162,
+    "passed": 162,
     "failed": 0,
     "skipped": 0
   },
