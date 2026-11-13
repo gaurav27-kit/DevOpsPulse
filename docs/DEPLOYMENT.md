@@ -65,6 +65,18 @@ NOTIFY_RATE_PER_HOUR=30
 NOTIFY_COOLDOWN_MINUTES=5
 ```
 
+#### 4. Contact Form Configuration (Step 17)
+```ini
+# Contact form IP rate limit window in milliseconds (default: 3600000 = 1 hour)
+CONTACT_RATE_LIMIT_WINDOW_MS=3600000
+
+# Maximum contact form submissions per IP per window (default: 3 in production, 1000 in test)
+CONTACT_RATE_LIMIT_MAX=3
+
+# Destination email for contact form inquiries (optional; if unset, messages are stored in DB only)
+CONTACT_TO_EMAIL=sales@devopspulse.com
+```
+
 ---
 
 ## Startup Maintenance

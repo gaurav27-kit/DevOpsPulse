@@ -41,6 +41,9 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     font-family: var(--font-sans);
     background-color: #faf8ff;
@@ -48,6 +51,72 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+}
+
+/* Reduced motion accessibility override */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Hero card sparkline and pulse animations */
+@keyframes sparklineDraw {
+  0% {
+    stroke-dashoffset: 300;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes incidentCycle {
+  0%, 25% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  30%, 65% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  75%, 100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes calmGlow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.04);
+  }
+}
+
+.animate-sparkline {
+  stroke-dasharray: 300;
+  animation: sparklineDraw 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-incident-badge {
+  animation: incidentCycle 8s ease-in-out infinite;
+}
+
+.animate-calm-glow {
+  animation: calmGlow 6s ease-in-out infinite;
 }
 
 /* Custom horizontal scrollbar for data tables */

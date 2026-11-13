@@ -193,4 +193,48 @@ test.describe('Generate SLO Documentation Screenshots', () => {
       fullPage: true
     });
   });
+
+  test('Capture Landing Page, Login, and Register screenshots', async ({ page, context }) => {
+    // Ensure clean state (logged out)
+    await context.clearCookies();
+
+    // 1. Desktop Landing Page
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/');
+    await expect(page.locator('h1')).toBeVisible();
+    await page.waitForTimeout(600);
+    await page.screenshot({
+      path: path.join(screenshotDir, 'landing-desktop.png'),
+      fullPage: false
+    });
+
+    // 2. Mobile Landing Page
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/');
+    await expect(page.locator('h1')).toBeVisible();
+    await page.waitForTimeout(600);
+    await page.screenshot({
+      path: path.join(screenshotDir, 'landing-mobile.png'),
+      fullPage: false
+    });
+
+    // 3. Login Page
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/login');
+    await expect(page.getByRole('heading', { name: /Sign in to DevOpsPulse/i })).toBeVisible();
+    await page.waitForTimeout(500);
+    await page.screenshot({
+      path: path.join(screenshotDir, 'login.png'),
+      fullPage: false
+    });
+
+    // 4. Register Page
+    await page.goto('/register');
+    await expect(page.getByRole('heading', { name: /Create an account/i })).toBeVisible();
+    await page.waitForTimeout(500);
+    await page.screenshot({
+      path: path.join(screenshotDir, 'register.png'),
+      fullPage: false
+    });
+  });
 });

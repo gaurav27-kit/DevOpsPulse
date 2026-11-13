@@ -98,7 +98,8 @@ describe('Cross-User Authorization Matrix (Multi-tenant Isolation)', () => {
     'GET /api/v1/health',
     'POST /api/v1/auth/register',
     'POST /api/v1/auth/login',
-    'POST /api/v1/auth/logout'
+    'POST /api/v1/auth/logout',
+    'POST /api/v1/contact'
   ];
 
   beforeEach(async () => {

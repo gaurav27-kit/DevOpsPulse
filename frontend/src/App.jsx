@@ -17,21 +17,22 @@ import { DeploymentsPage } from './pages/DeploymentsPage.jsx';
 import { DeploymentCreatePage } from './pages/DeploymentCreatePage.jsx';
 import { SlosPage } from './pages/SlosPage.jsx';
 import { NotificationsPage } from './pages/NotificationsPage.jsx';
+import LandingPage from './pages/LandingPage.jsx';
 import { NotFoundPage } from './pages/NotFoundPage.jsx';
 
 /**
  * Root routing component defining access control policies:
+ * - Public landing: /
  * - Public-only: /login, /register
  * - Protected: /dashboard, /applications, /incidents, /deployments
  * - Real-time: Protected routes wrapped with SocketProvider for live updates
- * - Redirects: / -> /dashboard
  * - Catch-all: * -> NotFoundPage
  */
 export default function App() {
   return (
     <Routes>
-      {/* Root redirect */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      {/* Public Landing Page */}
+      <Route path="/" element={<LandingPage />} />
 
       {/* Guest/Public-only routes */}
       <Route element={<PublicOnlyRoute />}>

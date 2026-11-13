@@ -93,6 +93,24 @@ Frontend runs on `http://localhost:5173`.
     - Optimistic concurrency locking (`{ sloId, version }`) for multi-worker safe evaluation.
     - Delivery deduplication via partial unique index `{ channelId, dedupeKey }`.
 
+- **Public Landing Page & Contact System (Step 17)**:
+  - Dark, modern responsive landing page (`/`) with sticky navigation, accessible skip link, and dynamic authentication actions (`Sign in` / `Get started free` vs. `Open dashboard`).
+  - Hero visual featuring live status card with real-time SVG sparkline animation, auto-resolving incident badge, and SRE value metrics.
+  - Core platform feature grid highlighting endpoint monitoring, incident state machines, SLO error budgets, WebSocket streams, signed alerts, and maintenance windows.
+  - 3-step setup walkthrough and comprehensive security architecture facts (httpOnly cookies, SSRF guard, AES-256-GCM encryption, HMAC signing, multi-tenant isolation).
+  - Public contact form with client and server-side validation, anti-spam honeypot field (`website`), and resilient plain-text email delivery with CRLF sanitization.
+  - WCAG AA compliant contrast ratios across dark and light surfaces, minimum 40px touch targets, zero layout shift, and full adherence to `prefers-reduced-motion`.
+
+### Screenshots
+
+| Desktop Landing Page | Mobile Landing Page (375px) |
+|---|---|
+| ![Landing Desktop](docs/screenshots/landing-desktop.png) | ![Landing Mobile](docs/screenshots/landing-mobile.png) |
+
+| Sign In Screen | Account Registration Screen |
+|---|---|
+| ![Login](docs/screenshots/login.png) | ![Register](docs/screenshots/register.png) |
+
 ### SLO Alerting Events & Thresholds
 
 | Event | Severity | Trigger Transition / Condition | Description & Payload |

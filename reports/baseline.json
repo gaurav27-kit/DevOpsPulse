@@ -1,12 +1,4 @@
 {
-  "playwright-e2e": {
-    "name": "16. Playwright E2E Primary Workflow",
-    "files": null,
-    "tests": 14,
-    "passed": 14,
-    "failed": 0,
-    "skipped": 0
-  },
   "secret-check": {
     "name": "1. Secret Check",
     "files": 1,
@@ -41,17 +33,17 @@
   },
   "backend-api-tests": {
     "name": "5. Backend API Integration Tests",
-    "files": 14,
-    "tests": 184,
-    "passed": 184,
+    "files": 15,
+    "tests": 191,
+    "passed": 191,
     "failed": 0,
     "skipped": 0
   },
   "frontend-unit-tests": {
     "name": "6. Frontend Unit Tests",
-    "files": 31,
-    "tests": 135,
-    "passed": 135,
+    "files": 32,
+    "tests": 144,
+    "passed": 144,
     "failed": 0,
     "skipped": 0
   },
@@ -132,6 +124,14 @@
     "files": 1,
     "tests": 31,
     "passed": 31,
+    "failed": 0,
+    "skipped": 0
+  },
+  "playwright-e2e": {
+    "name": "17. Playwright E2E Primary Workflow",
+    "files": null,
+    "tests": 20,
+    "passed": 20,
     "failed": 0,
     "skipped": 0
   }

@@ -63,6 +63,11 @@ export const env = Object.freeze({
     (process.env.NODE_ENV === 'production' ? 20 : 1000),
   CHECK_RATE_LIMIT_WINDOW_MS: Number(process.env.CHECK_RATE_LIMIT_WINDOW_MS) || 60 * 1000,
   CHECK_RATE_LIMIT_MAX: Number(process.env.CHECK_RATE_LIMIT_MAX) || 6,
+  CONTACT_RATE_LIMIT_WINDOW_MS: Number(process.env.CONTACT_RATE_LIMIT_WINDOW_MS) || 60 * 60 * 1000,
+  CONTACT_RATE_LIMIT_MAX:
+    Number(process.env.CONTACT_RATE_LIMIT_MAX) ||
+    (process.env.NODE_ENV === 'test' ? 1000 : 3),
+  CONTACT_TO_EMAIL: process.env.CONTACT_TO_EMAIL || '',
 
   // Alerting & Notifications
   SMTP_HOST: process.env.SMTP_HOST || '',

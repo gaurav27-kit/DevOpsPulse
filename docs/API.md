@@ -388,4 +388,43 @@ Service Level Objectives track service reliability against rolling evaluation wi
     - `order`: `asc` or `desc`
   - Returns `{ "success": true, "data": { "slos": [...], "pagination": { "page", "limit", "total", "totalPages" } } }`.
 
+---
+
+## 8. Public Contact API (`/api/v1/contact`)
+
+Public endpoint accessible without authentication. Protected by IP rate limiting (configurable via `CONTACT_RATE_LIMIT_MAX`, default 3 requests per hour in production).
+
+- `POST /api/v1/contact`
+  - Submits a message to DevOpsPulse support and sales team.
+  - Request body (strictly enforced schema):
+    - `name` (string, required, 2-80 characters, control characters sanitized)
+    - `email` (string, required, valid email format, max 255 characters)
+    - `message` (string, required, 10-2000 characters, control characters sanitized)
+    - `website` (string, optional honeypot field — if provided and non-empty, the request is quietly accepted with 200 OK without sending email or storing spam)
+  - Success Response (HTTP 200):
+    ```json
+    {
+      "success": true,
+      "message": "Thank you for reaching out! Your message has been received."
+    }
+    ```
+  - Rate Limited Response (HTTP 429):
+    ```json
+    {
+      "success": false,
+      "message": "Too many contact requests from this IP. Please try again later."
+    }
+    ```
+  - Validation Error Response (HTTP 400):
+    ```json
+    {
+      "success": false,
+      "message": "Validation error",
+      "errors": [
+        { "field": "name", "message": "Name must be at least 2 characters" }
+      ]
+    }
+    ```
+
+
 
