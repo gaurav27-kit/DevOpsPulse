@@ -65,8 +65,13 @@ export function shouldNotify({
   sentInLastHour = 0,
   now = Date.now(),
   cooldownMinutes = 5,
-  ratePerHour = 30
+  ratePerHour = 30,
+  isMaintenance = false
 }) {
+  if (isMaintenance && event !== 'test') {
+    return { notify: false, skipReason: 'maintenance_mode' };
+  }
+
   if (!channel || !channel.enabled) {
     return { notify: false, skipReason: 'disabled' };
   }

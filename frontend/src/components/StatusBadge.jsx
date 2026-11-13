@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, AlertTriangle, XCircle, HelpCircle } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, XCircle, HelpCircle, Wrench } from 'lucide-react';
 
 /**
  * Enhanced StatusBadge component conveying operational state with both text and iconography.
@@ -23,6 +23,11 @@ export function StatusBadge({ status = 'unknown', className = '' }) {
       label: 'Down',
       icon: XCircle,
       style: 'bg-[#fef2f2] text-[#991b1b] border-[#fecaca]'
+    },
+    maintenance: {
+      label: 'Maintenance',
+      icon: Wrench,
+      style: 'bg-[#eff6ff] text-[#1e40af] border-[#bfdbfe]'
     },
     unknown: {
       label: 'Unknown',

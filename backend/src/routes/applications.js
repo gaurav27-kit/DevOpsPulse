@@ -5,6 +5,7 @@ import * as healthCheckController from '../controllers/healthCheckController.js'
 import { createDeploymentHandler } from '../controllers/deploymentController.js';
 import { getUptimeHandler } from '../controllers/analyticsController.js';
 import * as sloController from '../controllers/sloController.js';
+import * as maintenanceController from '../controllers/maintenanceController.js';
 import { requireAuth } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import { assertSafeUrlSyntax } from '../services/urlSafetyService.js';
@@ -345,6 +346,52 @@ router.delete(
   '/:id/slo',
   validate({ params: mongoIdParamsSchema }),
   sloController.deleteSlo
+);
+
+// Maintenance sub-routes schemas
+const createMaintenanceSchema = z
+  .object({
+    startAt: z.string().datetime({ offset: true }).optional(),
+    endAt: z.string().datetime({ offset: true }, { required_error: 'endAt is required' }),
+    reason: z
+      .string({ required_error: 'Reason is required' })
+      .trim()
+      .min(1, 'Reason cannot be empty')
+      .max(500, 'Reason cannot exceed 500 characters')
+  })
+  .strict()
+  .refine(
+    (data) => {
+      const start = data.startAt ? new Date(data.startAt) : new Date();
+      const end = new Date(data.endAt);
+      return end.getTime() > start.getTime();
+    },
+    { message: 'End time must be strictly after start time', path: ['endAt'] }
+  );
+
+const getMaintenanceQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(10),
+  status: z.enum(['SCHEDULED', 'ACTIVE', 'COMPLETED', 'CANCELLED']).optional()
+});
+
+// Maintenance sub-routes
+router.post(
+  '/:id/maintenance',
+  validate({ params: mongoIdParamsSchema, body: createMaintenanceSchema }),
+  maintenanceController.createMaintenance
+);
+
+router.get(
+  '/:id/maintenance',
+  validate({ params: mongoIdParamsSchema, query: getMaintenanceQuerySchema }),
+  maintenanceController.getMaintenanceHistory
+);
+
+router.get(
+  '/:id/maintenance/active',
+  validate({ params: mongoIdParamsSchema }),
+  maintenanceController.getActiveMaintenance
 );
 
 export default router;

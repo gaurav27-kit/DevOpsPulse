@@ -66,12 +66,27 @@ export function useLiveInvalidation() {
       }
     };
 
+    const handleMaintenanceEvent = (data) => {
+      queryClient.invalidateQueries({ queryKey: ['applications'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboardSummary'] });
+      if (data?.applicationId) {
+        queryClient.invalidateQueries({ queryKey: ['application', data.applicationId] });
+        queryClient.invalidateQueries({ queryKey: ['maintenance', 'active', data.applicationId] });
+        queryClient.invalidateQueries({ queryKey: ['maintenance', 'history', data.applicationId] });
+      }
+    };
+
     socket.on('application:status', handleApplicationStatus);
     socket.on('healthcheck:completed', handleHealthCheckCompleted);
     socket.on('incident:created', handleIncidentChanged);
     socket.on('incident:updated', handleIncidentChanged);
     socket.on('deployment:recorded', handleDeploymentRecorded);
     socket.on('slo:alert', handleSloAlert);
+    socket.on('maintenance:started', handleMaintenanceEvent);
+    socket.on('maintenance:ended', handleMaintenanceEvent);
+    socket.on('maintenance:scheduled', handleMaintenanceEvent);
+    socket.on('maintenance:cancelled', handleMaintenanceEvent);
 
     return () => {
       socket.off('application:status', handleApplicationStatus);
@@ -80,6 +95,10 @@ export function useLiveInvalidation() {
       socket.off('incident:updated', handleIncidentChanged);
       socket.off('deployment:recorded', handleDeploymentRecorded);
       socket.off('slo:alert', handleSloAlert);
+      socket.off('maintenance:started', handleMaintenanceEvent);
+      socket.off('maintenance:ended', handleMaintenanceEvent);
+      socket.off('maintenance:scheduled', handleMaintenanceEvent);
+      socket.off('maintenance:cancelled', handleMaintenanceEvent);
     };
   }, [socket, queryClient]);
 }

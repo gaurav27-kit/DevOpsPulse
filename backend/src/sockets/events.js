@@ -6,7 +6,11 @@ export const SOCKET_EVENTS = Object.freeze({
   INCIDENT_CREATED: 'incident:created',
   INCIDENT_UPDATED: 'incident:updated',
   DEPLOYMENT_RECORDED: 'deployment:recorded',
-  SLO_ALERT: 'slo:alert'
+  SLO_ALERT: 'slo:alert',
+  MAINTENANCE_STARTED: 'maintenance:started',
+  MAINTENANCE_ENDED: 'maintenance:ended',
+  MAINTENANCE_SCHEDULED: 'maintenance:scheduled',
+  MAINTENANCE_CANCELLED: 'maintenance:cancelled'
 });
 
 /**
@@ -171,5 +175,97 @@ export function emitSloAlert(ownerId, alertData) {
     io.to(targetRoom).emit(SOCKET_EVENTS.SLO_ALERT, payload);
   } catch (err) {
     console.debug('[Socket] emitSloAlert error:', err.message);
+  }
+}
+
+/**
+ * Emits maintenance:started event to the owner's room only.
+ */
+export function emitMaintenanceStarted(ownerId, window) {
+  try {
+    const io = getIO();
+    if (!io) return;
+
+    const targetRoom = `user:${ownerId.toString()}`;
+    const payload = {
+      maintenanceId: (window._id || window.id).toString(),
+      applicationId: (window.applicationId?._id || window.applicationId).toString(),
+      status: window.status,
+      startAt: window.startAt,
+      endAt: window.endAt,
+      reason: window.reason
+    };
+
+    io.to(targetRoom).emit(SOCKET_EVENTS.MAINTENANCE_STARTED, payload);
+  } catch (err) {
+    console.debug('[Socket] emitMaintenanceStarted error:', err.message);
+  }
+}
+
+/**
+ * Emits maintenance:ended event to the owner's room only.
+ */
+export function emitMaintenanceEnded(ownerId, window) {
+  try {
+    const io = getIO();
+    if (!io) return;
+
+    const targetRoom = `user:${ownerId.toString()}`;
+    const payload = {
+      maintenanceId: (window._id || window.id).toString(),
+      applicationId: (window.applicationId?._id || window.applicationId).toString(),
+      status: window.status,
+      endedAt: window.endedAt || new Date()
+    };
+
+    io.to(targetRoom).emit(SOCKET_EVENTS.MAINTENANCE_ENDED, payload);
+  } catch (err) {
+    console.debug('[Socket] emitMaintenanceEnded error:', err.message);
+  }
+}
+
+/**
+ * Emits maintenance:scheduled event to the owner's room only.
+ */
+export function emitMaintenanceScheduled(ownerId, window) {
+  try {
+    const io = getIO();
+    if (!io) return;
+
+    const targetRoom = `user:${ownerId.toString()}`;
+    const payload = {
+      maintenanceId: (window._id || window.id).toString(),
+      applicationId: (window.applicationId?._id || window.applicationId).toString(),
+      status: window.status,
+      startAt: window.startAt,
+      endAt: window.endAt,
+      reason: window.reason
+    };
+
+    io.to(targetRoom).emit(SOCKET_EVENTS.MAINTENANCE_SCHEDULED, payload);
+  } catch (err) {
+    console.debug('[Socket] emitMaintenanceScheduled error:', err.message);
+  }
+}
+
+/**
+ * Emits maintenance:cancelled event to the owner's room only.
+ */
+export function emitMaintenanceCancelled(ownerId, window) {
+  try {
+    const io = getIO();
+    if (!io) return;
+
+    const targetRoom = `user:${ownerId.toString()}`;
+    const payload = {
+      maintenanceId: (window._id || window.id).toString(),
+      applicationId: (window.applicationId?._id || window.applicationId).toString(),
+      status: window.status,
+      endedAt: window.endedAt || new Date()
+    };
+
+    io.to(targetRoom).emit(SOCKET_EVENTS.MAINTENANCE_CANCELLED, payload);
+  } catch (err) {
+    console.debug('[Socket] emitMaintenanceCancelled error:', err.message);
   }
 }

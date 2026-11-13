@@ -41,17 +41,17 @@
   },
   "backend-api-tests": {
     "name": "5. Backend API Integration Tests",
-    "files": 13,
-    "tests": 162,
-    "passed": 162,
+    "files": 14,
+    "tests": 184,
+    "passed": 184,
     "failed": 0,
     "skipped": 0
   },
   "frontend-unit-tests": {
     "name": "6. Frontend Unit Tests",
     "files": 31,
-    "tests": 133,
-    "passed": 133,
+    "tests": 135,
+    "passed": 135,
     "failed": 0,
     "skipped": 0
   },

@@ -10,6 +10,7 @@ import { healthApi } from '../api/healthApi.js';
 import { incidentsApi } from '../api/incidentsApi.js';
 import { deploymentsApi } from '../api/deploymentsApi.js';
 import { slosApi } from '../api/slosApi.js';
+import { maintenanceApi } from '../api/maintenanceApi.js';
 
 vi.mock('../api/applicationsApi.js', () => ({
   applicationsApi: {
@@ -47,6 +48,15 @@ vi.mock('../api/slosApi.js', () => ({
   }
 }));
 
+vi.mock('../api/maintenanceApi.js', () => ({
+  maintenanceApi: {
+    create: vi.fn(),
+    list: vi.fn(),
+    getActive: vi.fn(),
+    end: vi.fn()
+  }
+}));
+
 describe('ApplicationDetailsPage SLO integration', () => {
   const fakeApp = {
     _id: 'app_123',
@@ -71,6 +81,8 @@ describe('ApplicationDetailsPage SLO integration', () => {
     healthApi.getHealthChecks.mockResolvedValue({ data: { healthChecks: [], pagination: {} } });
     incidentsApi.list.mockResolvedValue({ data: { incidents: [] } });
     deploymentsApi.list.mockResolvedValue({ data: { deployments: [] } });
+    maintenanceApi.getActive.mockResolvedValue({ data: { activeWindow: null } });
+    maintenanceApi.list.mockResolvedValue({ data: { windows: [], pagination: { page: 1, limit: 10, total: 0, totalPages: 1 } } });
   });
 
   const renderComponent = () =>
@@ -159,5 +171,45 @@ describe('ApplicationDetailsPage SLO integration', () => {
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(screen.getByText('Delete SLO?')).toBeInTheDocument();
+  });
+
+  it('renders Maintenance controls and opens configure modal on click', async () => {
+    const user = userEvent.setup();
+    slosApi.getSlo.mockResolvedValue(null);
+
+    renderComponent();
+
+    const maintBtn = await screen.findByText('Maintenance');
+    expect(maintBtn).toBeInTheDocument();
+    expect(screen.getByText('Maintenance Windows')).toBeInTheDocument();
+
+    await user.click(maintBtn);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByText('Configure Maintenance Mode')).toBeInTheDocument();
+    expect(screen.getByText('Start Immediately')).toBeInTheDocument();
+    expect(screen.getByText('Schedule for Later')).toBeInTheDocument();
+  });
+
+  it('renders ActiveMaintenanceBanner with badge, reason, and countdown when active maintenance exists', async () => {
+    slosApi.getSlo.mockResolvedValue(null);
+    maintenanceApi.getActive.mockResolvedValue({
+      data: {
+        activeWindow: {
+          _id: 'mw_123',
+          status: 'ACTIVE',
+          reason: 'Database index rebuild and cluster upgrade',
+          startAt: new Date(Date.now() - 60000).toISOString(),
+          endAt: new Date(Date.now() + 3600000).toISOString(),
+          createdBy: { name: 'Alice Admin', email: 'alice@example.com' }
+        }
+      }
+    });
+
+    renderComponent();
+
+    expect(await screen.findByText('Active Maintenance Mode')).toBeInTheDocument();
+    expect(screen.getByText('Database index rebuild and cluster upgrade')).toBeInTheDocument();
+    expect(screen.getByText('End Maintenance')).toBeInTheDocument();
+    expect(screen.getByText('In Maintenance')).toBeInTheDocument();
   });
 });

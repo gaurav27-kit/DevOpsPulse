@@ -137,6 +137,47 @@ async function resolveIncident(applicationId) {
   }
 }
 
+export async function updateActiveIncidentSilently(applicationId, now = new Date()) {
+  const updated = await Incident.findOneAndUpdate(
+    { applicationId, isActive: true },
+    {
+      $inc: { failureCount: 1 },
+      $set: { lastFailureAt: now }
+    },
+    { new: true }
+  );
+
+  if (updated) {
+    emitIncidentUpdated(updated.ownerId, updated);
+  }
+}
+
+/**
+ * Re-evaluates incident state immediately after a maintenance window concludes.
+ * Opens an incident if the service remained unhealthy, or resolves if healthy.
+ *
+ * @param {object} application
+ */
+export async function evaluateIncidentStateAfterMaintenance(application) {
+  const activeIncident = await Incident.findOne(
+    { applicationId: application._id, isActive: true },
+    { _id: 1 }
+  ).lean();
+
+  if (application.consecutiveFailures >= 2 || application.status === 'down') {
+    if (!activeIncident) {
+      await openIncident(application, {
+        errorType: 'maintenance_ended_unhealthy',
+        errorMessage: 'Service remained unhealthy after maintenance window ended'
+      });
+    }
+  } else if (application.consecutiveSuccesses >= 2 || application.status === 'up') {
+    if (activeIncident) {
+      await resolveIncident(application._id);
+    }
+  }
+}
+
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 /**
@@ -147,6 +188,14 @@ async function resolveIncident(applicationId) {
  * @param {object} result      - Check result { success, errorType, ... }
  */
 export async function handleCheckOutcome(application, result) {
+  // During maintenance, suppress new incident creation and avoid generating outage alerts
+  if (application.status === 'maintenance' || application.activeMaintenanceWindowId) {
+    if (result && !result.success) {
+      await updateActiveIncidentSilently(application._id);
+    }
+    return;
+  }
+
   const activeIncident = await Incident.findOne(
     { applicationId: application._id, isActive: true },
     { _id: 1 } // only need to know if one exists

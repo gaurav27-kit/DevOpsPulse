@@ -8,6 +8,7 @@ import { Deployment } from '../../src/models/Deployment.js';
 import { NotificationChannel } from '../../src/models/NotificationChannel.js';
 import { NotificationDelivery } from '../../src/models/NotificationDelivery.js';
 import { Slo } from '../../src/models/Slo.js';
+import { MaintenanceWindow } from '../../src/models/MaintenanceWindow.js';
 import { encrypt, generateSigningSecret } from '../../src/utils/crypto.js';
 import { createTestUser, getAuthCookie } from '../helpers.js';
 
@@ -48,7 +49,7 @@ function getAllRegisteredRoutes(expressApp) {
 describe('Cross-User Authorization Matrix (Multi-tenant Isolation)', () => {
   let userA, userB;
   let cookieA, cookieB;
-  let appA, checkA, incidentA, deploymentA, channelA;
+  let appA, checkA, incidentA, deploymentA, channelA, maintenanceA;
 
   // Resource ID-scoped routes matrix:
   const SCOPED_RESOURCE_ROUTES = [
@@ -70,7 +71,12 @@ describe('Cross-User Authorization Matrix (Multi-tenant Isolation)', () => {
     { method: 'POST', routePattern: '/api/v1/applications/:id/slo', getPath: () => `/api/v1/applications/${appA._id}/slo`, body: { name: 'Cross SLO', targetPercent: 99.9, windowDays: 30 } },
     { method: 'GET', routePattern: '/api/v1/applications/:id/slo', getPath: () => `/api/v1/applications/${appA._id}/slo` },
     { method: 'PATCH', routePattern: '/api/v1/applications/:id/slo', getPath: () => `/api/v1/applications/${appA._id}/slo`, body: { name: 'Hacked SLO' } },
-    { method: 'DELETE', routePattern: '/api/v1/applications/:id/slo', getPath: () => `/api/v1/applications/${appA._id}/slo` }
+    { method: 'DELETE', routePattern: '/api/v1/applications/:id/slo', getPath: () => `/api/v1/applications/${appA._id}/slo` },
+    { method: 'POST', routePattern: '/api/v1/applications/:id/maintenance', getPath: () => `/api/v1/applications/${appA._id}/maintenance`, body: { reason: 'Unauthorized maintenance', endAt: new Date(Date.now() + 3600000).toISOString() } },
+    { method: 'GET', routePattern: '/api/v1/applications/:id/maintenance', getPath: () => `/api/v1/applications/${appA._id}/maintenance` },
+    { method: 'GET', routePattern: '/api/v1/applications/:id/maintenance/active', getPath: () => `/api/v1/applications/${appA._id}/maintenance/active` },
+    { method: 'PATCH', routePattern: '/api/v1/maintenance/:maintenanceId/end', getPath: () => `/api/v1/maintenance/${maintenanceA._id}/end` },
+    { method: 'GET', routePattern: '/api/v1/maintenance/:maintenanceId', getPath: () => `/api/v1/maintenance/${maintenanceA._id}` }
   ];
 
   // Collection/User-level protected routes
@@ -158,6 +164,16 @@ describe('Cross-User Authorization Matrix (Multi-tenant Isolation)', () => {
       name: 'User A SLO',
       targetPercent: 99.9,
       windowDays: 30
+    });
+
+    maintenanceA = await MaintenanceWindow.create({
+      applicationId: appA._id,
+      ownerId: userA._id,
+      createdBy: userA._id,
+      reason: 'User A Maintenance Window',
+      startAt: new Date(),
+      endAt: new Date(Date.now() + 3600000),
+      status: 'ACTIVE'
     });
   });
 

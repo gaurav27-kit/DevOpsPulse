@@ -9,6 +9,7 @@ import { env } from '../config/env.js';
 import { handleCheckOutcome } from './incidentService.js';
 import { evaluateSloAlerts } from './sloAlertService.js';
 import { emitApplicationStatus, emitHealthCheckCompleted } from '../sockets/events.js';
+import { processScheduledMaintenanceTick } from './maintenanceService.js';
 
 let tickInterval = null;
 let staleSweepInterval = null;
@@ -27,6 +28,7 @@ let isTickRunning = false;
 export async function processCheckResult(application, result) {
   const now = new Date();
   const checkedAt = now;
+  const isMaintenance = application.status === 'maintenance' || Boolean(application.activeMaintenanceWindowId);
 
   // a) Insert HealthCheck document (best-effort; never abort the rest on failure)
   try {
@@ -38,7 +40,9 @@ export async function processCheckResult(application, result) {
       statusCode: result.statusCode ?? null,
       responseTimeMs: result.responseTimeMs,
       errorType: result.errorType ?? null,
-      errorMessage: result.errorMessage ?? null
+      errorMessage: result.errorMessage ?? null,
+      isMaintenance,
+      maintenanceWindowId: application.activeMaintenanceWindowId || null
     });
   } catch (err) {
     console.error(`[Scheduler] Failed to insert HealthCheck for ${application._id}:`, err.message);
@@ -77,7 +81,8 @@ export async function processCheckResult(application, result) {
   // c) Atomically update the application.
   // Filter by { _id, url } so a URL change during the check causes a no-op (prevents stale writes).
   const updatePayload = {
-    status: nextState.status,
+    status: isMaintenance ? 'maintenance' : nextState.status,
+    underlyingStatus: nextState.status,
     consecutiveFailures: nextState.consecutiveFailures,
     consecutiveSuccesses: nextState.consecutiveSuccesses,
     lastCheckedAt: now,
@@ -145,6 +150,10 @@ async function tick() {
 
   try {
     const now = new Date();
+
+    // Check and process scheduled / expiring maintenance windows atomically
+    await processScheduledMaintenanceTick(now);
+
     const claimedApps = [];
 
     // Claim apps one at a time up to the concurrency limit.

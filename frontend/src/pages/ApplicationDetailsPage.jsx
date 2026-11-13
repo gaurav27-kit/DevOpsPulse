@@ -18,6 +18,7 @@ import {
   Plus,
   ArrowRight,
   Target,
+  Wrench,
   X
 } from 'lucide-react';
 import { useApplication, useDeleteApplication } from '../hooks/useApplications.js';
@@ -38,6 +39,15 @@ import { BurnRateCard } from '../components/BurnRateCard.jsx';
 import { BurnDownChart } from '../components/BurnDownChart.jsx';
 import { SloForm } from '../components/SloForm.jsx';
 import { PartialWindowNotice } from '../components/PartialWindowNotice.jsx';
+import {
+  useActiveMaintenance,
+  useMaintenanceHistory,
+  useCreateMaintenance,
+  useEndMaintenance
+} from '../hooks/useMaintenance.js';
+import { ActiveMaintenanceBanner } from '../components/ActiveMaintenanceBanner.jsx';
+import { MaintenanceModal } from '../components/MaintenanceModal.jsx';
+import { MaintenanceHistoryTable } from '../components/MaintenanceHistoryTable.jsx';
 import { useIncidentsList } from '../hooks/useIncidents.js';
 import { useDeploymentsList } from '../hooks/useDeployments.js';
 import { StatusBadge } from '../components/StatusBadge.jsx';
@@ -104,6 +114,13 @@ export function ApplicationDetailsPage() {
   const updateSloMutation = useUpdateSlo(id);
   const deleteSloMutation = useDeleteSlo(id);
 
+  // Maintenance Query & Mutations
+  const { data: activeMaintenance } = useActiveMaintenance(id);
+  const [maintenancePage, setMaintenancePage] = useState(1);
+  const { data: maintHistoryData } = useMaintenanceHistory(id, { page: maintenancePage, limit: 5 });
+  const createMaintenanceMutation = useCreateMaintenance(id);
+  const endMaintenanceMutation = useEndMaintenance(id);
+
   // Local state
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [checkBanner, setCheckBanner] = useState(null);
@@ -111,6 +128,38 @@ export function ApplicationDetailsPage() {
   const [isDeleteSloOpen, setIsDeleteSloOpen] = useState(false);
   const [sloServerError, setSloServerError] = useState(null);
   const [sloBanner, setSloBanner] = useState(null);
+  const [isMaintenanceModalOpen, setIsMaintenanceModalOpen] = useState(false);
+  const [maintenanceBanner, setMaintenanceBanner] = useState(null);
+  const [maintenanceServerError, setMaintenanceServerError] = useState(null);
+
+  const handleCreateMaintenance = async (formData) => {
+    setMaintenanceServerError(null);
+    try {
+      await createMaintenanceMutation.mutateAsync(formData);
+      setIsMaintenanceModalOpen(false);
+      setMaintenanceBanner({
+        type: 'success',
+        message: 'Maintenance window configured successfully.'
+      });
+    } catch (err) {
+      setMaintenanceServerError(err);
+    }
+  };
+
+  const handleEndMaintenance = async (maintenanceId) => {
+    try {
+      await endMaintenanceMutation.mutateAsync(maintenanceId);
+      setMaintenanceBanner({
+        type: 'success',
+        message: 'Maintenance window ended successfully.'
+      });
+    } catch (err) {
+      setMaintenanceBanner({
+        type: 'error',
+        message: err?.response?.data?.message || err?.message || 'Failed to end maintenance window.'
+      });
+    }
+  };
 
   const handleRunCheck = async () => {
     setCheckBanner(null);
@@ -292,6 +341,17 @@ export function ApplicationDetailsPage() {
             )}
           </Button>
 
+          <Button
+            variant="outline"
+            onClick={() => setIsMaintenanceModalOpen(true)}
+            className={`text-xs py-1.5 px-3 flex items-center gap-1.5 min-h-[38px] font-semibold ${
+              activeMaintenance ? 'border-blue-300 text-blue-700 bg-blue-50/60 hover:bg-blue-100/60' : ''
+            }`}
+          >
+            <Wrench className="w-3.5 h-3.5" />
+            <span>{activeMaintenance ? 'In Maintenance' : 'Maintenance'}</span>
+          </Button>
+
           <Link to={`/applications/${id}/edit`}>
             <Button variant="outline" className="text-xs py-1.5 px-3 flex items-center gap-1.5 min-h-[38px]">
               <Edit2 className="w-3.5 h-3.5" />
@@ -316,6 +376,24 @@ export function ApplicationDetailsPage() {
           type={checkBanner.type}
           message={checkBanner.message}
           onDismiss={() => setCheckBanner(null)}
+        />
+      )}
+
+      {/* Maintenance Result Banner */}
+      {maintenanceBanner && (
+        <AlertBanner
+          type={maintenanceBanner.type}
+          message={maintenanceBanner.message}
+          onDismiss={() => setMaintenanceBanner(null)}
+        />
+      )}
+
+      {/* Active Maintenance Alert Banner */}
+      {activeMaintenance && (
+        <ActiveMaintenanceBanner
+          activeWindow={activeMaintenance}
+          onEndMaintenance={handleEndMaintenance}
+          isEnding={endMaintenanceMutation.isPending}
         />
       )}
 
@@ -743,6 +821,33 @@ export function ApplicationDetailsPage() {
         </div>
       </div>
 
+      {/* Maintenance Windows Section */}
+      <div className="rounded-xl border border-[#e2e8f0] bg-white p-6 shadow-sm space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Wrench className="w-4 h-4 text-slate-700" />
+            <h3 className="text-base font-semibold text-[#131b2e]">Maintenance Windows</h3>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsMaintenanceModalOpen(true)}
+            className="text-xs py-1.5 px-3 flex items-center gap-1.5 font-semibold text-blue-700 border-blue-200 hover:bg-blue-50"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>Schedule / Enable Maintenance</span>
+          </Button>
+        </div>
+
+        <MaintenanceHistoryTable
+          windows={maintHistoryData?.windows}
+          pagination={maintHistoryData?.pagination}
+          onPageChange={setMaintenancePage}
+          onEndWindow={handleEndMaintenance}
+          isEnding={endMaintenanceMutation.isPending}
+        />
+      </div>
+
       {/* Delete Confirmation Modal */}
       <ConfirmDialog
         isOpen={isDeleteOpen}
@@ -804,6 +909,18 @@ export function ApplicationDetailsPage() {
         isLoading={deleteSloMutation.isPending}
         onConfirm={handleDeleteSlo}
         onClose={() => setIsDeleteSloOpen(false)}
+      />
+
+      {/* Maintenance Configure Modal */}
+      <MaintenanceModal
+        isOpen={isMaintenanceModalOpen}
+        onClose={() => {
+          setIsMaintenanceModalOpen(false);
+          setMaintenanceServerError(null);
+        }}
+        onSubmit={handleCreateMaintenance}
+        isLoading={createMaintenanceMutation.isPending}
+        serverError={maintenanceServerError}
       />
     </div>
   );

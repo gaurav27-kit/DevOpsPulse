@@ -53,7 +53,7 @@ const notificationDeliverySchema = new mongoose.Schema(
     },
     skipReason: {
       type: String,
-      enum: ['cooldown', 'rate_limit', 'severity', 'disabled', 'no_open_alert', null],
+      enum: ['cooldown', 'rate_limit', 'severity', 'disabled', 'no_open_alert', 'maintenance_mode', null],
       default: null
     },
     attempts: {

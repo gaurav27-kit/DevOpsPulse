@@ -69,6 +69,15 @@ const healthCheckSchema = new mongoose.Schema(
       type: String,
       default: null,
       maxlength: 300
+    },
+    isMaintenance: {
+      type: Boolean,
+      default: false
+    },
+    maintenanceWindowId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'MaintenanceWindow',
+      default: null
     }
   },
   {

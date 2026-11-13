@@ -10,6 +10,7 @@ import deploymentRoutes from './routes/deployments.js';
 import dashboardRoutes from './routes/dashboard.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import sloRoutes from './routes/sloRoutes.js';
+import maintenanceRoutes from './routes/maintenanceRoutes.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
 const app = express();
@@ -44,6 +45,7 @@ app.use('/api/v1/deployments', deploymentRoutes);
 app.use('/api/v1/dashboard', dashboardRoutes);
 app.use('/api/v1/notifications', notificationRoutes);
 app.use('/api/v1/slos', sloRoutes);
+app.use('/api/v1/maintenance', maintenanceRoutes);
 
 // Catch 404 for undefined routes
 app.use(notFoundHandler);

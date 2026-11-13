@@ -47,10 +47,20 @@ const applicationSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: {
-        values: ['unknown', 'up', 'degraded', 'down'],
+        values: ['unknown', 'up', 'degraded', 'down', 'maintenance'],
         message: '{VALUE} is not a valid application status'
       },
       default: 'unknown'
+    },
+    underlyingStatus: {
+      type: String,
+      enum: ['unknown', 'up', 'degraded', 'down'],
+      default: 'unknown'
+    },
+    activeMaintenanceWindowId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'MaintenanceWindow',
+      default: null
     },
     consecutiveFailures: {
       type: Number,

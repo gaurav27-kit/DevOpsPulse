@@ -686,6 +686,8 @@ export async function notifyEvent({
         openDeliveryWasSent = Boolean(breachedDelivery);
       }
 
+      const isAppInMaintenance = application?.status === 'maintenance' || Boolean(application?.activeMaintenanceWindowId);
+
       const ruleResult = shouldNotify({
         channel,
         event: type,
@@ -696,7 +698,8 @@ export async function notifyEvent({
         sentInLastHour,
         now,
         cooldownMinutes,
-        ratePerHour: env.NOTIFY_RATE_PER_HOUR
+        ratePerHour: env.NOTIFY_RATE_PER_HOUR,
+        isMaintenance: isAppInMaintenance
       });
 
       if (!ruleResult.notify) {

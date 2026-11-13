@@ -49,6 +49,8 @@ describe('useLiveInvalidation hook', () => {
     expect(mockSocket.on).toHaveBeenCalledWith('incident:created', expect.any(Function));
     expect(mockSocket.on).toHaveBeenCalledWith('incident:updated', expect.any(Function));
     expect(mockSocket.on).toHaveBeenCalledWith('deployment:recorded', expect.any(Function));
+    expect(mockSocket.on).toHaveBeenCalledWith('maintenance:started', expect.any(Function));
+    expect(mockSocket.on).toHaveBeenCalledWith('maintenance:ended', expect.any(Function));
 
     unmount();
 
@@ -57,6 +59,8 @@ describe('useLiveInvalidation hook', () => {
     expect(mockSocket.off).toHaveBeenCalledWith('incident:created', expect.any(Function));
     expect(mockSocket.off).toHaveBeenCalledWith('incident:updated', expect.any(Function));
     expect(mockSocket.off).toHaveBeenCalledWith('deployment:recorded', expect.any(Function));
+    expect(mockSocket.off).toHaveBeenCalledWith('maintenance:started', expect.any(Function));
+    expect(mockSocket.off).toHaveBeenCalledWith('maintenance:ended', expect.any(Function));
   });
 
   it('invalidates dashboard and application queries on application:status event', () => {
